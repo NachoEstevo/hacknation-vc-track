@@ -1,20 +1,19 @@
 # Data
 
-## `source/clay-companies.csv`
+## `source/clay-us-uk-early-software.csv`
 
-This is the provisional Clay export supplied for the HackNation VC track prototype.
+The exact 50-row export from the user's latest Clay search for self-employed or 2-10-person US/UK companies in software/AI-related subindustries with $0-$500K annual revenue. It is committed at the dataset owner's request and every imported value remains unverified discovery data.
 
-- Snapshot received: 2026-07-18
-- Rows: 50 companies
-- Intended coverage: small Software and IT companies in the United States and United Kingdom
-- Usable fields: name, description, primary industry, size, type, location, country, domain, and LinkedIn company URL
-- Known limitation: the supplied file contains 50 rows even though the expected source base was described as approximately 350 companies
-- Verification status: unverified discovery data
+The separate authenticated Clay table has a 400-result limit. It is not represented as a local 400-row file because Brave blocked Clay's S3 download; this repository does not fill the gap with Acelera, LATAM, or a different industry search.
 
-The application must preserve source provenance and must not treat an imported description, employee band, domain, or social URL as verified investment evidence. Importing a later complete export should be idempotent and should update or add records without duplicating normalized domains.
+## `enriched/company-web-profiles.json`
 
-The file contains company-level public business information and is intentionally committed to the public prototype repository at the dataset owner's request.
+A timestamped, reproducible public-web evidence snapshot for all 50 companies. It stores concise extracted facts, company-published profile links, GitHub public metadata, evidence URLs, and typed failures. It never stores downloaded HTML or scraped LinkedIn/X content.
+
+## `enriched/company-web-profiles-summary.json`
+
+Coverage counts for the corresponding enrichment run.
 
 ## `enriched/clay-founder-pilot.json`
 
-This is a public-data pilot from Clay MCP contact search across three company domains. It is committed so candidate-resolution behavior remains reproducible. Every relationship is labeled `candidate_only`; accepted candidates still require founder or admin confirmation before the application may present them as verified founders.
+An earlier three-company Clay contact-search pilot. It remains separate from the website run, and every relationship is labeled `candidate_only` until founder or admin confirmation.

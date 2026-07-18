@@ -6,11 +6,14 @@
   "exports": "./src/index.ts",
   "scripts": {
     "analyze:seed": "tsx scripts/analyze-seed.ts",
+    "enrich:seed": "tsx scripts/enrich-seed.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "csv-parse": "^6.1.0"
+    "cheerio": "^1.2.0",
+    "csv-parse": "^6.1.0",
+    "robots-parser": "^3.0.1"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

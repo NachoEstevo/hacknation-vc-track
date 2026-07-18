@@ -2,16 +2,16 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Produce useful company and founder profiles for the 50-company VC seed and a separate 429-company Acelera software pool without relying on Clay enrichment.
+**Goal:** Produce useful company and founder profiles for the exact US/UK early-stage software cohort selected in Clay, without relying on paid Clay enrichment.
 
-**Architecture:** Extend the existing TypeScript Data Core with an Acelera adapter, a bounded public-web crawler, structured profile extraction, and optional GitHub API enrichment. Every output is a timestamped evidence snapshot. Website links may discover LinkedIn profiles, but the application never requests or scrapes LinkedIn pages.
+**Architecture:** Extend the existing TypeScript Data Core with a bounded public-web crawler, structured profile extraction, and optional GitHub API enrichment. Every output is a timestamped evidence snapshot. Website links may discover LinkedIn profiles, but the application never requests or scrapes LinkedIn pages.
 
-**Tech Stack:** TypeScript, Node.js fetch/DNS APIs, Cheerio, robots-parser, csv-parse/csv-stringify, Vitest, GitHub REST API
+**Tech Stack:** TypeScript, Node.js fetch/DNS APIs, Cheerio, robots-parser, csv-parse, Vitest, GitHub REST API
 
 ## Global Constraints
 
 - Do not create or modify UI files.
-- Keep the original 50 US/UK companies and the 429 Acelera software-like companies as separate cohorts.
+- Only process companies from the user's latest Clay search: US/UK, self-employed or 2-10 employees, $0-$500K revenue, and software/AI-related subindustries.
 - Never treat a discovered person or social link as a verified founder relationship.
 - Never scrape LinkedIn or X pages; only preserve outbound URLs found on company-controlled pages.
 - Respect robots.txt, bound requests, block private-network targets, and limit same-origin traversal.
@@ -22,29 +22,17 @@
 
 ---
 
-### Task 1: Acelera software-pool adapter and reproducible export
+### Task 1: Exact Clay cohort and reproducible source snapshot
 
 **Files:**
-- Modify: `packages/data-core/package.json`
-- Modify: `packages/data-core/src/types.ts`
-- Modify: `packages/data-core/src/normalize-company.ts`
-- Create: `packages/data-core/src/parse-acelera-csv.ts`
-- Modify: `packages/data-core/src/index.ts`
-- Create: `packages/data-core/test/parse-acelera-csv.test.ts`
-- Create: `packages/data-core/scripts/build-acelera-pool.ts`
-- Create: `data/source/acelera-software-companies.csv`
+- Use: `C:\Users\nacho\Desktop\Small-Companies,-Software-and-IT,-US-and-UK-Default-view-export-1784401549683.csv`
+- Create: `data/source/clay-us-uk-early-software.csv`
+- Modify: `data/README.md`
 
-**Interfaces:**
-- `parseAceleraCsv(csv: string): AceleraCompanyRow[]`
-- `buildAceleraSoftwarePool(rows: AceleraCompanyRow[]): ImportBatch`
-- `normalizeClayCompany(raw, rowNumber, sourceType)` accepts `clay_csv | acelera_csv`
-
-- [ ] Write tests proving Spanish headers map correctly, non-technology rows are excluded, technology rows remain unverified, and duplicate domains collapse through the existing import batch.
-- [ ] Run the focused test and observe failure because the adapter does not exist.
-- [ ] Implement a documented software classification regex over `Rubro`; require company name plus domain or LinkedIn URL.
-- [ ] Add `csv-stringify` and a CLI that writes normalized public business fields only.
-- [ ] Run the CLI against `C:\Users\nacho\Desktop\acelera_30000_empresas.xlsm - Acelera.csv` and verify 429 input matches before deduplication.
-- [ ] Commit the adapter and generated 429-company source cohort.
+- [ ] Preserve the original 50-row CSV as the runnable local source snapshot.
+- [ ] Record the exact search filters and the separate 400-result Clay table URL.
+- [ ] Validate row count, countries, size bands, domains, and duplicate identities with the existing import batch.
+- [ ] Do not mix in Acelera, LATAM, or a looser industry search.
 
 ### Task 2: Safe bounded website crawler
 
@@ -114,16 +102,15 @@
 - [ ] Observe failure, then implement orchestration with maximum four concurrent companies, three pages per company, eight-second request timeout, and timestamped results.
 - [ ] Run the CLI over all 50 primary companies; do not fabricate data for inaccessible sites.
 - [ ] Generate a compact summary containing successes, partials, failures, discovered founder candidates, social links, GitHub profiles, and per-company evidence coverage.
-- [ ] Document the Acelera cohort, crawler policy, output schema, known limitations, and rerun commands.
+- [ ] Document the exact US/UK cohort, crawler policy, output schema, known limitations, and rerun commands.
 - [ ] Run full tests, typecheck, seed analysis, JSON validation, and `git diff --check`.
 - [ ] Commit, merge into `main`, rerun verification on `main`, push `origin/main`, and remove the worktree/feature branch.
 
-### Task 5: Optional Clay audience handoff
+### Task 5: Clay table handoff
 
 **Files:**
-- Use: `data/source/acelera-software-companies.csv`
+- Use: authenticated Clay table `Small Software IT Companies US UK`
 
-- [ ] Inspect the Clay import flow in the authenticated browser.
-- [ ] If Clay supports a new audience from CSV without overwriting existing records, create `HackNation VC - Acelera Software Pool` and upload only the 429-company subset.
-- [ ] Stop before any paid enrichment action; audience creation and founder enrichment are separate operations.
-- [ ] Record whether the audience was created, blocked by plan/workspace settings, or requires user confirmation.
+- [ ] Keep the dedicated 400-result table created from the user's latest search.
+- [ ] Stop before any paid enrichment action; table creation and founder enrichment are separate operations.
+- [ ] Record that the first 50 rows are the reproducible local cohort and that the 400-row export remains available in Clay.
