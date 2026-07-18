@@ -1,0 +1,77 @@
+{
+  "source": "clay_mcp_public_contact_search",
+  "capturedAt": "2026-07-18T19:30:47.774Z",
+  "verification": "candidate_only",
+  "query": {
+    "companyDomains": [
+      "icon.com",
+      "thectojournal.com",
+      "careerprinciples.com"
+    ],
+    "profileKeywords": [
+      "founder",
+      "co-founder"
+    ],
+    "limitPerCompany": 3
+  },
+  "companies": [
+    {
+      "domain": "icon.com",
+      "acceptedCandidates": [
+        {
+          "name": "Kennan Frost",
+          "profileId": "341713197",
+          "linkedInUrl": "https://www.linkedin.com/in/kennandavison/",
+          "currentCompany": "Icon",
+          "currentTitle": "Founder",
+          "currentDomain": "icon.com",
+          "resolution": "accepted_candidate",
+          "reason": "exact_domain_and_founder_title"
+        }
+      ],
+      "rejectedCandidates": [
+        {
+          "name": "Kevin Miller",
+          "profileId": "776458348",
+          "linkedInUrl": "https://www.linkedin.com/in/kevinmichaelmiller3/",
+          "currentCompany": "GR0",
+          "currentTitle": "Co-Founder and CEO",
+          "currentDomain": "gr0.com",
+          "resolution": "rejected",
+          "reason": "domain_mismatch"
+        },
+        {
+          "name": "Ronak Shah",
+          "profileId": "343512017",
+          "linkedInUrl": "https://www.linkedin.com/in/ronak-shah-1531499/",
+          "currentCompany": "Obvi",
+          "currentTitle": "Chief Executive Officer",
+          "currentDomain": "myobvi.com",
+          "resolution": "rejected",
+          "reason": "domain_mismatch"
+        }
+      ]
+    },
+    {
+      "domain": "thectojournal.com",
+      "acceptedCandidates": [],
+      "rejectedCandidates": []
+    },
+    {
+      "domain": "careerprinciples.com",
+      "acceptedCandidates": [
+        {
+          "name": "Kenji Farré",
+          "profileId": "770538128",
+          "linkedInUrl": "https://www.linkedin.com/in/kenji-farr%C3%A9-b14209161/",
+          "currentCompany": "Career Principles",
+          "currentTitle": "Co-Founder",
+          "currentDomain": "careerprinciples.com",
+          "resolution": "accepted_candidate",
+          "reason": "exact_domain_and_founder_title"
+        }
+      ],
+      "rejectedCandidates": []
+    }
+  ]
+}

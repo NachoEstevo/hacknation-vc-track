@@ -71,3 +71,27 @@ export interface QuarantinedRow {
 export type NormalizedCompanyResult =
   | { kind: "company"; company: CompanySeed }
   | QuarantinedRow;
+
+export interface ClayContact {
+  name: string;
+  profileId: string;
+  latestExperienceCompany: string | null;
+  latestExperienceTitle: string | null;
+  domain: string | null;
+  linkedInUrl: string | null;
+}
+
+export type FounderResolutionReason =
+  | "exact_domain_and_founder_title"
+  | "company_name_and_founder_title"
+  | "domain_mismatch"
+  | "non_founder_title"
+  | "missing_linkedin_url"
+  | "insufficient_company_match";
+
+export interface FounderResolution {
+  state: "accepted_candidate" | "needs_review" | "rejected";
+  confidence: number;
+  reason: FounderResolutionReason;
+  contact: ClayContact;
+}
