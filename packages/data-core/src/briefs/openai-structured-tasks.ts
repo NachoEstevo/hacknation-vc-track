@@ -27,6 +27,10 @@ export interface OpenAIStructuredTaskDependencies {
   createResponse(request: ResponseCreateParamsNonStreaming): Promise<OpenAIResponseResult>;
 }
 
+export type OpenAIClientFactory = (options: { apiKey: string; maxRetries: 0 }) => {
+  responses: { create(request: ResponseCreateParamsNonStreaming): Promise<OpenAIResponseResult> };
+};
+
 export interface DraftInvestmentBriefInput {
   bundle: CompanyEvidenceBundle;
   thesis: FundThesis;
@@ -36,7 +40,7 @@ export interface DraftInvestmentBriefInput {
 export class OpenAIStructuredTaskError extends Error {
   constructor(
     readonly task: "parse_thesis" | "extract_claim_candidates" | "draft_investment_brief",
-    readonly code: "invalid_schema" | "request_failed" | "citation_validation" | "refusal",
+    readonly code: "invalid_schema" | "invalid_input" | "request_failed" | "citation_validation" | "refusal",
     cause?: unknown,
   ) {
     super(`OpenAI structured task ${task} failed: ${code}`, { cause });
@@ -44,8 +48,11 @@ export class OpenAIStructuredTaskError extends Error {
   }
 }
 
-export function createOpenAIResponse(config: OpenAIConfig): OpenAIStructuredTaskDependencies["createResponse"] {
-  const client = new OpenAI({ apiKey: config.apiKey });
+export function createOpenAIResponse(
+  config: OpenAIConfig,
+  createClient: OpenAIClientFactory = (options) => new OpenAI(options),
+): OpenAIStructuredTaskDependencies["createResponse"] {
+  const client = createClient({ apiKey: config.apiKey, maxRetries: 0 });
   return async (request) => client.responses.create(request);
 }
 
@@ -56,6 +63,15 @@ function stableInstructions(outcome: string): string {
     "Use only the supplied evidence. Do not invent facts, scores, recommendations, verification states, or evidence IDs.",
     "Cite every factual or analytical statement with the supplied evidence indexes. Stop when the supplied evidence is insufficient and name the gap instead.",
     "Return only JSON that satisfies the provided schema.",
+  ].join("\n");
+}
+
+function thesisInstructions(): string {
+  return [
+    `PROMPT_VERSION: ${PROMPT_VERSION}`,
+    "OUTCOME: Convert the fund query into an explicit investment thesis.",
+    "The query is the source text. Preserve its explicit constraints and do not invent unsupported constraints.",
+    "No citations are needed. Return at least one criterion and only JSON that satisfies the provided schema.",
   ].join("\n");
 }
 
@@ -137,9 +153,11 @@ function validIndexes(value: unknown, records: CompanyEvidenceBundle["evidence"]
 }
 
 function claimCandidates(value: unknown, bundle: CompanyEvidenceBundle): ClaimCandidate[] {
-  if (!Array.isArray(value)) throw new Error("Claim candidates must be an array");
+  if (!isRecord(value) || Object.keys(value).length !== 1 || !Array.isArray(value.candidates)) {
+    throw new Error("Claim candidates must be a strict object containing candidates");
+  }
   const ids = new Set<string>();
-  return value.map((candidate) => {
+  return value.candidates.map((candidate) => {
     if (!isRecord(candidate) || typeof candidate.claimId !== "string" || candidate.claimId.trim() === "" || ids.has(candidate.claimId)
       || typeof candidate.subject !== "string" || typeof candidate.predicate !== "string"
       || !["string", "number", "boolean"].includes(typeof candidate.value)
@@ -204,7 +222,7 @@ export async function parseThesis(query: string, dependencies: OpenAIStructuredT
   return requestStructured("parse_thesis", {
     model: dependencies.config.extractionModel,
     reasoning: { effort: dependencies.config.extractionReasoning },
-    input: `${stableInstructions("Convert the fund query into an explicit investment thesis.")}\n\nQUERY:\n${query}`,
+    input: `${thesisInstructions()}\n\nQUERY:\n${query}`,
     text: { format: { type: "json_schema", name: "fund_thesis", strict: true, schema: fundThesisSchema } },
   }, dependencies, validateFundThesis);
 }
@@ -219,6 +237,10 @@ export async function extractClaimCandidates(bundle: CompanyEvidenceBundle, depe
 }
 
 export async function draftInvestmentBrief(input: DraftInvestmentBriefInput, dependencies: OpenAIStructuredTaskDependencies): Promise<InvestmentBrief> {
+  if (input.evaluation.companyId !== input.bundle.companyId
+    || input.bundle.evidence.some((record) => record.companyId !== input.bundle.companyId)) {
+    throw new OpenAIStructuredTaskError("draft_investment_brief", "invalid_input");
+  }
   const draft = await requestStructured("draft_investment_brief", {
     model: dependencies.config.briefModel,
     reasoning: { effort: dependencies.config.briefReasoning },

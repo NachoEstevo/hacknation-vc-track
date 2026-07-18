@@ -32,21 +32,23 @@ export const fundThesisSchema = objectSchema({
   promptVersion: text,
 });
 
-export const claimCandidatesSchema: JsonSchema = {
-  type: "array",
-  items: objectSchema({
-    claimId: text,
-    subject: text,
-    predicate: text,
-    value: scalar,
-    unit: { type: ["string", "null"] },
-    claimKind: { type: "string", enum: ["observed_fact", "first_party_claim", "analysis"] },
-    evidenceIndexes,
-    directness: { type: "string", enum: ["direct_measurement", "primary_document", "first_party_statement", "proxy_signal", "inference_only"] },
-    independentSupportingEvidenceIndexes: { type: "array", items: { type: "integer", minimum: 0 } },
-    hasConflict: { type: "boolean" },
-  }),
-};
+export const claimCandidatesSchema = objectSchema({
+  candidates: {
+    type: "array",
+    items: objectSchema({
+      claimId: text,
+      subject: text,
+      predicate: text,
+      value: scalar,
+      unit: { type: ["string", "null"] },
+      claimKind: { type: "string", enum: ["observed_fact", "first_party_claim", "analysis"] },
+      evidenceIndexes,
+      directness: { type: "string", enum: ["direct_measurement", "primary_document", "first_party_statement", "proxy_signal", "inference_only"] },
+      independentSupportingEvidenceIndexes: { type: "array", items: { type: "integer", minimum: 0 } },
+      hasConflict: { type: "boolean" },
+    }),
+  },
+});
 
 export const investmentBriefSchema = objectSchema({
   summary: { type: "array", items: citedStatement },
