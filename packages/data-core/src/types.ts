@@ -33,6 +33,34 @@ export interface CompanySeed {
   source: SourceMetadata;
 }
 
+export interface StableCompanySeed extends CompanySeed {
+  stableId: string;
+}
+
+export interface DuplicateCompanyRow {
+  dedupeKey: string;
+  canonicalStableId: string;
+  duplicateName: string;
+  duplicateRowNumber: number;
+}
+
+export interface ImportSummary {
+  totalRows: number;
+  acceptedCompanies: number;
+  quarantinedRows: number;
+  duplicateRows: number;
+  missingDomains: number;
+  countryDistribution: Record<string, number>;
+  fieldCoverage: Record<string, number>;
+}
+
+export interface ImportBatch {
+  companies: StableCompanySeed[];
+  quarantined: QuarantinedRow[];
+  duplicates: DuplicateCompanyRow[];
+  summary: ImportSummary;
+}
+
 export interface QuarantinedRow {
   kind: "quarantined";
   rowNumber: number;
@@ -43,4 +71,3 @@ export interface QuarantinedRow {
 export type NormalizedCompanyResult =
   | { kind: "company"; company: CompanySeed }
   | QuarantinedRow;
-
