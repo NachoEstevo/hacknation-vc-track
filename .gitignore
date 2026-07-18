@@ -1,0 +1,21 @@
+# Dependencies and builds
+node_modules/
+.next/
+out/
+coverage/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Local tooling and generated source artifacts
+tmp/
+.vercel/
+*.log
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
