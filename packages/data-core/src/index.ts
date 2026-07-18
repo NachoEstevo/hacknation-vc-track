@@ -24,3 +24,4 @@ export * from "./briefs/openai-structured-tasks.js";
 export * from "./briefs/openai-schemas.js";
 export * from "./briefs/rank-companies.js";
 export * from "./briefs/build-investment-briefs.js";
+export * from "./briefs/investment-brief-artifact.js";

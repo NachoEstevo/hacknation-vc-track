@@ -1,5 +1,6 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { randomUUID } from "node:crypto";
+import { mkdir, readFile, rename, unlink, writeFile } from "node:fs/promises";
+import { basename, dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
   buildImportBatch,
@@ -10,6 +11,7 @@ import {
   loadOpenAIConfig,
   parseClayCsv,
   parseThesis,
+  toInvestmentBriefArtifact,
   type BuildInvestmentBriefsDependencies,
   type CompanyEnrichmentResult,
   type FundThesis,
@@ -97,6 +99,8 @@ export interface BriefCliRuntime {
   readFile(path: string): Promise<string>;
   writeFile(path: string, contents: string): Promise<void>;
   mkdir(path: string): Promise<unknown>;
+  rename(source: string, destination: string): Promise<void>;
+  removeFile(path: string): Promise<void>;
   structuredTasks: BuildInvestmentBriefsDependencies;
 }
 
@@ -109,11 +113,49 @@ function parseEnrichments(value: string): CompanyEnrichmentResult[] {
   throw new Error("Enrichment JSON must be an array or an object containing results");
 }
 
+function canonicalPath(path: string): string {
+  return path.replaceAll("\\", "/").toLocaleLowerCase("en-US");
+}
+
+function rejectOutputCollision(args: BriefCliArgs, cwd: string): void {
+  const outputPath = resolve(cwd, args.output);
+  const destinations = [outputPath];
+  if (!args.acceptParsedThesis) destinations.push(`${outputPath}.thesis.json`);
+  const inputs = [args.companies, args.enrichment, args.thesisFile]
+    .filter((path): path is string => path !== undefined)
+    .map((path) => canonicalPath(resolve(cwd, path)));
+  if (destinations.some((path) => inputs.includes(canonicalPath(path)))) {
+    throw new BriefCliUsageError("--output must not overwrite an input file");
+  }
+}
+
+async function atomicWrite(
+  destination: string,
+  contents: string,
+  runtime: BriefCliRuntime,
+): Promise<void> {
+  const directory = dirname(destination);
+  const temporary = join(directory, `.${basename(destination)}.${randomUUID()}.tmp`);
+  await runtime.mkdir(directory);
+  try {
+    await runtime.writeFile(temporary, contents);
+    await runtime.rename(temporary, destination);
+  } catch (error) {
+    try {
+      await runtime.removeFile(temporary);
+    } catch {
+      // The temporary file may not exist if its creation failed.
+    }
+    throw error;
+  }
+}
+
 export async function runBriefCli(
   argv: string[],
   runtime: BriefCliRuntime,
 ): Promise<InvestmentBriefRun> {
   const args = parseBriefCliArgs(argv);
+  rejectOutputCollision(args, runtime.cwd);
   const companiesPath = resolve(runtime.cwd, args.companies);
   const enrichmentPath = resolve(runtime.cwd, args.enrichment);
   const outputPath = resolve(runtime.cwd, args.output);
@@ -135,18 +177,22 @@ export async function runBriefCli(
   const destination = run.status === "awaiting_thesis_confirmation"
     ? `${outputPath}.thesis.json`
     : outputPath;
-  const output = run.status === "awaiting_thesis_confirmation" ? run.thesis : run;
-  await runtime.mkdir(dirname(destination));
-  await runtime.writeFile(destination, `${JSON.stringify(output, null, 2)}\n`);
+  const output = run.status === "awaiting_thesis_confirmation"
+    ? run.thesis
+    : toInvestmentBriefArtifact(run);
+  await atomicWrite(destination, `${JSON.stringify(output, null, 2)}\n`, runtime);
   return run;
 }
 
-function createStructuredTasks(env: Record<string, string | undefined>): BuildInvestmentBriefsDependencies {
+export function createStructuredTasks(
+  env: Record<string, string | undefined>,
+  injectedCreateResponse?: OpenAIStructuredTaskDependencies["createResponse"],
+): BuildInvestmentBriefsDependencies {
   let tasks: OpenAIStructuredTaskDependencies | undefined;
   function configuredTasks(): OpenAIStructuredTaskDependencies {
     if (!tasks) {
       const config = loadOpenAIConfig(env);
-      tasks = { config, createResponse: createOpenAIResponse(config) };
+      tasks = { config, createResponse: injectedCreateResponse ?? createOpenAIResponse(config) };
     }
     return tasks;
   }
@@ -168,6 +214,8 @@ async function main(): Promise<void> {
     readFile: (path) => readFile(path, "utf8"),
     writeFile: (path, contents) => writeFile(path, contents, "utf8"),
     mkdir: (path) => mkdir(path, { recursive: true }),
+    rename: (source, destination) => rename(source, destination),
+    removeFile: (path) => unlink(path),
     structuredTasks: createStructuredTasks(process.env),
   });
 }

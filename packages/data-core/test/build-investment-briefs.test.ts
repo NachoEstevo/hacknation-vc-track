@@ -258,6 +258,7 @@ describe("investment brief CLI", () => {
 
   it("writes the parsed thesis artifact and performs no company analysis before confirmation", async () => {
     const writes: Array<{ path: string; contents: string }> = [];
+    const renames: Array<{ source: string; destination: string }> = [];
     let extractionCalls = 0;
     const result = await runBriefCli(requiredArgs, {
       cwd: "C:\\demo",
@@ -266,6 +267,8 @@ describe("investment brief CLI", () => {
         : JSON.stringify({ results: [] }),
       writeFile: async (path, contents) => { writes.push({ path, contents }); },
       mkdir: async () => undefined,
+      rename: async (source, destination) => { renames.push({ source, destination }); },
+      removeFile: async () => undefined,
       structuredTasks: {
         now: () => new Date(generatedAt),
         parseThesis: async () => thesis,
@@ -276,9 +279,12 @@ describe("investment brief CLI", () => {
 
     expect(result.status).toBe("awaiting_thesis_confirmation");
     expect(extractionCalls).toBe(0);
-    expect(writes).toEqual([{
-      path: "C:\\demo\\briefs.json.thesis.json",
-      contents: `${JSON.stringify(thesis, null, 2)}\n`,
+    expect(writes).toHaveLength(1);
+    expect(writes[0]!.path).toMatch(/\.tmp$/);
+    expect(writes[0]!.contents).toBe(`${JSON.stringify(thesis, null, 2)}\n`);
+    expect(renames).toEqual([{
+      source: writes[0]!.path,
+      destination: "C:\\demo\\briefs.json.thesis.json",
     }]);
   });
 });

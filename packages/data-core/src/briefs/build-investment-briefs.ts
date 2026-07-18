@@ -53,6 +53,13 @@ export interface InvestmentBriefRun {
   failures: InvestmentBriefFailure[];
 }
 
+export class InvestmentBriefInputError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "InvestmentBriefInputError";
+  }
+}
+
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
@@ -101,6 +108,9 @@ export async function buildInvestmentBriefs(
 ): Promise<InvestmentBriefRun> {
   const top = input.top ?? DEFAULT_TOP;
   if (!Number.isInteger(top) || top < 1) throw new RangeError("top must be an integer greater than zero");
+  if (input.companies.length === 0) {
+    throw new InvestmentBriefInputError("No accepted companies were found in --companies input");
+  }
 
   const evidence = buildEvidenceIndex(input.companies, input.enrichments);
   const thesis = typeof input.thesis === "string"
