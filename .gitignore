@@ -11,6 +11,7 @@ coverage/
 
 # Local tooling and generated source artifacts
 tmp/
+.worktrees/
 .vercel/
 *.log
 
