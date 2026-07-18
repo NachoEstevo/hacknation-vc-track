@@ -137,6 +137,12 @@ function evidenceInput(bundle: CompanyEvidenceBundle): Array<Record<string, unkn
   }));
 }
 
+function assertBundleIdentity(bundle: CompanyEvidenceBundle, task: OpenAIStructuredTaskError["task"]): void {
+  if (bundle.evidence.some((record) => record.companyId !== bundle.companyId)) {
+    throw new OpenAIStructuredTaskError(task, "invalid_input");
+  }
+}
+
 function evaluationTime(bundle: CompanyEvidenceBundle): string {
   return bundle.evidence.reduce((latest, record) => Date.parse(record.capturedAt) > Date.parse(latest) ? record.capturedAt : latest, "1970-01-01T00:00:00.000Z");
 }
@@ -228,6 +234,7 @@ export async function parseThesis(query: string, dependencies: OpenAIStructuredT
 }
 
 export async function extractClaimCandidates(bundle: CompanyEvidenceBundle, dependencies: OpenAIStructuredTaskDependencies): Promise<ClaimCandidate[]> {
+  assertBundleIdentity(bundle, "extract_claim_candidates");
   return requestStructured("extract_claim_candidates", {
     model: dependencies.config.extractionModel,
     reasoning: { effort: dependencies.config.extractionReasoning },
@@ -237,10 +244,10 @@ export async function extractClaimCandidates(bundle: CompanyEvidenceBundle, depe
 }
 
 export async function draftInvestmentBrief(input: DraftInvestmentBriefInput, dependencies: OpenAIStructuredTaskDependencies): Promise<InvestmentBrief> {
-  if (input.evaluation.companyId !== input.bundle.companyId
-    || input.bundle.evidence.some((record) => record.companyId !== input.bundle.companyId)) {
+  if (input.evaluation.companyId !== input.bundle.companyId) {
     throw new OpenAIStructuredTaskError("draft_investment_brief", "invalid_input");
   }
+  assertBundleIdentity(input.bundle, "draft_investment_brief");
   const draft = await requestStructured("draft_investment_brief", {
     model: dependencies.config.briefModel,
     reasoning: { effort: dependencies.config.briefReasoning },
