@@ -13,15 +13,17 @@ type ValidationError = Exclude<BriefValidationResult, { valid: true }>["errors"]
 
 const NUMERIC_TOKEN = /(?<![\p{L}\p{N}$€£+\-.,])(?<sign>[+-]?)(?<currency>[$€£])?(?<value>\d+(?:[.,]\d+)*|\.\d+)(?<exponent>e[+-]?\d+)?(?<suffix>%|[kmb])?(?![\p{L}\p{N}])/giu;
 const PERCENT_RANGE = /(?<![\p{L}\p{N}.,])(\d+(?:[.,]\d+)*|\.\d+)(e[+-]?\d+)?\s*-\s*(\d+(?:[.,]\d+)*|\.\d+)(e[+-]?\d+)?%(?![\p{L}\p{N}])/giu;
+const HYPHEN_SEPARATOR = /(?<=\d)\s*-\s*(?=[$€£]?(?:\d|\.\d))/gu;
 
 const MAGNITUDE_POWER = { k: 3n, m: 6n, b: 9n } as const;
 
-function expandPercentageRanges(value: string): string {
-  return value.replace(
+function prepareNumericText(value: string): string {
+  const expandedRanges = value.replace(
     PERCENT_RANGE,
     (_range, left, leftExponent = "", right, rightExponent = "") =>
       `${left}${leftExponent}% ${right}${rightExponent}%`,
   );
+  return expandedRanges.replace(HYPHEN_SEPARATOR, " ");
 }
 
 function canonicalDecimal(sign: string, value: string, exponent: string, magnitudePower: bigint): string {
@@ -39,7 +41,7 @@ function canonicalDecimal(sign: string, value: string, exponent: string, magnitu
 }
 
 function numericTokens(value: string): string[] {
-  return [...expandPercentageRanges(value).matchAll(NUMERIC_TOKEN)].map((match) => {
+  return [...prepareNumericText(value).matchAll(NUMERIC_TOKEN)].map((match) => {
     const sign = match.groups?.sign ?? "";
     const currency = match.groups?.currency;
     const exponent = match.groups?.exponent ?? "";

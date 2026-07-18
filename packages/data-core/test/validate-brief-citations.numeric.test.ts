@@ -104,4 +104,51 @@ describe("validateBriefCitations numeric canonicalization", () => {
       evidenceWithValue(citedValue),
     )).toEqual({ valid: true, errors: [] });
   });
+
+  it.each([
+    ["35", "35-40"],
+    ["$35", "$35-$40"],
+    ["2026", "2026-07-18"],
+  ])("rejects partially grounded hyphenated expressions", (citedValue, analysisValue) => {
+    expect(validateBriefCitations(
+      analysisBrief(analysisValue),
+      evidenceWithValue(citedValue),
+    )).toEqual(invalidNumericResult());
+  });
+
+  it.each([
+    ["35 and 40", "35-40"],
+    ["35-40", "35 and 40"],
+    ["$35 and $40", "$35-$40"],
+    ["$35-$40", "$35 and $40"],
+    ["2026, 07, 18", "2026-07-18"],
+    ["2026-07-18", "2026, 07, 18"],
+  ])("accepts fully grounded hyphenated expressions", (citedValue, analysisValue) => {
+    expect(validateBriefCitations(
+      analysisBrief(analysisValue),
+      evidenceWithValue(citedValue),
+    )).toEqual({ valid: true, errors: [] });
+  });
+
+  it.each([
+    ["-35", "35"],
+    ["35", "-35"],
+    ["-$35", "$35"],
+    ["$35", "-$35"],
+  ])("preserves unary negative signs as part of the value", (citedValue, analysisValue) => {
+    expect(validateBriefCitations(
+      analysisBrief(analysisValue),
+      evidenceWithValue(citedValue),
+    )).toEqual(invalidNumericResult());
+  });
+
+  it.each([
+    ["-35", "-35"],
+    ["-$35", "-$35"],
+  ])("accepts equivalently grounded unary negative values", (citedValue, analysisValue) => {
+    expect(validateBriefCitations(
+      analysisBrief(analysisValue),
+      evidenceWithValue(citedValue),
+    )).toEqual({ valid: true, errors: [] });
+  });
 });
