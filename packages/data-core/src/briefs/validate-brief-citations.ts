@@ -11,20 +11,22 @@ export type BriefValidationResult =
 
 type ValidationError = Exclude<BriefValidationResult, { valid: true }>["errors"][number];
 
-const NUMERIC_TOKEN = /(?<![\p{L}\p{N}])(?<currency>[$€£])?(?<value>-?\d+(?:[.,]\d+)*)(?<suffix>%|[kmb])?(?![\p{L}\p{N}])/giu;
+const NUMERIC_TOKEN = /(?<![\p{L}\p{N}$€£+\-])(?<sign>[+-]?)(?<currency>[$€£])?(?<value>\d+(?:[.,]\d+)*)(?<exponent>e[+-]?\d+)?(?<suffix>%|[kmb])?(?![\p{L}\p{N}])/giu;
 
 const MAGNITUDE = { k: 1_000, m: 1_000_000, b: 1_000_000_000 } as const;
 
 function numericTokens(value: string): string[] {
   return [...value.matchAll(NUMERIC_TOKEN)].map((match) => {
+    const sign = match.groups?.sign ?? "";
     const currency = match.groups?.currency;
+    const exponent = match.groups?.exponent ?? "";
     const suffix = match.groups?.suffix?.toLowerCase();
     const numericValue = match.groups?.value;
     if (numericValue === undefined) throw new Error("Numeric token is missing its value");
     const magnitude = suffix && suffix in MAGNITUDE
       ? MAGNITUDE[suffix as keyof typeof MAGNITUDE]
       : 1;
-    const normalizedValue = Number(numericValue.replace(/,/g, "")) * magnitude;
+    const normalizedValue = Number(`${sign}${numericValue.replace(/,/g, "")}${exponent}`) * magnitude;
     const unit = currency ?? (suffix === "%" ? "%" : "unitless");
     return `${unit}:${normalizedValue}`;
   });

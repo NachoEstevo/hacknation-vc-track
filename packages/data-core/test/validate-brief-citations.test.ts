@@ -132,6 +132,91 @@ describe("validateBriefCitations", () => {
     }), currencyEvidence)).toEqual({ valid: true, errors: [] });
   });
 
+  it.each([
+    ["-$35", "$35"],
+    ["$35", "-$35"],
+  ])("rejects sign changes before currency values", (citedValue, analysisValue) => {
+    const signedEvidence: EvidenceRecord[] = [{
+      ...evidence[0]!,
+      excerpt: `Reported value: ${citedValue}.`,
+      payload: null,
+    }];
+
+    expect(validateBriefCitations(brief({
+      strengths: [{
+        text: `The relevant value is ${analysisValue}.`,
+        statementKind: "analysis",
+        evidenceIds: ["stripe"],
+      }],
+    }), signedEvidence)).toEqual({
+      valid: false,
+      errors: [{ code: "unsupported_numeric_value", section: "strengths", statementIndex: 0 }],
+    });
+  });
+
+  it.each([
+    ["-$2,500,000", "-$2.5M"],
+    ["+$2,500", "$2500"],
+  ])("accepts equivalent signed currency formatting", (citedValue, analysisValue) => {
+    const signedEvidence: EvidenceRecord[] = [{
+      ...evidence[0]!,
+      excerpt: `Reported value: ${citedValue}.`,
+      payload: null,
+    }];
+
+    expect(validateBriefCitations(brief({
+      strengths: [{
+        text: `The relevant value is ${analysisValue}.`,
+        statementKind: "analysis",
+        evidenceIds: ["stripe"],
+      }],
+    }), signedEvidence)).toEqual({ valid: true, errors: [] });
+  });
+
+  it.each([
+    ["5", "1e6"],
+    ["2000000", "1e6"],
+    ["2500", "-2.5E3"],
+  ])("rejects unsupported exponent-form analysis values", (citedValue, analysisValue) => {
+    const exponentEvidence: EvidenceRecord[] = [{
+      ...evidence[0]!,
+      excerpt: `Reported value: ${citedValue}.`,
+      payload: null,
+    }];
+
+    expect(validateBriefCitations(brief({
+      strengths: [{
+        text: `The relevant value is ${analysisValue}.`,
+        statementKind: "analysis",
+        evidenceIds: ["stripe"],
+      }],
+    }), exponentEvidence)).toEqual({
+      valid: false,
+      errors: [{ code: "unsupported_numeric_value", section: "strengths", statementIndex: 0 }],
+    });
+  });
+
+  it.each([
+    ["1000000", "1e6"],
+    ["1e6", "1000000"],
+    ["-2500", "-2.5E3"],
+    ["$1,000,000", "$1e6"],
+  ])("accepts equivalent exponent and plain numeric forms", (citedValue, analysisValue) => {
+    const exponentEvidence: EvidenceRecord[] = [{
+      ...evidence[0]!,
+      excerpt: `Reported value: ${citedValue}.`,
+      payload: null,
+    }];
+
+    expect(validateBriefCitations(brief({
+      strengths: [{
+        text: `The relevant value is ${analysisValue}.`,
+        statementKind: "analysis",
+        evidenceIds: ["stripe"],
+      }],
+    }), exponentEvidence)).toEqual({ valid: true, errors: [] });
+  });
+
   it("allows uncited uncertainty when it names a declared missing field", () => {
     expect(validateBriefCitations(brief({
       risks: [{
