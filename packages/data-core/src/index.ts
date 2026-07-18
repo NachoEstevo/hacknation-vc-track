@@ -22,3 +22,5 @@ export * from "./briefs/recommend-company.js";
 export * from "./briefs/openai-config.js";
 export * from "./briefs/openai-structured-tasks.js";
 export * from "./briefs/openai-schemas.js";
+export * from "./briefs/rank-companies.js";
+export * from "./briefs/build-investment-briefs.js";
