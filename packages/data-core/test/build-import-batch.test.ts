@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildImportBatch, parseClayCsv } from "../src/index.js";
+import { buildImportBatch, parseClayCsv } from "../src/index";
 
 const csv = `Ignored,Name,Description,Primary Industry,Size,Type,Location,Country,Domain,LinkedIn URL
 ,Alpha,"Line one

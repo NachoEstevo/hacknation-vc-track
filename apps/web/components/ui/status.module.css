@@ -1,0 +1,57 @@
+.status {
+  --status-color: var(--text);
+  --status-bg: var(--surface-subtle);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 0 9px;
+  border: 1px solid color-mix(in srgb, var(--status-color) 15%, transparent);
+  border-radius: 999px;
+  background: var(--status-bg);
+  color: var(--status-color);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.positive {
+  --status-color: var(--verified);
+  --status-bg: var(--verified-soft);
+}
+
+.caution {
+  --status-color: var(--inference);
+  --status-bg: var(--inference-soft);
+}
+
+.negative {
+  --status-color: var(--risk);
+  --status-bg: var(--risk-soft);
+}
+
+.neutral {
+  --status-color: var(--text);
+  --status-bg: var(--surface-subtle);
+}
+
+.external {
+  --status-color: var(--external);
+  --status-bg: var(--external-soft);
+}
+
+.founder {
+  --status-color: var(--founder);
+  --status-bg: var(--founder-soft);
+}

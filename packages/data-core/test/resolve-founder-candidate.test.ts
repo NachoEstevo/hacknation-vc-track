@@ -3,7 +3,7 @@ import {
   normalizeClayCompany,
   resolveFounderCandidate,
   type CompanySeed,
-} from "../src/index.js";
+} from "../src/index";
 
 const normalized = normalizeClayCompany({
   Name: "Icon",

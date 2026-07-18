@@ -1,0 +1,26 @@
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
+import { WorkspaceProvider } from "@/components/workspace-provider";
+import { bodyFont, displayFont } from "@/lib/fonts";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: {
+    default: "undr — Evidence-first venture sourcing",
+    template: "%s · undr",
+  },
+  description:
+    "Find and understand early founders and projects before they reach traditional venture channels.",
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html
+      lang="en"
+      className={`${bodyFont.variable} ${displayFont.variable}`}
+      data-scroll-behavior="smooth"
+    >
+      <body><WorkspaceProvider>{children}</WorkspaceProvider></body>
+    </html>
+  );
+}

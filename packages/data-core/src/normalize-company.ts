@@ -1,7 +1,7 @@
 import type {
   ClayCompanyRow,
   NormalizedCompanyResult,
-} from "./types.js";
+} from "./types";
 
 const EMPTY_VALUES = new Set(["", "—", "-", "n/a", "null", "undefined"]);
 
@@ -106,4 +106,3 @@ export function normalizeClayCompany(
     },
   };
 }
-

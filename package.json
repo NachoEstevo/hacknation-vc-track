@@ -1,0 +1,21 @@
+{
+  "name": "hacknation-vc-track",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm --workspace @undr/web run dev",
+    "build": "npm --workspace @undr/web run build",
+    "start": "npm --workspace @undr/web run start",
+    "lint": "npm --workspace @undr/web run lint",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

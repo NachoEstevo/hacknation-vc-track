@@ -3,7 +3,7 @@ import {
   normalizeClayCompany,
   normalizeDomain,
   normalizeLinkedInCompanyUrl,
-} from "../src/index.js";
+} from "../src/index";
 
 describe("normalizeDomain", () => {
   it("removes protocol, www, paths, and trailing dots", () => {

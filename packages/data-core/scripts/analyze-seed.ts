@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { buildImportBatch, parseClayCsv } from "../src/index.js";
+import { buildImportBatch, parseClayCsv } from "../src/index";
 
 const inputPath = process.argv[2];
 if (!inputPath) {

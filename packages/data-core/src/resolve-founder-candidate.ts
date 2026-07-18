@@ -1,9 +1,9 @@
-import { normalizeDomain, normalizeTextKey } from "./normalize-company.js";
+import { normalizeDomain, normalizeTextKey } from "./normalize-company";
 import type {
   ClayContact,
   CompanySeed,
   FounderResolution,
-} from "./types.js";
+} from "./types";
 
 const FOUNDER_TITLE = /\b(co[- ]?founder|founder|founding partner)\b/i;
 
@@ -52,4 +52,3 @@ export function resolveFounderCandidate(
 
   return { state: "rejected", confidence: 0.1, reason: "insufficient_company_match", contact };
 }
-

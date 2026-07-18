@@ -13,6 +13,8 @@ coverage/
 tmp/
 .worktrees/
 .vercel/
+.playwright-cli/
+supabase/.temp/
 *.log
 
 # OS and editor files

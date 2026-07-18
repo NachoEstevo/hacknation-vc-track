@@ -1,11 +1,11 @@
 import { createHash } from "node:crypto";
-import { normalizeClayCompany } from "./normalize-company.js";
+import { normalizeClayCompany } from "./normalize-company";
 import type {
   ClayCompanyRow,
   ImportBatch,
   ImportSummary,
   StableCompanySeed,
-} from "./types.js";
+} from "./types";
 
 function stableId(dedupeKey: string): string {
   return createHash("sha256").update(dedupeKey).digest("hex").slice(0, 24);
@@ -87,4 +87,3 @@ export function buildImportBatch(rows: ClayCompanyRow[]): ImportBatch {
 
   return { companies, quarantined, duplicates, summary };
 }
-

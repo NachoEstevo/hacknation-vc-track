@@ -1,0 +1,105 @@
+.chip {
+  --chip-color: var(--text);
+  --chip-bg: var(--surface-subtle);
+  --chip-border: var(--border);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  border: 1px solid var(--chip-border);
+  border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--chip-color);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sm {
+  min-height: 24px;
+  padding: 0 8px;
+  font-size: 10px;
+}
+
+.md {
+  min-height: 30px;
+  padding: 0 10px;
+  font-size: 11px;
+}
+
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 11%, transparent);
+}
+
+.icon {
+  display: grid;
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+  place-items: center;
+}
+
+.icon :global(svg) {
+  width: 13px;
+  height: 13px;
+  stroke-width: 2;
+}
+
+.neutral {
+  --chip-color: var(--text);
+  --chip-bg: var(--surface);
+  --chip-border: var(--border);
+}
+
+.accent {
+  --chip-color: var(--accent-ink);
+  --chip-bg: var(--accent-soft);
+  --chip-border: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.verified {
+  --chip-color: var(--verified);
+  --chip-bg: var(--verified-soft);
+  --chip-border: color-mix(in srgb, var(--verified) 17%, transparent);
+}
+
+.inference {
+  --chip-color: var(--inference);
+  --chip-bg: var(--inference-soft);
+  --chip-border: color-mix(in srgb, var(--inference) 16%, transparent);
+}
+
+.risk {
+  --chip-color: var(--risk);
+  --chip-bg: var(--risk-soft);
+  --chip-border: color-mix(in srgb, var(--risk) 15%, transparent);
+}
+
+.external {
+  --chip-color: var(--external);
+  --chip-bg: var(--external-soft);
+  --chip-border: color-mix(in srgb, var(--external) 15%, transparent);
+}
+
+.founder {
+  --chip-color: var(--founder);
+  --chip-bg: var(--founder-soft);
+  --chip-border: color-mix(in srgb, var(--founder) 15%, transparent);
+}
+
+.muted {
+  --chip-color: var(--muted);
+  --chip-bg: color-mix(in srgb, var(--surface-subtle) 58%, transparent);
+  --chip-border: transparent;
+}

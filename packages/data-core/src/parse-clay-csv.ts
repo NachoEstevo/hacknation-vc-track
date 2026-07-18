@@ -1,5 +1,5 @@
 import { parse } from "csv-parse/sync";
-import type { ClayCompanyRow } from "./types.js";
+import type { ClayCompanyRow } from "./types";
 
 export function parseClayCsv(csv: string): ClayCompanyRow[] {
   return parse(csv, {
@@ -9,4 +9,3 @@ export function parseClayCsv(csv: string): ClayCompanyRow[] {
     skip_empty_lines: true,
   }) as ClayCompanyRow[];
 }
-

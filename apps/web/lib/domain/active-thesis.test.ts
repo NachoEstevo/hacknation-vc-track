@@ -1,0 +1,56 @@
+import { describe, expect, it } from "vitest";
+import {
+  createActiveThesis,
+  isActiveThesis,
+  parseCurrencyAmount,
+} from "./active-thesis";
+
+const baseInput = {
+  brief: "Technical founders building developer tools before seed.",
+  sectors: ["Developer tools", "Robotics"],
+  stages: ["Pre-seed", "Seed"],
+  geographies: ["Latin America"],
+  signals: ["Working product", "Unmodeled founder signal"],
+  exclusions: ["Institutional Series A+"],
+  checkRange: { currency: "USD" as const, min: 100_000, max: 750_000 },
+  riskPosture: "balanced" as const,
+};
+
+describe("active thesis", () => {
+  it("normalizes currency-like values and rejects unsafe ranges", () => {
+    expect(parseCurrencyAmount("$100k")).toBe(100_000);
+    expect(parseCurrencyAmount("1.5m")).toBe(1_500_000);
+    expect(parseCurrencyAmount("0")).toBeNull();
+    expect(parseCurrencyAmount("100 dollars")).toBeNull();
+    expect(() => createActiveThesis({
+      ...baseInput,
+      checkRange: { currency: "USD", min: 800_000, max: 750_000 },
+    })).toThrow(/minimum/i);
+  });
+
+  it("creates a validated lens with unsupported parameters kept neutral", () => {
+    const thesis = createActiveThesis(baseInput, "2026-07-18T12:00:00.000Z");
+
+    expect(isActiveThesis(thesis)).toBe(true);
+    expect(thesis.criteria).toEqual(expect.arrayContaining([
+      expect.objectContaining({ field: "sector", priority: "required" }),
+      expect.objectContaining({ field: "working_demo", priority: "preferred" }),
+      expect.objectContaining({ field: "valued_signal_types", priority: "preferred" }),
+      expect.objectContaining({
+        field: "team_preferences",
+        priority: "required",
+        label: expect.stringContaining("Robotics"),
+      }),
+      expect.objectContaining({ field: "check_size", operator: "between" }),
+      expect.objectContaining({ field: "acceptable_risk" }),
+    ]));
+  });
+
+  it("rejects a malformed persisted thesis at the runtime boundary", () => {
+    const thesis = createActiveThesis(baseInput, "2026-07-18T12:00:00.000Z");
+    expect(isActiveThesis({
+      ...thesis,
+      checkRange: { currency: "USD", min: 900_000, max: 100_000 },
+    })).toBe(false);
+  });
+});
