@@ -14,3 +14,7 @@ This is the provisional Clay export supplied for the HackNation VC track prototy
 The application must preserve source provenance and must not treat an imported description, employee band, domain, or social URL as verified investment evidence. Importing a later complete export should be idempotent and should update or add records without duplicating normalized domains.
 
 The file contains company-level public business information and is intentionally committed to the public prototype repository at the dataset owner's request.
+
+## `enriched/clay-founder-pilot.json`
+
+This is a public-data pilot from Clay MCP contact search across three company domains. It is committed so candidate-resolution behavior remains reproducible. Every relationship is labeled `candidate_only`; accepted candidates still require founder or admin confirmation before the application may present them as verified founders.
