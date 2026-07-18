@@ -285,7 +285,7 @@ describe("investment brief CLI", () => {
     expect(writes[0]!.contents).toBe(`${JSON.stringify(thesis, null, 2)}\n`);
     expect(renames).toEqual([{
       source: writes[0]!.path,
-      destination: "C:\\demo\\briefs.json.thesis.json",
+      destination: "C:\\demo\\briefs.thesis.json",
     }]);
   });
 });

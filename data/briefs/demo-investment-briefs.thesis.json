@@ -1,0 +1,56 @@
+{
+  "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+  "originalQuery": "Early US or UK B2B software companies with teams below 10 people and visible execution signals",
+  "criteria": [
+    {
+      "criterionId": "geography-1",
+      "category": "geography",
+      "label": "Company location",
+      "requirement": "required",
+      "weight": 5,
+      "operator": "one_of",
+      "expectedValue": [
+        "United States",
+        "United Kingdom"
+      ]
+    },
+    {
+      "criterionId": "industry-1",
+      "category": "industry",
+      "label": "B2B software",
+      "requirement": "required",
+      "weight": 5,
+      "operator": "equals",
+      "expectedValue": "B2B software"
+    },
+    {
+      "criterionId": "company-size-1",
+      "category": "company_size",
+      "label": "Team size",
+      "requirement": "required",
+      "weight": 5,
+      "operator": "lte",
+      "expectedValue": 9
+    },
+    {
+      "criterionId": "stage-1",
+      "category": "stage",
+      "label": "Early stage",
+      "requirement": "required",
+      "weight": 4,
+      "operator": "equals",
+      "expectedValue": "early"
+    },
+    {
+      "criterionId": "traction-1",
+      "category": "traction",
+      "label": "Visible execution signals",
+      "requirement": "required",
+      "weight": 4,
+      "operator": "exists",
+      "expectedValue": true
+    }
+  ],
+  "generatedAt": "2026-07-18T23:23:14.589Z",
+  "promptVersion": "briefs-v1"
+}

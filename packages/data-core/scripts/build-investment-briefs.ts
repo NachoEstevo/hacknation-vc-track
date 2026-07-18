@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, realpath, rename, unlink, writeFile } from "node:fs/promises";
-import { basename, dirname, join, resolve } from "node:path";
+import { basename, dirname, extname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
   buildImportBatch,
@@ -162,7 +162,11 @@ async function canonicalizeCliPaths(
     : undefined;
   const requestedOutput = resolve(runtime.cwd, args.output);
   const output = await canonicalTarget(requestedOutput, runtime);
-  const thesisOutput = await canonicalTarget(`${requestedOutput}.thesis.json`, runtime);
+  const outputExtension = extname(requestedOutput);
+  const thesisOutputPath = outputExtension.toLocaleLowerCase("en-US") === ".json"
+    ? `${requestedOutput.slice(0, -outputExtension.length)}.thesis.json`
+    : `${requestedOutput}.thesis.json`;
+  const thesisOutput = await canonicalTarget(thesisOutputPath, runtime);
   const inputs = [companies, enrichment, thesisFile]
     .filter((path): path is string => path !== undefined)
     .map(canonicalPath);

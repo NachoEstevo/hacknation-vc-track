@@ -1,0 +1,68 @@
+{
+  "status": "completed",
+  "generatedAt": "2026-07-18T23:29:49.270Z",
+  "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+  "promptVersion": "briefs-v1",
+  "models": {
+    "thesisAndClaimExtraction": "gpt-5.6-luna",
+    "briefDrafting": "gpt-5.6-sol"
+  },
+  "counts": {
+    "sourceCompanies": 50,
+    "evaluatedCompanies": 50,
+    "rankedCompanies": 50,
+    "requestedBriefs": 3,
+    "validBriefs": 3,
+    "failedBriefs": 0,
+    "citationValidBriefs": 3
+  },
+  "evidenceCounts": {
+    "clayCsv": 50,
+    "companyWebsite": 38,
+    "githubPublic": 1,
+    "publicVisibility": 39,
+    "investorPrivateVisibility": 50
+  },
+  "topThree": [
+    {
+      "rank": 1,
+      "companyId": "0186b70d0e326a1dbbaacac5",
+      "companyName": "Career Principles",
+      "recommendation": "pass_for_thesis",
+      "thesisFit": 0,
+      "evidenceCoverage": 65.21739130434783,
+      "citedStatements": 7
+    },
+    {
+      "rank": 2,
+      "companyId": "07738bc0d64caad517eb18bb",
+      "companyName": "Bridging the Gap",
+      "recommendation": "pass_for_thesis",
+      "thesisFit": 0,
+      "evidenceCoverage": 65.21739130434783,
+      "citedStatements": 9
+    },
+    {
+      "rank": 3,
+      "companyId": "103985f3d9a2524734319456",
+      "companyName": "SET",
+      "recommendation": "pass_for_thesis",
+      "thesisFit": 0,
+      "evidenceCoverage": 65.21739130434783,
+      "citedStatements": 8
+    }
+  ],
+  "failures": [],
+  "provenance": {
+    "companyDataset": "data/source/clay-us-uk-early-software.csv",
+    "publicWebEnrichment": "data/enriched/company-web-profiles.json",
+    "privateRelyDataUsed": false,
+    "rawCsvRowsPersisted": false
+  },
+  "knownGaps": [
+    "Human-readable country names do not equal the normalized US and GB country codes.",
+    "The numeric team-size cap does not match string-valued size bands such as 2-10 employees.",
+    "B2B software, early-stage, and execution criteria lack directly matching normalized fields or claims in this run.",
+    "The committed Clay discovery rows are unverified and conservatively tagged investor_private by the evidence schema."
+  ]
+}

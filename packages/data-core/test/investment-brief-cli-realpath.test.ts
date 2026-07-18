@@ -119,7 +119,7 @@ describe("investment brief CLI real path safety", () => {
       expect(dirname(writes[0]!)).toBe(canonicalParent);
       expect(renames).toEqual([{
         source: writes[0]!,
-        destination: join(canonicalParent, "briefs.json.thesis.json"),
+        destination: join(canonicalParent, "briefs.thesis.json"),
       }]);
     } finally {
       await rm(root, { recursive: true, force: true, maxRetries: 3 });

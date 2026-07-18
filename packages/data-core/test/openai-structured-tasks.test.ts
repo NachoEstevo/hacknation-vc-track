@@ -57,6 +57,7 @@ function dependencies(outputs: string[]): OpenAIStructuredTaskDependencies & { r
   const requests: unknown[] = [];
   return {
     config: loadOpenAIConfig({ OPENAI_API_KEY: "test" }),
+    now: () => new Date(thesis.generatedAt),
     requests,
     createResponse: async (request) => {
       requests.push(request);
@@ -88,6 +89,19 @@ describe("structured OpenAI tasks", () => {
       text: { format: { type: "json_schema", name: "fund_thesis", strict: true } },
     });
     expect(JSON.stringify(fake.requests[0])).toContain("PROMPT_VERSION: briefs-v1");
+  });
+
+  it("replaces model-authored thesis metadata with trusted runtime values", async () => {
+    const fake = dependencies([JSON.stringify({
+      ...thesis,
+      generatedAt: "2025-02-14T00:00:00.000Z",
+      promptVersion: "model-invented",
+    })]);
+
+    await expect(parseThesis(thesis.originalQuery, fake)).resolves.toMatchObject({
+      generatedAt: thesis.generatedAt,
+      promptVersion: "briefs-v1",
+    });
   });
 
   it("treats the thesis query as source text without evidence-index instructions", async () => {
@@ -263,6 +277,7 @@ describe("structured OpenAI tasks", () => {
       reasoning: { effort: "low" },
       text: { format: { type: "json_schema", name: "investment_brief", strict: true } },
     });
+    expect((fake.requests[0] as { input: string }).input).toContain("metadata, not citable evidence");
   });
 
   it("rejects an evaluation for a different company before drafting", async () => {
@@ -288,6 +303,23 @@ describe("structured OpenAI tasks", () => {
   it("retries one invalid brief draft before applying the citation gate", async () => {
     const fake = dependencies([
       JSON.stringify({ summary: [{ text: "Missing statement kind", evidenceIndexes: [0] }], strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [] }),
+      JSON.stringify({ summary: [], strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [] }),
+    ]);
+
+    await expect(draftInvestmentBrief({ bundle, thesis, evaluation }, fake)).resolves.toMatchObject({ summary: [] });
+    expect(fake.requests).toHaveLength(2);
+  });
+
+  it("retries a brief that attempts to cite deterministic evaluation metadata", async () => {
+    const fake = dependencies([
+      JSON.stringify({
+        summary: [{
+          text: "The deterministic evaluation assigns a thesis fit of 100.",
+          statementKind: "fact",
+          evidenceIndexes: [0],
+        }],
+        strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [],
+      }),
       JSON.stringify({ summary: [], strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [] }),
     ]);
 

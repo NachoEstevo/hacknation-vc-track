@@ -25,6 +25,7 @@ export interface OpenAIResponseResult {
 export interface OpenAIStructuredTaskDependencies {
   config: OpenAIConfig;
   createResponse(request: ResponseCreateParamsNonStreaming): Promise<OpenAIResponseResult>;
+  now?: () => Date;
 }
 
 export type OpenAIClientFactory = (options: { apiKey: string; maxRetries: 0 }) => {
@@ -61,6 +62,7 @@ function stableInstructions(outcome: string): string {
     `PROMPT_VERSION: ${PROMPT_VERSION}`,
     `OUTCOME: ${outcome}`,
     "Use only the supplied evidence. Do not invent facts, scores, recommendations, verification states, or evidence IDs.",
+    "The deterministic EVALUATION object is metadata, not citable evidence. Do not restate its scores, recommendation, or criterion states in prose.",
     "Cite every factual or analytical statement with the supplied evidence indexes. Stop when the supplied evidence is insufficient and name the gap instead.",
     "Return only JSON that satisfies the provided schema.",
   ].join("\n");
@@ -212,25 +214,38 @@ interface BriefDraftContent {
   diligenceQuestions: string[];
 }
 
+const EVALUATION_RESTATEMENT = /\b(?:deterministic evaluation|thesis fit|evidence coverage|recommendation|pass_for_thesis|needs_evidence)\b/iu;
+
 function briefDraft(value: unknown, bundle: CompanyEvidenceBundle): BriefDraftContent {
   if (!isRecord(value) || !Array.isArray(value.evidenceGaps) || !Array.isArray(value.diligenceQuestions)
     || !value.evidenceGaps.every((gap) => isRecord(gap) && typeof gap.field === "string" && gap.field.trim() !== "" && typeof gap.reason === "string" && gap.reason.trim() !== "")
     || !value.diligenceQuestions.every((question) => typeof question === "string" && question.trim() !== "")) {
     throw new Error("Invalid investment brief");
   }
+  const summary = citedStatements(value.summary, bundle);
+  const strengths = citedStatements(value.strengths, bundle);
+  const risks = citedStatements(value.risks, bundle);
+  if ([...summary, ...strengths, ...risks].some(({ text }) => EVALUATION_RESTATEMENT.test(text))) {
+    throw new Error("Brief prose must not restate deterministic evaluation metadata");
+  }
   return {
-    summary: citedStatements(value.summary, bundle), strengths: citedStatements(value.strengths, bundle), risks: citedStatements(value.risks, bundle),
+    summary, strengths, risks,
     evidenceGaps: value.evidenceGaps as InvestmentBrief["evidenceGaps"], diligenceQuestions: value.diligenceQuestions as string[],
   };
 }
 
 export async function parseThesis(query: string, dependencies: OpenAIStructuredTaskDependencies): Promise<FundThesis> {
-  return requestStructured("parse_thesis", {
+  const thesis = await requestStructured("parse_thesis", {
     model: dependencies.config.extractionModel,
     reasoning: { effort: dependencies.config.extractionReasoning },
     input: `${thesisInstructions()}\n\nQUERY:\n${query}`,
     text: { format: { type: "json_schema", name: "fund_thesis", strict: true, schema: fundThesisSchema } },
   }, dependencies, validateFundThesis);
+  return {
+    ...thesis,
+    generatedAt: (dependencies.now ?? (() => new Date()))().toISOString(),
+    promptVersion: PROMPT_VERSION,
+  };
 }
 
 export async function extractClaimCandidates(bundle: CompanyEvidenceBundle, dependencies: OpenAIStructuredTaskDependencies): Promise<ClaimCandidate[]> {

@@ -57,6 +57,20 @@ Outputs:
 - `data/enriched/company-web-profiles-summary.json`: run-level coverage;
 - `data/enriched/clay-founder-pilot.json`: earlier three-company founder-search pilot, kept as a separate provenance snapshot.
 
+## Investment brief run
+
+The brief engine consumes only `data/source/clay-us-uk-early-software.csv` and `data/enriched/company-web-profiles.json` for the demo run. It parses the human thesis into a reviewable file and stops before company-level model calls. An operator must inspect and explicitly accept that file before the 50-company analysis can start.
+
+The 2026-07-18 accepted run evaluated and ranked all 50 companies, requested three briefs, generated three briefs, and rejected none at the citation gate. The result is `completed`. All three selected companies are `pass_for_thesis` with 0% thesis fit because human-readable country names and a numeric size cap do not directly equal the normalized country-code and size-band values; the B2B, stage, and execution criteria also lacked directly matching evaluated values. This is retained as an explicit data-contract gap rather than rewritten into a positive result.
+
+Outputs:
+
+- `data/briefs/demo-investment-briefs.thesis.json`: reviewed thesis;
+- `data/briefs/demo-investment-briefs.json`: allowlisted evidence, deterministic evaluations and ranking, cited briefs, and sanitized failures;
+- `data/briefs/demo-investment-briefs-summary.json`: compact live-run counts and limitations.
+
+The source CSV is an unverified discovery export and is conservatively tagged `investor_private` in evidence metadata. The enrichment evidence is public website/GitHub data. No Rely, Stripe, founder document, or founder assertion data was used. Full operation and scoring details are in `docs/investment-brief-engine.md`.
+
 ## Run locally
 
 ```powershell

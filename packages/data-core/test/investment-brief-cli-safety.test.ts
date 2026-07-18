@@ -84,7 +84,7 @@ describe("investment brief CLI filesystem safety", () => {
     {
       label: "derived thesis artifact",
       args: [
-        "--companies", "briefs.json.thesis.json",
+        "--companies", "briefs.thesis.json",
         "--enrichment", "enrichment.json",
         "--thesis", thesis.originalQuery,
         "--output", "briefs.json",
@@ -109,7 +109,7 @@ describe("investment brief CLI filesystem safety", () => {
 
   it("writes through a temporary file in the destination directory then renames", async () => {
     const { runtime, events } = setupRuntime();
-    const destination = resolve(runtime.cwd, "briefs.json.thesis.json");
+    const destination = resolve(runtime.cwd, "briefs.thesis.json");
 
     await runBriefCli(baseArgs, runtime);
 
