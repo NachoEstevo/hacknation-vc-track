@@ -11,3 +11,5 @@ export * from "./enrichment/enrich-company.js";
 export * from "./enrichment/enrich-github-profile.js";
 export * from "./enrichment/extract-company-profile.js";
 export * from "./enrichment/types.js";
+export * from "./briefs/build-evidence-index.js";
+export * from "./briefs/types.js";
