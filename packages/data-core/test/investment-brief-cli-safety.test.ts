@@ -195,6 +195,10 @@ describe("investment brief CLI confirmed run", () => {
       removeFile: async () => undefined,
       structuredTasks,
     };
+    (runtime as BriefCliRuntime & { modelNames: { extraction: string; brief: string } }).modelNames = {
+      extraction: "extract-live",
+      brief: "brief-live",
+    };
 
     const run = await runBriefCli([
       "--companies", "companies.csv",
@@ -209,12 +213,13 @@ describe("investment brief CLI confirmed run", () => {
     expect(run.evaluations).toHaveLength(2);
     expect(run.briefs).toHaveLength(1);
     expect(run.failures).toHaveLength(1);
-    expect(writes).toHaveLength(1);
-    expect(renames).toEqual([{
-      source: writes[0]!.path,
-      destination: resolve(runtime.cwd, "briefs.json"),
-    }]);
-    const persisted = JSON.parse(writes[0]!.contents) as Record<string, unknown>;
+    expect(writes).toHaveLength(2);
+    expect(renames.map(({ destination }) => destination)).toEqual([
+      resolve(runtime.cwd, "briefs.json"),
+      resolve(runtime.cwd, "briefs-summary.json"),
+    ]);
+    const persisted = JSON.parse(writes.find(({ path }) => !path.includes("summary"))!.contents) as Record<string, unknown>;
+    const summary = JSON.parse(writes.find(({ path }) => path.includes("summary"))!.contents) as Record<string, any>;
     const serialized = JSON.stringify(persisted);
     expect(serialized).not.toContain(apiKeySentinel);
     expect(serialized).not.toContain(rawCsvSentinel);
@@ -225,5 +230,15 @@ describe("investment brief CLI confirmed run", () => {
         message: "Investment brief drafting failed",
       }],
     });
+    expect(summary).toMatchObject({
+      status: "partial",
+      models: { thesisAndClaimExtraction: "extract-live", briefDrafting: "brief-live" },
+      counts: { evaluatedCompanies: 2, requestedBriefs: 3, validBriefs: 1, failedBriefs: 1 },
+      evidenceCounts: { publicVisibility: 0, investorPrivateVisibility: 0 },
+      failures: [{ stage: "draft_investment_brief" }],
+      provenance: { rankingSeed: "companies.csv", publishedEvidence: "enrichment.json" },
+    });
+    expect(summary.generatedAt).toBe(persisted.generatedAt);
+    expect(summary.topCompanies).toHaveLength(2);
   });
 });

@@ -5,10 +5,12 @@ import { pathToFileURL } from "node:url";
 import {
   buildImportBatch,
   buildInvestmentBriefs,
+  createInvestmentBriefSummary,
   createOpenAIResponse,
   draftInvestmentBrief,
   extractClaimCandidates,
   loadOpenAIConfig,
+  openAIModelNames,
   parseClayCsv,
   parseThesis,
   toInvestmentBriefArtifact,
@@ -103,6 +105,7 @@ export interface BriefCliRuntime {
   rename(source: string, destination: string): Promise<void>;
   removeFile(path: string): Promise<void>;
   structuredTasks: BuildInvestmentBriefsDependencies;
+  modelNames?: { extraction: string; brief: string };
 }
 
 function parseEnrichments(value: string): CompanyEnrichmentResult[] {
@@ -149,6 +152,14 @@ interface CanonicalCliPaths {
   thesisFile: string | undefined;
   output: string;
   thesisOutput: string;
+  summaryOutput: string;
+}
+
+function derivedJsonPath(output: string, suffix: string, separator = "."): string {
+  const extension = extname(output);
+  return extension.toLocaleLowerCase("en-US") === ".json"
+    ? `${output.slice(0, -extension.length)}${separator}${suffix}.json`
+    : `${output}${separator}${suffix}.json`;
 }
 
 async function canonicalizeCliPaths(
@@ -162,19 +173,16 @@ async function canonicalizeCliPaths(
     : undefined;
   const requestedOutput = resolve(runtime.cwd, args.output);
   const output = await canonicalTarget(requestedOutput, runtime);
-  const outputExtension = extname(requestedOutput);
-  const thesisOutputPath = outputExtension.toLocaleLowerCase("en-US") === ".json"
-    ? `${requestedOutput.slice(0, -outputExtension.length)}.thesis.json`
-    : `${requestedOutput}.thesis.json`;
-  const thesisOutput = await canonicalTarget(thesisOutputPath, runtime);
+  const thesisOutput = await canonicalTarget(derivedJsonPath(requestedOutput, "thesis"), runtime);
+  const summaryOutput = await canonicalTarget(derivedJsonPath(requestedOutput, "summary", "-"), runtime);
   const inputs = [companies, enrichment, thesisFile]
     .filter((path): path is string => path !== undefined)
     .map(canonicalPath);
-  const destinations = args.acceptParsedThesis ? [output] : [output, thesisOutput];
+  const destinations = args.acceptParsedThesis ? [output, summaryOutput] : [output, thesisOutput];
   if (destinations.some((path) => inputs.includes(canonicalPath(path)))) {
     throw new BriefCliUsageError("--output must not overwrite an input file");
   }
-  return { companies, enrichment, thesisFile, output, thesisOutput };
+  return { companies, enrichment, thesisFile, output, thesisOutput, summaryOutput };
 }
 
 async function atomicWrite(
@@ -219,13 +227,19 @@ export async function runBriefCli(
     thesisConfirmed: args.acceptParsedThesis,
     top: args.top,
   }, runtime.structuredTasks);
-  const destination = run.status === "awaiting_thesis_confirmation"
-    ? paths.thesisOutput
-    : paths.output;
-  const output = run.status === "awaiting_thesis_confirmation"
-    ? run.thesis
-    : toInvestmentBriefArtifact(run);
-  await atomicWrite(destination, `${JSON.stringify(output, null, 2)}\n`, runtime);
+  if (run.status === "awaiting_thesis_confirmation") {
+    await atomicWrite(paths.thesisOutput, `${JSON.stringify(run.thesis, null, 2)}\n`, runtime);
+    return run;
+  }
+  const artifact = toInvestmentBriefArtifact(run);
+  await atomicWrite(paths.output, `${JSON.stringify(artifact, null, 2)}\n`, runtime);
+  const summary = createInvestmentBriefSummary(artifact, {
+    modelNames: runtime.modelNames ?? { extraction: "unknown", brief: "unknown" },
+    requestedBriefs: args.top,
+    rankingSeed: basename(paths.companies),
+    publishedEvidence: basename(paths.enrichment),
+  });
+  await atomicWrite(paths.summaryOutput, `${JSON.stringify(summary, null, 2)}\n`, runtime);
   return run;
 }
 
@@ -243,7 +257,7 @@ export function createStructuredTasks(
   }
   return {
     parseThesis: (query) => parseThesis(query, configuredTasks()),
-    extractClaimCandidates: (bundle) => extractClaimCandidates(bundle, configuredTasks()),
+    extractClaimCandidates: (bundle, thesis) => extractClaimCandidates(bundle, configuredTasks(), thesis),
     draftInvestmentBrief: (input) => draftInvestmentBrief(input, configuredTasks()),
   };
 }
@@ -263,6 +277,7 @@ async function main(): Promise<void> {
     rename: (source, destination) => rename(source, destination),
     removeFile: (path) => unlink(path),
     structuredTasks: createStructuredTasks(process.env),
+    modelNames: openAIModelNames(process.env),
   });
 }
 

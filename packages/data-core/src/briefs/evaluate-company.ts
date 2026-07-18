@@ -21,11 +21,40 @@ function fieldValues(bundle: CompanyEvidenceBundle, criterion: ThesisCriterion):
     : criterion.category === "industry"
       ? [company.primaryIndustry]
       : criterion.category === "company_size"
-        ? [company.sizeBand]
+        ? []
         : criterion.category === "product" || criterion.category === "market"
           ? [company.description]
           : [];
   return values.filter((value): value is string => value !== null).map((value) => ({ value, evidenceIds: clayEvidenceIds, conflicted: false }));
+}
+
+interface NumericRange {
+  minimum: number;
+  maximum: number;
+}
+
+function teamSizeRange(value: string | null): NumericRange | null {
+  if (!value) return null;
+  if (/^self-employed$/iu.test(value.trim())) return { minimum: 1, maximum: 1 };
+  const match = value.match(/(\d+)\s*[-–]\s*(\d+)/u);
+  if (!match) return null;
+  return { minimum: Number(match[1]), maximum: Number(match[2]) };
+}
+
+function companySizeEvaluation(bundle: CompanyEvidenceBundle, criterion: ThesisCriterion): CriterionEvaluation | null {
+  if (criterion.category !== "company_size" || (criterion.operator !== "lte" && criterion.operator !== "gte")
+    || typeof criterion.expectedValue !== "number") return null;
+  const evidenceIds = bundle.evidence.filter(({ sourceType }) => sourceType === "clay_csv").map(({ evidenceId }) => evidenceId);
+  const range = evidenceIds.length > 0 ? teamSizeRange(bundle.normalizedCompany.sizeBand) : null;
+  if (!range) return { criterionId: criterion.criterionId, requirement: criterion.requirement, state: "missing", weight: criterion.weight, reason: "No comparable team-size range is available.", evidenceIds: [] };
+  const relation = criterion.operator === "lte"
+    ? range.maximum <= criterion.expectedValue ? "match" : range.minimum <= criterion.expectedValue ? "partial" : "nonmatch"
+    : range.minimum >= criterion.expectedValue ? "match" : range.maximum >= criterion.expectedValue ? "partial" : "nonmatch";
+  const state = relation === "match"
+    ? criterion.requirement === "excluded" ? "conflict" : "match"
+    : relation === "partial" ? "partial"
+      : criterion.requirement === "required" ? "conflict" : criterion.requirement === "excluded" ? "match" : "partial";
+  return { criterionId: criterion.criterionId, requirement: criterion.requirement, state, weight: criterion.weight, reason: relation === "partial" ? "The reported team-size range overlaps the criterion boundary." : state === "match" ? "The reported team-size range matches this criterion." : "The reported team-size range does not match this criterion.", evidenceIds };
 }
 
 function relevantClaim(claim: ClaimCandidate, criterion: ThesisCriterion): boolean {
@@ -58,8 +87,19 @@ function matches(operator: ThesisCriterion["operator"], expectedValue: ThesisCri
   return expectedValue === false && candidate.value === false;
 }
 
+function comparable(operator: ThesisCriterion["operator"], expectedValue: ThesisCriterion["expectedValue"], candidate: CandidateValue): boolean {
+  if (operator === "one_of") return Array.isArray(expectedValue) && typeof candidate.value === "string";
+  if (operator === "gte" || operator === "lte") return typeof expectedValue === "number" && typeof candidate.value === "number";
+  if (operator === "contains") return typeof expectedValue === "string" && typeof candidate.value === "string";
+  if (operator === "exists" || operator === "not_exists") return true;
+  return !Array.isArray(expectedValue) && (typeof expectedValue === typeof candidate.value);
+}
+
 function evaluateCriterion(bundle: CompanyEvidenceBundle, criterion: ThesisCriterion, claims: ClaimCandidate[]): CriterionEvaluation {
-  const candidates = [...fieldValues(bundle, criterion), ...claimValues(bundle, criterion, claims)];
+  const sizeEvaluation = companySizeEvaluation(bundle, criterion);
+  if (sizeEvaluation) return sizeEvaluation;
+  const candidates = [...fieldValues(bundle, criterion), ...claimValues(bundle, criterion, claims)]
+    .filter((candidate) => comparable(criterion.operator, criterion.expectedValue, candidate));
   const evidenceIds = [...new Set(candidates.flatMap((candidate) => candidate.evidenceIds))];
   const hasMatch = candidates.some((candidate) => matches(criterion.operator, criterion.expectedValue, candidate));
   const hasConflict = candidates.some((candidate) => candidate.conflicted);

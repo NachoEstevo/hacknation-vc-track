@@ -95,7 +95,7 @@ export function validateBriefCitations(
         errors.push({ code: "unknown_evidence_id", section, statementIndex });
       }
 
-      if (statement.statementKind === "analysis") {
+      if (statement.statementKind === "analysis" || statement.statementKind === "fact") {
         const supportedTokens = new Set(citedEvidence.flatMap((item) => numericTokens(evidenceText(item))));
         const hasUnsupportedNumber = numericTokens(statement.text)
           .some((token) => !supportedTokens.has(token));

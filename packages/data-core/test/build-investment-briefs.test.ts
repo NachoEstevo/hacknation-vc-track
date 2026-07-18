@@ -151,6 +151,19 @@ describe("buildInvestmentBriefs", () => {
     expect(maximumActive).toBe(4);
   });
 
+  it("provides the reviewed thesis to every claim-extraction task", async () => {
+    const { input, dependencies } = setup(2);
+    const received: unknown[] = [];
+    dependencies.extractClaimCandidates = (async (...args: unknown[]) => {
+      received.push(args[1]);
+      return [];
+    }) as BuildInvestmentBriefsDependencies["extractClaimCandidates"];
+
+    await buildInvestmentBriefs(input, dependencies);
+
+    expect(received).toEqual([thesis, thesis]);
+  });
+
   it("drafts only the default top three plus explicitly requested companies", async () => {
     const { input, dependencies, calls } = setup(10);
 
@@ -168,6 +181,19 @@ describe("buildInvestmentBriefs", () => {
     expect(result.briefs.map((item) => item.companyId)).toEqual(calls.drafted);
   });
 
+  it("provides only public evidence to brief drafting", async () => {
+    const { input, dependencies } = setup(1);
+    let visibilities: string[] = [];
+    dependencies.draftInvestmentBrief = async ({ bundle, evaluation }) => {
+      visibilities = bundle.evidence.map(({ visibility }) => visibility);
+      return brief(bundle, evaluation);
+    };
+
+    await buildInvestmentBriefs(input, dependencies);
+
+    expect(visibilities).toEqual([]);
+  });
+
   it("honors a requested top count without skipping evaluation of lower-ranked companies", async () => {
     const { input, dependencies, calls } = setup(10);
 
@@ -181,9 +207,9 @@ describe("buildInvestmentBriefs", () => {
   it("isolates and types one-company extraction failures without cancelling evaluation", async () => {
     const { input, dependencies } = setup(4);
     const extract = dependencies.extractClaimCandidates;
-    dependencies.extractClaimCandidates = async (bundle) => {
+    dependencies.extractClaimCandidates = async (bundle, reviewedThesis) => {
       if (bundle.companyId === "company-01") throw new Error("provider unavailable");
-      return extract(bundle);
+      return extract(bundle, reviewedThesis);
     };
 
     const result = await buildInvestmentBriefs(input, dependencies);

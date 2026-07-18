@@ -1,6 +1,6 @@
-import type { StableCompanySeed } from "../types.js";
 import type { InvestmentBriefRun, InvestmentBriefFailure } from "./build-investment-briefs.js";
 import type {
+  AssessmentAxis,
   CompanyEvaluation,
   EvidenceRecord,
   FundThesis,
@@ -8,20 +8,9 @@ import type {
 } from "./types.js";
 import type { RankedCompany } from "./rank-companies.js";
 
-export interface ArtifactCompanySource {
-  sourceType: "clay_csv";
-  rowNumber: number;
-  verification: "unverified";
-}
-
-export interface ArtifactCompany extends Omit<StableCompanySeed, "source"> {
-  source: ArtifactCompanySource;
-}
-
 export interface ArtifactEvidenceBundle {
   companyId: string;
   companyName: string;
-  normalizedCompany: ArtifactCompany;
   evidence: EvidenceRecord[];
 }
 
@@ -34,27 +23,6 @@ export interface InvestmentBriefArtifact {
   ranking: RankedCompany[];
   briefs: InvestmentBrief[];
   failures: InvestmentBriefFailure[];
-}
-
-function artifactCompany(company: StableCompanySeed): ArtifactCompany {
-  return {
-    stableId: company.stableId,
-    name: company.name,
-    description: company.description,
-    primaryIndustry: company.primaryIndustry,
-    sizeBand: company.sizeBand,
-    organizationType: company.organizationType,
-    location: company.location,
-    countryCode: company.countryCode,
-    domain: company.domain,
-    linkedInUrl: company.linkedInUrl,
-    dedupeKey: company.dedupeKey,
-    source: {
-      sourceType: company.source.sourceType,
-      rowNumber: company.source.rowNumber,
-      verification: company.source.verification,
-    },
-  };
 }
 
 function artifactEvidence(record: EvidenceRecord): EvidenceRecord {
@@ -72,6 +40,41 @@ function artifactEvidence(record: EvidenceRecord): EvidenceRecord {
   };
 }
 
+export class PublicArtifactError extends Error {
+  constructor() {
+    super("Brief cites private or unknown evidence");
+    this.name = "PublicArtifactError";
+  }
+}
+
+function publicAxes(axes: AssessmentAxis[], publicIds: Set<string>): AssessmentAxis[] {
+  return axes.map((axis) => ({
+    ...axis,
+    dimensions: axis.dimensions.map((dimension) => ({
+      ...dimension,
+      evidenceIds: dimension.evidenceIds.filter((id) => publicIds.has(id)),
+    })),
+  }));
+}
+
+function publicEvaluation(evaluation: CompanyEvaluation, publicIds: Set<string>): CompanyEvaluation {
+  return {
+    ...evaluation,
+    criteria: evaluation.criteria.map((criterion) => ({
+      ...criterion,
+      evidenceIds: criterion.evidenceIds.filter((id) => publicIds.has(id)),
+    })),
+    axes: publicAxes(evaluation.axes, publicIds),
+  };
+}
+
+function publicBrief(brief: InvestmentBrief, publicIds: Set<string>): InvestmentBrief {
+  for (const statement of [...brief.summary, ...brief.strengths, ...brief.risks]) {
+    if (statement.evidenceIds.some((id) => !publicIds.has(id))) throw new PublicArtifactError();
+  }
+  return { ...brief, axes: publicAxes(brief.axes, publicIds) };
+}
+
 const CITATION_ERROR = /(fact_missing_citation|analysis_missing_citation|unknown_evidence_id|unsupported_numeric_value):(summary|strengths|risks):(\d+)/g;
 
 function safeFailureMessage(failure: InvestmentBriefFailure): string {
@@ -86,6 +89,8 @@ function safeFailureMessage(failure: InvestmentBriefFailure): string {
 }
 
 export function toInvestmentBriefArtifact(run: InvestmentBriefRun): InvestmentBriefArtifact {
+  const publicEvidence = run.evidence.flatMap((bundle) => bundle.evidence.filter(({ visibility }) => visibility === "public"));
+  const publicIds = new Set(publicEvidence.map(({ evidenceId }) => evidenceId));
   return {
     status: run.status,
     generatedAt: run.generatedAt,
@@ -93,12 +98,11 @@ export function toInvestmentBriefArtifact(run: InvestmentBriefRun): InvestmentBr
     evidence: run.evidence.map((bundle) => ({
       companyId: bundle.companyId,
       companyName: bundle.companyName,
-      normalizedCompany: artifactCompany(bundle.normalizedCompany),
-      evidence: bundle.evidence.map(artifactEvidence),
+      evidence: bundle.evidence.filter(({ visibility }) => visibility === "public").map(artifactEvidence),
     })),
-    evaluations: run.evaluations,
-    ranking: run.ranking,
-    briefs: run.briefs,
+    evaluations: run.evaluations.map((evaluation) => publicEvaluation(evaluation, publicIds)),
+    ranking: run.ranking.map(({ rank, evaluation }) => ({ rank, evaluation: publicEvaluation(evaluation, publicIds) })),
+    briefs: run.briefs.map((brief) => publicBrief(brief, publicIds)),
     failures: run.failures.map((failure) => ({
       companyId: failure.companyId,
       stage: failure.stage,

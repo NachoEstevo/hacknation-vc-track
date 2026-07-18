@@ -1,6 +1,7 @@
 {
-  "status": "completed",
-  "generatedAt": "2026-07-18T23:29:49.270Z",
+  "status": "partial",
+  "generatedAt": "2026-07-18T23:54:41.430Z",
+  "thesisGeneratedAt": "2026-07-18T23:52:52.458Z",
   "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
   "promptVersion": "briefs-v1",
   "models": {
@@ -8,61 +9,62 @@
     "briefDrafting": "gpt-5.6-sol"
   },
   "counts": {
-    "sourceCompanies": 50,
     "evaluatedCompanies": 50,
     "rankedCompanies": 50,
     "requestedBriefs": 3,
-    "validBriefs": 3,
-    "failedBriefs": 0,
-    "citationValidBriefs": 3
+    "validBriefs": 2,
+    "failedBriefs": 1,
+    "totalFailures": 1
   },
   "evidenceCounts": {
-    "clayCsv": 50,
     "companyWebsite": 38,
     "githubPublic": 1,
     "publicVisibility": 39,
-    "investorPrivateVisibility": 50
+    "investorPrivateVisibility": 0
   },
-  "topThree": [
+  "topCompanies": [
     {
       "rank": 1,
-      "companyId": "0186b70d0e326a1dbbaacac5",
-      "companyName": "Career Principles",
+      "companyId": "12cd1e805e9508bd8a43af53",
+      "companyName": "Julian Jewel's AI Bot",
       "recommendation": "pass_for_thesis",
-      "thesisFit": 0,
+      "thesisFit": 66.66666666666666,
       "evidenceCoverage": 65.21739130434783,
-      "citedStatements": 7
+      "briefGenerated": false,
+      "briefGeneratedAt": null
     },
     {
       "rank": 2,
-      "companyId": "07738bc0d64caad517eb18bb",
-      "companyName": "Bridging the Gap",
+      "companyId": "73c89d3320e06114f6241365",
+      "companyName": "Icon",
       "recommendation": "pass_for_thesis",
-      "thesisFit": 0,
+      "thesisFit": 66.66666666666666,
       "evidenceCoverage": 65.21739130434783,
-      "citedStatements": 9
+      "briefGenerated": true,
+      "briefGeneratedAt": "2026-07-18T23:55:18.390Z"
     },
     {
       "rank": 3,
-      "companyId": "103985f3d9a2524734319456",
-      "companyName": "SET",
+      "companyId": "de15bb5f896e8ceac7531ad7",
+      "companyName": "Steal These Thoughts!",
       "recommendation": "pass_for_thesis",
-      "thesisFit": 0,
+      "thesisFit": 66.66666666666666,
       "evidenceCoverage": 65.21739130434783,
-      "citedStatements": 8
+      "briefGenerated": true,
+      "briefGeneratedAt": "2026-07-18T23:55:21.570Z"
     }
   ],
-  "failures": [],
+  "failures": [
+    {
+      "companyId": "12cd1e805e9508bd8a43af53",
+      "stage": "draft_investment_brief",
+      "message": "Investment brief drafting failed"
+    }
+  ],
   "provenance": {
-    "companyDataset": "data/source/clay-us-uk-early-software.csv",
-    "publicWebEnrichment": "data/enriched/company-web-profiles.json",
-    "privateRelyDataUsed": false,
-    "rawCsvRowsPersisted": false
-  },
-  "knownGaps": [
-    "Human-readable country names do not equal the normalized US and GB country codes.",
-    "The numeric team-size cap does not match string-valued size bands such as 2-10 employees.",
-    "B2B software, early-stage, and execution criteria lack directly matching normalized fields or claims in this run.",
-    "The committed Clay discovery rows are unverified and conservatively tagged investor_private by the evidence schema."
-  ]
+    "rankingSeed": "clay-us-uk-early-software.csv",
+    "rankingSeedHandling": "owner_provided_internal_not_published",
+    "publishedEvidence": "company-web-profiles.json",
+    "publishedVisibility": "public_only"
+  }
 }

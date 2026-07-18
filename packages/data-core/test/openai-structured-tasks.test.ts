@@ -104,6 +104,23 @@ describe("structured OpenAI tasks", () => {
     });
   });
 
+  it("canonicalizes human geography values to normalized seed country codes", async () => {
+    const rawThesis = {
+      ...thesis,
+      criteria: [{
+        ...thesis.criteria[0]!,
+        category: "geography" as const,
+        operator: "one_of" as const,
+        expectedValue: ["United States", "United Kingdom"],
+      }],
+    };
+    const fake = dependencies([JSON.stringify(rawThesis)]);
+
+    const result = await parseThesis(rawThesis.originalQuery, fake);
+
+    expect(result.criteria[0]!.expectedValue).toEqual(["US", "GB"]);
+  });
+
   it("treats the thesis query as source text without evidence-index instructions", async () => {
     const fake = dependencies([JSON.stringify(thesis)]);
 
@@ -280,6 +297,17 @@ describe("structured OpenAI tasks", () => {
     expect((fake.requests[0] as { input: string }).input).toContain("metadata, not citable evidence");
   });
 
+  it("uses the trusted runtime clock for brief generation metadata", async () => {
+    const fake = dependencies([JSON.stringify({
+      summary: [], strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [],
+    })]);
+    fake.now = () => new Date("2026-07-18T01:00:00.000Z");
+
+    const brief = await draftInvestmentBrief({ bundle, thesis, evaluation }, fake);
+
+    expect(brief.generatedAt).toBe("2026-07-18T01:00:00.000Z");
+  });
+
   it("rejects an evaluation for a different company before drafting", async () => {
     const fake = dependencies([JSON.stringify({ summary: [], strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [] })]);
 
@@ -318,6 +346,26 @@ describe("structured OpenAI tasks", () => {
           statementKind: "fact",
           evidenceIndexes: [0],
         }],
+        strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [],
+      }),
+      JSON.stringify({ summary: [], strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [] }),
+    ]);
+
+    await expect(draftInvestmentBrief({ bundle, thesis, evaluation }, fake)).resolves.toMatchObject({ summary: [] });
+    expect(fake.requests).toHaveLength(2);
+  });
+
+  it.each([
+    "The company was rated investigate with a fit score of 100.",
+    "The current decision label is watch.",
+    "Our recommendation state is positive.",
+    "The market axis is strong.",
+    "This criterion is a match.",
+    "It ranks first on coverage.",
+  ])("rejects structural decision metadata prose: %s", async (text) => {
+    const fake = dependencies([
+      JSON.stringify({
+        summary: [{ text, statementKind: "fact", evidenceIndexes: [0] }],
         strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [],
       }),
       JSON.stringify({ summary: [], strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [] }),

@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 import type { ResponseCreateParamsNonStreaming } from "openai/resources/responses/responses.js";
 import { calculateClaimTrust, type ClaimDirectness } from "./calculate-claim-trust.js";
+import { containsEvaluationMetadata } from "./brief-prose-policy.js";
+import { canonicalizeFundThesis } from "./canonicalize-thesis.js";
 import type { OpenAIConfig } from "./openai-config.js";
 import { claimCandidatesSchema, fundThesisSchema, investmentBriefSchema } from "./openai-schemas.js";
 import { validateBriefCitations } from "./validate-brief-citations.js";
@@ -214,8 +216,6 @@ interface BriefDraftContent {
   diligenceQuestions: string[];
 }
 
-const EVALUATION_RESTATEMENT = /\b(?:deterministic evaluation|thesis fit|evidence coverage|recommendation|pass_for_thesis|needs_evidence)\b/iu;
-
 function briefDraft(value: unknown, bundle: CompanyEvidenceBundle): BriefDraftContent {
   if (!isRecord(value) || !Array.isArray(value.evidenceGaps) || !Array.isArray(value.diligenceQuestions)
     || !value.evidenceGaps.every((gap) => isRecord(gap) && typeof gap.field === "string" && gap.field.trim() !== "" && typeof gap.reason === "string" && gap.reason.trim() !== "")
@@ -225,7 +225,7 @@ function briefDraft(value: unknown, bundle: CompanyEvidenceBundle): BriefDraftCo
   const summary = citedStatements(value.summary, bundle);
   const strengths = citedStatements(value.strengths, bundle);
   const risks = citedStatements(value.risks, bundle);
-  if ([...summary, ...strengths, ...risks].some(({ text }) => EVALUATION_RESTATEMENT.test(text))) {
+  if ([...summary, ...strengths, ...risks].some(({ text }) => containsEvaluationMetadata(text))) {
     throw new Error("Brief prose must not restate deterministic evaluation metadata");
   }
   return {
@@ -235,12 +235,12 @@ function briefDraft(value: unknown, bundle: CompanyEvidenceBundle): BriefDraftCo
 }
 
 export async function parseThesis(query: string, dependencies: OpenAIStructuredTaskDependencies): Promise<FundThesis> {
-  const thesis = await requestStructured("parse_thesis", {
+  const thesis = canonicalizeFundThesis(await requestStructured("parse_thesis", {
     model: dependencies.config.extractionModel,
     reasoning: { effort: dependencies.config.extractionReasoning },
     input: `${thesisInstructions()}\n\nQUERY:\n${query}`,
     text: { format: { type: "json_schema", name: "fund_thesis", strict: true, schema: fundThesisSchema } },
-  }, dependencies, validateFundThesis);
+  }, dependencies, validateFundThesis));
   return {
     ...thesis,
     generatedAt: (dependencies.now ?? (() => new Date()))().toISOString(),
@@ -248,12 +248,12 @@ export async function parseThesis(query: string, dependencies: OpenAIStructuredT
   };
 }
 
-export async function extractClaimCandidates(bundle: CompanyEvidenceBundle, dependencies: OpenAIStructuredTaskDependencies): Promise<ClaimCandidate[]> {
+export async function extractClaimCandidates(bundle: CompanyEvidenceBundle, dependencies: OpenAIStructuredTaskDependencies, thesis?: FundThesis): Promise<ClaimCandidate[]> {
   assertBundleIdentity(bundle, "extract_claim_candidates");
   return requestStructured("extract_claim_candidates", {
     model: dependencies.config.extractionModel,
     reasoning: { effort: dependencies.config.extractionReasoning },
-    input: `${stableInstructions("Extract evidence-backed claim candidates for one company.")}\n\nEVIDENCE:\n${JSON.stringify(evidenceInput(bundle))}`,
+    input: `${stableInstructions("Extract evidence-backed claim candidates for one company.")}\nFor criterion-backed claims, predicate must exactly equal a supplied criterionId.\n\nCRITERIA:\n${JSON.stringify(thesis?.criteria ?? [])}\n\nEVIDENCE:\n${JSON.stringify(evidenceInput(bundle))}`,
     text: { format: { type: "json_schema", name: "claim_candidates", strict: true, schema: claimCandidatesSchema } },
   }, dependencies, (value) => claimCandidates(value, bundle));
 }
@@ -274,7 +274,7 @@ export async function draftInvestmentBrief(input: DraftInvestmentBriefInput, dep
     thesisFit: input.evaluation.thesisFit, evidenceCoverage: input.evaluation.evidenceCoverage, axes: input.evaluation.axes,
     summary: draft.summary, strengths: draft.strengths, risks: draft.risks,
     evidenceGaps: draft.evidenceGaps, diligenceQuestions: draft.diligenceQuestions,
-    generatedAt: evaluationTime(input.bundle), promptVersion: PROMPT_VERSION,
+    generatedAt: (dependencies.now ?? (() => new Date()))().toISOString(), promptVersion: PROMPT_VERSION,
   };
   if (!validateBriefCitations(brief, input.bundle.evidence).valid) {
     throw new OpenAIStructuredTaskError("draft_investment_brief", "citation_validation");

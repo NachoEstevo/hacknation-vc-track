@@ -1,6 +1,7 @@
 import type { CompanyEnrichmentResult } from "../enrichment/types.js";
 import type { StableCompanySeed } from "../types.js";
 import { buildEvidenceIndex } from "./build-evidence-index.js";
+import { canonicalizeFundThesis } from "./canonicalize-thesis.js";
 import { evaluateCompany } from "./evaluate-company.js";
 import { rankCompanies, type RankedCompany } from "./rank-companies.js";
 import type {
@@ -27,7 +28,7 @@ export interface BuildInvestmentBriefsInput {
 
 export interface BuildInvestmentBriefsDependencies {
   parseThesis(query: string): Promise<FundThesis>;
-  extractClaimCandidates(bundle: CompanyEvidenceBundle): Promise<ClaimCandidate[]>;
+  extractClaimCandidates(bundle: CompanyEvidenceBundle, thesis: FundThesis): Promise<ClaimCandidate[]>;
   draftInvestmentBrief(input: {
     bundle: CompanyEvidenceBundle;
     thesis: FundThesis;
@@ -113,9 +114,9 @@ export async function buildInvestmentBriefs(
   }
 
   const evidence = buildEvidenceIndex(input.companies, input.enrichments);
-  const thesis = typeof input.thesis === "string"
+  const thesis = canonicalizeFundThesis(typeof input.thesis === "string"
     ? await dependencies.parseThesis(input.thesis)
-    : validateFundThesis(input.thesis);
+    : validateFundThesis(input.thesis));
   const generatedAt = (dependencies.now ?? (() => new Date()))().toISOString();
 
   if (!input.thesisConfirmed) {
@@ -137,7 +138,7 @@ export async function buildInvestmentBriefs(
     const bundle = evidence[index]!;
     let claims: ClaimCandidate[] = [];
     try {
-      claims = await dependencies.extractClaimCandidates(bundle);
+      claims = await dependencies.extractClaimCandidates(bundle, thesis);
     } catch (error) {
       extractionFailures[index] = {
         companyId: bundle.companyId,
@@ -162,9 +163,13 @@ export async function buildInvestmentBriefs(
   await runWorkers(selected.evaluations.length, async (index) => {
     const evaluation = selected.evaluations[index]!;
     const bundle = bundlesById.get(evaluation.companyId)!;
+    const publicBundle = {
+      ...bundle,
+      evidence: bundle.evidence.filter(({ visibility }) => visibility === "public"),
+    };
     try {
-      const brief = await dependencies.draftInvestmentBrief({ bundle, thesis, evaluation });
-      const validation = validateBriefCitations(brief, bundle.evidence);
+      const brief = await dependencies.draftInvestmentBrief({ bundle: publicBundle, thesis, evaluation });
+      const validation = validateBriefCitations(brief, publicBundle.evidence);
       if (!validation.valid) {
         briefFailures[index] = {
           companyId: evaluation.companyId,

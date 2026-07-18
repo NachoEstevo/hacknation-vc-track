@@ -45,7 +45,7 @@ const thesis: FundThesis = {
 };
 
 describe("toInvestmentBriefArtifact", () => {
-  it("allowlists normalized company fields and persists only safe failure messages", async () => {
+  it("publishes only public evidence and sanitizes private evidence references", async () => {
     const run = await buildInvestmentBriefs({
       companies: [company],
       enrichments: [],
@@ -80,28 +80,48 @@ describe("toInvestmentBriefArtifact", () => {
 
     expect(serialized).not.toContain(rawSecret);
     expect(serialized).not.toContain(providerSecret);
-    expect(artifact.evidence[0]!.normalizedCompany).toMatchObject({
-      stableId: "company-00",
-      name: "Acme",
-      source: { sourceType: "clay_csv", rowNumber: 2, verification: "unverified" },
+    expect(artifact.evidence[0]).toEqual({
+      companyId: "company-00",
+      companyName: "Acme",
+      evidence: [],
     });
-    expect(artifact.evidence[0]!.normalizedCompany.source).not.toHaveProperty("raw");
-    expect(artifact.evidence[0]!.evidence[0]!.payload).toEqual({
-      name: "Acme",
-      description: "Workflow software",
-      primaryIndustry: "Software",
-      sizeBand: "1-10",
-      organizationType: "Private",
-      location: "New York",
-      countryCode: "US",
-      domain: "acme.test",
-      linkedInUrl: null,
-      sourceRowNumber: 2,
-    });
+    expect(artifact.evaluations[0]!.criteria[0]!.evidenceIds).toEqual([]);
+    expect(artifact.ranking[0]!.evaluation.criteria[0]!.evidenceIds).toEqual([]);
     expect(artifact.failures).toEqual([{
       companyId: "company-00",
       stage: "extract_claim_candidates",
       message: "Company claim extraction failed",
     }]);
   });
+
+  it("rejects publication when a brief cites private evidence", async () => {
+    const run = await buildInvestmentBriefs({
+      companies: [company], enrichments: [], thesis, thesisConfirmed: true, top: 1,
+    }, {
+      now: () => new Date(generatedAt),
+      parseThesis: async () => thesis,
+      extractClaimCandidates: async () => [],
+      draftInvestmentBrief: async ({ bundle, evaluation }) => briefFor(bundle.companyId, evaluation),
+    });
+    run.briefs[0]!.summary = [{
+      text: "Acme is in the US.",
+      statementKind: "fact",
+      evidenceIds: [run.evidence[0]!.evidence[0]!.evidenceId],
+    }];
+
+    expect(() => toInvestmentBriefArtifact(run)).toThrow("private or unknown evidence");
+  });
 });
+
+function briefFor(companyId: string, evaluation: import("../src/briefs/types.js").CompanyEvaluation) {
+  return {
+    companyId,
+    thesisId: thesis.thesisId,
+    recommendation: evaluation.recommendation,
+    thesisFit: evaluation.thesisFit,
+    evidenceCoverage: evaluation.evidenceCoverage,
+    axes: evaluation.axes,
+    summary: [], strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [],
+    generatedAt, promptVersion: "test-v1",
+  };
+}

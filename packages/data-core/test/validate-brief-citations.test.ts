@@ -88,6 +88,19 @@ describe("validateBriefCitations", () => {
     });
   });
 
+  it("rejects a numeric value introduced by a fact but absent from cited evidence", () => {
+    expect(validateBriefCitations(brief({
+      summary: [{
+        text: "The company has 999 customers.",
+        statementKind: "fact",
+        evidenceIds: ["stripe"],
+      }],
+    }), evidence)).toEqual({
+      valid: false,
+      errors: [{ code: "unsupported_numeric_value", section: "summary", statementIndex: 0 }],
+    });
+  });
+
   it.each([
     ["$35", "35%"],
     ["35%", "$35"],

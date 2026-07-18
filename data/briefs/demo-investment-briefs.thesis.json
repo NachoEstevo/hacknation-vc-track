@@ -5,13 +5,13 @@
     {
       "criterionId": "geography-1",
       "category": "geography",
-      "label": "Company location",
+      "label": "Company geography",
       "requirement": "required",
       "weight": 5,
       "operator": "one_of",
       "expectedValue": [
-        "United States",
-        "United Kingdom"
+        "US",
+        "GB"
       ]
     },
     {
@@ -51,6 +51,6 @@
       "expectedValue": true
     }
   ],
-  "generatedAt": "2026-07-18T23:23:14.589Z",
+  "generatedAt": "2026-07-18T23:52:52.458Z",
   "promptVersion": "briefs-v1"
 }

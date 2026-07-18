@@ -61,7 +61,7 @@ Outputs:
 
 The brief engine consumes only `data/source/clay-us-uk-early-software.csv` and `data/enriched/company-web-profiles.json` for the demo run. It parses the human thesis into a reviewable file and stops before company-level model calls. An operator must inspect and explicitly accept that file before the 50-company analysis can start.
 
-The 2026-07-18 accepted run evaluated and ranked all 50 companies, requested three briefs, generated three briefs, and rejected none at the citation gate. The result is `completed`. All three selected companies are `pass_for_thesis` with 0% thesis fit because human-readable country names and a numeric size cap do not directly equal the normalized country-code and size-band values; the B2B, stage, and execution criteria also lacked directly matching evaluated values. This is retained as an explicit data-contract gap rather than rewritten into a positive result.
+The final 2026-07-18 accepted run evaluated and ranked all 50 companies and produced a non-degenerate fit distribution. It requested three briefs, generated two citation-valid briefs, and retained one sanitized draft failure, so the result is honestly `partial`. The top three match the canonical US/UK geography and the deterministically derived self-employed/below-10 size criterion. They still conflict with the required B2B-software criterion and lack supported stage/traction claims, so all remain `pass_for_thesis`; this is not rewritten into a positive result.
 
 Outputs:
 
@@ -69,7 +69,7 @@ Outputs:
 - `data/briefs/demo-investment-briefs.json`: allowlisted evidence, deterministic evaluations and ranking, cited briefs, and sanitized failures;
 - `data/briefs/demo-investment-briefs-summary.json`: compact live-run counts and limitations.
 
-The source CSV is an unverified discovery export and is conservatively tagged `investor_private` in evidence metadata. The enrichment evidence is public website/GitHub data. No Rely, Stripe, founder document, or founder assertion data was used. Full operation and scoring details are in `docs/investment-brief-engine.md`.
+The source CSV is an unverified owner-provided discovery export used internally for normalization and ranking. Its `investor_private` evidence records and normalized payloads are excluded from the published artifact. Public evaluations/axes have private evidence IDs removed, brief drafting receives only public evidence, and publication fails if any brief would retain a private or dangling citation. No Rely, Stripe, founder document, or founder assertion data was used. Full operation and scoring details are in `docs/investment-brief-engine.md`.
 
 ## Run locally
 

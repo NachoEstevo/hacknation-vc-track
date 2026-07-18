@@ -35,6 +35,57 @@ function claim(predicate: string, value: string | number | boolean, state: Claim
 }
 
 describe("evaluateCompany", () => {
+  it("evaluates real seed country and size shapes without representation conflicts", () => {
+    const realSeedBundle = {
+      ...bundle,
+      normalizedCompany: {
+        ...bundle.normalizedCompany,
+        countryCode: "US" as const,
+        location: "North Carolina, United States",
+        sizeBand: "2-10 employees",
+      },
+    };
+    const result = evaluateCompany(thesis([
+      criterion({ operator: "one_of", expectedValue: ["US", "GB"] }),
+      criterion({ criterionId: "team", category: "company_size", label: "Below 10", operator: "lte", expectedValue: 9 }),
+      criterion({ criterionId: "b2b", category: "industry", label: "B2B software", expectedValue: "B2B software" }),
+      criterion({ criterionId: "stage", category: "stage", label: "Early", expectedValue: "early" }),
+      criterion({ criterionId: "execution", category: "traction", label: "Execution", operator: "exists", expectedValue: true }),
+    ]), realSeedBundle, [
+      claim("b2b", "B2B software"),
+      claim("stage", "early"),
+      claim("execution", true),
+    ]);
+
+    expect(result.criteria.map(({ state }) => state)).toEqual(["match", "partial", "match", "match", "match"]);
+    expect(result.thesisFit).toBe(90);
+    expect(result.recommendation).toBe("investigate");
+  });
+
+  it("marks an incomparable team-size representation missing rather than conflicting", () => {
+    const result = evaluateCompany(thesis([
+      criterion({ category: "company_size", operator: "lte", expectedValue: 9 }),
+    ]), {
+      ...bundle,
+      normalizedCompany: { ...bundle.normalizedCompany, sizeBand: "Not reported" },
+    }, []);
+
+    expect(result.criteria[0]!.state).toBe("missing");
+    expect(result.thesisFit).toBeNull();
+  });
+
+  it("matches a self-employed seed against a below-ten team criterion", () => {
+    const result = evaluateCompany(thesis([
+      criterion({ category: "company_size", operator: "lte", expectedValue: 9 }),
+    ]), {
+      ...bundle,
+      normalizedCompany: { ...bundle.normalizedCompany, sizeBand: "Self-employed" },
+    }, []);
+
+    expect(result.criteria[0]!.state).toBe("match");
+    expect(result.thesisFit).toBe(100);
+  });
+
   it("calculates thesis fit over known criteria separately from weighted coverage", () => {
     const result = evaluateCompany(thesis([
       criterion(),

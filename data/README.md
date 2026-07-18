@@ -24,10 +24,10 @@ The reviewed machine-readable thesis for the live demo. The proposed thesis was 
 
 ## `briefs/demo-investment-briefs.json`
 
-The 2026-07-18 live analysis of the exact 50-company source snapshot and public-web enrichment. It contains 50 deterministic evaluations and rankings plus three model-drafted, mechanically citation-valid briefs. It stores allowlisted normalized company fields rather than raw CSV rows and contains no Rely, founder-private, or payment evidence.
+The 2026-07-18 live analysis of the exact 50-company source snapshot and public-web enrichment. It contains 50 deterministic evaluations and rankings plus two model-drafted, mechanically citation-valid briefs; one top-three draft failure remains explicit. The published artifact contains only public website/GitHub evidence and sanitized evidence references. It contains no Clay evidence payloads, raw CSV rows, Rely data, founder-private evidence, or payment evidence.
 
 ## `briefs/demo-investment-briefs-summary.json`
 
-A sanitized run summary with models, counts, selected company IDs, citation-validation results, provenance, and known data-contract gaps. The evidence schema conservatively labels the 50 committed Clay discovery records `investor_private`; the 38 website and one GitHub records are `public`.
+A CLI-generated summary from the same run with actual model names, timestamps, counts, selected company identities, failures, and provenance. The 50 committed Clay discovery records are used internally for normalization and ranking but never published; the artifact exposes 38 website and one GitHub records, all labeled `public`.
 
 See `docs/investment-brief-engine.md` for commands, scoring, retry behavior, and interpretation limits.
