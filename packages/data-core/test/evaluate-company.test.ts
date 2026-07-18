@@ -1,0 +1,79 @@
+import { describe, expect, it } from "vitest";
+import { evaluateCompany } from "../src/briefs/evaluate-company.js";
+import type { ClaimCandidate, CompanyEvidenceBundle, FundThesis } from "../src/briefs/types.js";
+
+const bundle: CompanyEvidenceBundle = {
+  companyId: "acme",
+  companyName: "Acme",
+  normalizedCompany: {
+    stableId: "acme", name: "Acme", description: "Workflow software for finance teams", primaryIndustry: "Software",
+    sizeBand: "1-10", organizationType: "Private", location: "New York", countryCode: "US", domain: "acme.test",
+    linkedInUrl: null, dedupeKey: "acme.test", source: { sourceType: "clay_csv", rowNumber: 2, verification: "unverified", raw: {} },
+  },
+  evidence: [{
+    evidenceId: "clay", companyId: "acme", sourceType: "clay_csv", sourceUrl: null, snapshotPath: null,
+    capturedAt: "2026-07-18T00:00:00.000Z", excerpt: null, payload: null, verificationState: "unverified", visibility: "investor_private",
+  }, {
+    evidenceId: "claim-evidence", companyId: "acme", sourceType: "founder_document", sourceUrl: null, snapshotPath: null,
+    capturedAt: "2026-07-18T00:00:00.000Z", excerpt: null, payload: null, verificationState: "verified", visibility: "founder_private",
+  }],
+};
+
+function thesis(criteria: FundThesis["criteria"]): FundThesis {
+  return { thesisId: "thesis", originalQuery: "Test", criteria, generatedAt: "2026-07-18T00:00:00.000Z", promptVersion: "v1" };
+}
+
+function criterion(overrides: Partial<FundThesis["criteria"][number]> = {}): FundThesis["criteria"][number] {
+  return { criterionId: "country", category: "geography", label: "US", requirement: "required", weight: 5, operator: "equals", expectedValue: "US", ...overrides };
+}
+
+function claim(predicate: string, value: string | number | boolean, state: ClaimCandidate["state"] = "supported"): ClaimCandidate {
+  return {
+    claimId: predicate, companyId: "acme", subject: "Acme", predicate, value, unit: null, claimKind: "observed_fact", evidenceIds: ["claim-evidence"], state,
+    trust: { sourceReliability: 40, directness: 25, corroboration: 0, recency: 15, total: 80, state: state === "conflicted" ? "conflicted" : "supported" },
+  };
+}
+
+describe("evaluateCompany", () => {
+  it("calculates thesis fit over known criteria separately from weighted coverage", () => {
+    const result = evaluateCompany(thesis([
+      criterion(),
+      criterion({ criterionId: "industry", category: "industry", label: "SaaS", requirement: "preferred", weight: 3, expectedValue: "SaaS" }),
+      criterion({ criterionId: "stage", category: "stage", label: "Seed", requirement: "preferred", weight: 2, expectedValue: "Seed" }),
+      criterion({ criterionId: "excluded", category: "exclusion", label: "Excluded", requirement: "excluded", weight: 1, expectedValue: true }),
+    ]), bundle, [claim("excluded", true)]);
+
+    expect(result.criteria.map((item) => item.state)).toEqual(["match", "partial", "missing", "conflict"]);
+    expect(result.thesisFit).toBeCloseTo((5 + 1.5 + 0) / (5 + 3 + 1) * 100);
+    expect(result.evidenceCoverage).toBeCloseTo((5 + 3 + 1) / 11 * 100);
+    expect(result.criteria.every((item) => item.reason.length > 0 && Array.isArray(item.evidenceIds))).toBe(true);
+  });
+
+  it("returns null fit and zero coverage when no criterion has known evidence", () => {
+    const result = evaluateCompany(thesis([criterion({ category: "stage", expectedValue: "Seed" })]), bundle, []);
+
+    expect(result.thesisFit).toBeNull();
+    expect(result.evidenceCoverage).toBe(0);
+  });
+
+  it("treats an unverified claim as missing evidence", () => {
+    const result = evaluateCompany(thesis([criterion({ category: "stage", expectedValue: "Seed" })]), bundle, [
+      claim("country", "US", "unverified"),
+    ]);
+
+    expect(result.criteria[0]!.state).toBe("missing");
+  });
+
+  it("executes every approved operator against normalized fields and cited claims", () => {
+    const result = evaluateCompany(thesis([
+      criterion({ criterionId: "country", operator: "one_of", expectedValue: ["US", "GB"] }),
+      criterion({ criterionId: "description", category: "product", label: "Workflow", operator: "contains", expectedValue: "workflow" }),
+      criterion({ criterionId: "revenue-min", category: "traction", label: "Revenue", operator: "gte", expectedValue: 100 }),
+      criterion({ criterionId: "revenue-max", category: "traction", label: "Revenue cap", operator: "lte", expectedValue: 100 }),
+      criterion({ criterionId: "customers", category: "traction", label: "Customers", operator: "exists", expectedValue: true }),
+      criterion({ criterionId: "churn", category: "traction", label: "Churn", operator: "not_exists", expectedValue: false }),
+    ]), bundle, [claim("revenue-min", 100), claim("revenue-max", 100), claim("customers", 4), claim("churn", false)]);
+
+    expect(result.criteria.map((item) => item.state)).toEqual(["match", "match", "match", "match", "match", "match"]);
+  });
+});

@@ -64,6 +64,7 @@ export interface ClaimCandidate {
 
 export interface CriterionEvaluation {
   criterionId: string;
+  requirement: ThesisCriterion["requirement"];
   state: "match" | "partial" | "missing" | "conflict";
   weight: number;
   reason: string;

@@ -15,3 +15,7 @@ export * from "./briefs/build-evidence-index.js";
 export * from "./briefs/calculate-claim-trust.js";
 export * from "./briefs/types.js";
 export * from "./briefs/validate-brief-citations.js";
+export * from "./briefs/validate-thesis.js";
+export * from "./briefs/evaluate-company.js";
+export * from "./briefs/assess-company.js";
+export * from "./briefs/recommend-company.js";
