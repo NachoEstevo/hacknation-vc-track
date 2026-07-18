@@ -12,4 +12,6 @@ export * from "./enrichment/enrich-github-profile.js";
 export * from "./enrichment/extract-company-profile.js";
 export * from "./enrichment/types.js";
 export * from "./briefs/build-evidence-index.js";
+export * from "./briefs/calculate-claim-trust.js";
 export * from "./briefs/types.js";
+export * from "./briefs/validate-brief-citations.js";
