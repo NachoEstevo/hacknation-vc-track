@@ -63,6 +63,7 @@ function setupRuntime(csv = validCsv): {
       },
       writeFile: async (path) => { events.push({ operation: "write", path }); },
       mkdir: async () => undefined,
+      realpath: async (path) => path,
       rename: async (path, destination) => { events.push({ operation: "rename", path, destination }); },
       removeFile: async (path) => { events.push({ operation: "remove", path }); },
       structuredTasks: {
@@ -189,6 +190,7 @@ describe("investment brief CLI confirmed run", () => {
       },
       writeFile: async (path, contents) => { writes.push({ path, contents }); },
       mkdir: async () => undefined,
+      realpath: async (path) => path,
       rename: async (source, destination) => { renames.push({ source, destination }); },
       removeFile: async () => undefined,
       structuredTasks,

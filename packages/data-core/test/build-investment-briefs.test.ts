@@ -267,6 +267,7 @@ describe("investment brief CLI", () => {
         : JSON.stringify({ results: [] }),
       writeFile: async (path, contents) => { writes.push({ path, contents }); },
       mkdir: async () => undefined,
+      realpath: async (path) => path,
       rename: async (source, destination) => { renames.push({ source, destination }); },
       removeFile: async () => undefined,
       structuredTasks: {

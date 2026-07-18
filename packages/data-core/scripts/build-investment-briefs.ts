@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, rename, unlink, writeFile } from "node:fs/promises";
+import { mkdir, readFile, realpath, rename, unlink, writeFile } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
@@ -99,6 +99,7 @@ export interface BriefCliRuntime {
   readFile(path: string): Promise<string>;
   writeFile(path: string, contents: string): Promise<void>;
   mkdir(path: string): Promise<unknown>;
+  realpath(path: string): Promise<string>;
   rename(source: string, destination: string): Promise<void>;
   removeFile(path: string): Promise<void>;
   structuredTasks: BuildInvestmentBriefsDependencies;
@@ -117,16 +118,59 @@ function canonicalPath(path: string): string {
   return path.replaceAll("\\", "/").toLocaleLowerCase("en-US");
 }
 
-function rejectOutputCollision(args: BriefCliArgs, cwd: string): void {
-  const outputPath = resolve(cwd, args.output);
-  const destinations = [outputPath];
-  if (!args.acceptParsedThesis) destinations.push(`${outputPath}.thesis.json`);
-  const inputs = [args.companies, args.enrichment, args.thesisFile]
+function isMissingPath(error: unknown): boolean {
+  return typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT";
+}
+
+async function canonicalTarget(path: string, runtime: BriefCliRuntime): Promise<string> {
+  try {
+    return await runtime.realpath(path);
+  } catch (error) {
+    if (!isMissingPath(error)) throw error;
+  }
+
+  const missingSegments: string[] = [];
+  let cursor = path;
+  while (true) {
+    missingSegments.unshift(basename(cursor));
+    const parent = dirname(cursor);
+    try {
+      return join(await runtime.realpath(parent), ...missingSegments);
+    } catch (error) {
+      if (!isMissingPath(error) || parent === cursor) throw error;
+      cursor = parent;
+    }
+  }
+}
+
+interface CanonicalCliPaths {
+  companies: string;
+  enrichment: string;
+  thesisFile: string | undefined;
+  output: string;
+  thesisOutput: string;
+}
+
+async function canonicalizeCliPaths(
+  args: BriefCliArgs,
+  runtime: BriefCliRuntime,
+): Promise<CanonicalCliPaths> {
+  const companies = await runtime.realpath(resolve(runtime.cwd, args.companies));
+  const enrichment = await runtime.realpath(resolve(runtime.cwd, args.enrichment));
+  const thesisFile = args.thesisFile
+    ? await runtime.realpath(resolve(runtime.cwd, args.thesisFile))
+    : undefined;
+  const requestedOutput = resolve(runtime.cwd, args.output);
+  const output = await canonicalTarget(requestedOutput, runtime);
+  const thesisOutput = await canonicalTarget(`${requestedOutput}.thesis.json`, runtime);
+  const inputs = [companies, enrichment, thesisFile]
     .filter((path): path is string => path !== undefined)
-    .map((path) => canonicalPath(resolve(cwd, path)));
+    .map(canonicalPath);
+  const destinations = args.acceptParsedThesis ? [output] : [output, thesisOutput];
   if (destinations.some((path) => inputs.includes(canonicalPath(path)))) {
     throw new BriefCliUsageError("--output must not overwrite an input file");
   }
+  return { companies, enrichment, thesisFile, output, thesisOutput };
 }
 
 async function atomicWrite(
@@ -155,15 +199,12 @@ export async function runBriefCli(
   runtime: BriefCliRuntime,
 ): Promise<InvestmentBriefRun> {
   const args = parseBriefCliArgs(argv);
-  rejectOutputCollision(args, runtime.cwd);
-  const companiesPath = resolve(runtime.cwd, args.companies);
-  const enrichmentPath = resolve(runtime.cwd, args.enrichment);
-  const outputPath = resolve(runtime.cwd, args.output);
+  const paths = await canonicalizeCliPaths(args, runtime);
   const [companiesCsv, enrichmentJson, thesis] = await Promise.all([
-    runtime.readFile(companiesPath),
-    runtime.readFile(enrichmentPath),
-    args.thesisFile
-      ? runtime.readFile(resolve(runtime.cwd, args.thesisFile)).then((value) => JSON.parse(value) as FundThesis)
+    runtime.readFile(paths.companies),
+    runtime.readFile(paths.enrichment),
+    paths.thesisFile
+      ? runtime.readFile(paths.thesisFile).then((value) => JSON.parse(value) as FundThesis)
       : Promise.resolve(args.thesis!),
   ]);
   const companies = buildImportBatch(parseClayCsv(companiesCsv)).companies;
@@ -175,8 +216,8 @@ export async function runBriefCli(
     top: args.top,
   }, runtime.structuredTasks);
   const destination = run.status === "awaiting_thesis_confirmation"
-    ? `${outputPath}.thesis.json`
-    : outputPath;
+    ? paths.thesisOutput
+    : paths.output;
   const output = run.status === "awaiting_thesis_confirmation"
     ? run.thesis
     : toInvestmentBriefArtifact(run);
@@ -214,6 +255,7 @@ async function main(): Promise<void> {
     readFile: (path) => readFile(path, "utf8"),
     writeFile: (path, contents) => writeFile(path, contents, "utf8"),
     mkdir: (path) => mkdir(path, { recursive: true }),
+    realpath: (path) => realpath(path),
     rename: (source, destination) => rename(source, destination),
     removeFile: (path) => unlink(path),
     structuredTasks: createStructuredTasks(process.env),
