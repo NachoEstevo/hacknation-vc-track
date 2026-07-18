@@ -15,6 +15,7 @@ function normalized(value: string): string {
 function fieldValues(bundle: CompanyEvidenceBundle, criterion: ThesisCriterion): CandidateValue[] {
   const company = bundle.normalizedCompany;
   const clayEvidenceIds = bundle.evidence.filter((record) => record.sourceType === "clay_csv").map((record) => record.evidenceId);
+  if (clayEvidenceIds.length === 0) return [];
   const values: Array<string | null> = criterion.category === "geography"
     ? [company.countryCode, company.location]
     : criterion.category === "industry"
@@ -36,7 +37,11 @@ function claimValues(bundle: CompanyEvidenceBundle, criterion: ThesisCriterion, 
   const knownEvidenceIds = new Set(bundle.evidence.map((record) => record.evidenceId));
   return claims
     .filter((claim) => claim.companyId === bundle.companyId && claim.state !== "unverified" && relevantClaim(claim, criterion) && claim.evidenceIds.some((id) => knownEvidenceIds.has(id)))
-    .map((claim) => ({ value: claim.value, evidenceIds: claim.evidenceIds, conflicted: claim.state === "conflicted" }));
+    .map((claim) => ({
+      value: claim.value,
+      evidenceIds: claim.evidenceIds.filter((id) => knownEvidenceIds.has(id)),
+      conflicted: claim.state === "conflicted",
+    }));
 }
 
 function equals(left: string | number | boolean, right: string | number | boolean): boolean {
@@ -58,19 +63,19 @@ function evaluateCriterion(bundle: CompanyEvidenceBundle, criterion: ThesisCrite
   const evidenceIds = [...new Set(candidates.flatMap((candidate) => candidate.evidenceIds))];
   const hasMatch = candidates.some((candidate) => matches(criterion.operator, criterion.expectedValue, candidate));
   const hasConflict = candidates.some((candidate) => candidate.conflicted);
-  const state = candidates.length === 0
-    ? "missing"
-    : hasConflict || (criterion.requirement === "excluded" && hasMatch)
-      ? "conflict"
-      : hasMatch
-        ? "match"
-        : "partial";
+  const state = candidates.length === 0 ? "missing"
+    : hasConflict ? "conflict"
+      : criterion.requirement === "excluded" ? hasMatch ? "conflict" : "match"
+        : hasMatch ? "match"
+          : criterion.requirement === "required" ? "conflict" : "partial";
   const reason = state === "missing"
     ? "No cited company value is available for this criterion."
     : state === "conflict"
       ? criterion.requirement === "excluded" && hasMatch
         ? "Evidence satisfies an excluded condition."
-        : "Cited evidence is conflicted."
+        : criterion.requirement === "required" && !hasMatch
+          ? "Cited company evidence conflicts with a required criterion."
+          : "Cited evidence is conflicted."
       : state === "match"
         ? "Cited company evidence matches this criterion."
         : "Cited company evidence is present but does not fully match this criterion.";

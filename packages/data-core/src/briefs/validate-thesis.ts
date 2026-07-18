@@ -52,12 +52,15 @@ function validateCriterion(value: unknown, index: number, issues: string[]): voi
   } else if (value.operator === "contains") {
     if (!hasText(value.expectedValue)) issues.push(`${path}.expectedValue`);
   } else if (value.operator === "exists" || value.operator === "not_exists") {
-    if (typeof value.expectedValue !== "boolean") issues.push(`${path}.expectedValue`);
+    const expectedBoolean = value.operator === "exists";
+    if (value.expectedValue !== expectedBoolean) issues.push(`${path}.expectedValue`);
   } else if (
     typeof value.expectedValue !== "string" &&
     typeof value.expectedValue !== "number" &&
     typeof value.expectedValue !== "boolean"
   ) {
+    issues.push(`${path}.expectedValue`);
+  } else if (typeof value.expectedValue === "string" && !hasText(value.expectedValue)) {
     issues.push(`${path}.expectedValue`);
   }
 }

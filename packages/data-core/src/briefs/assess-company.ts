@@ -10,7 +10,9 @@ function evidenceBySource(bundle: CompanyEvidenceBundle, sourceType: EvidenceRec
 
 function citedSupportedClaims(bundle: CompanyEvidenceBundle, claims: ClaimCandidate[]): ClaimCandidate[] {
   const evidenceIds = new Set(bundle.evidence.map((record) => record.evidenceId));
-  return claims.filter((claim) => claim.state === "supported" && claim.evidenceIds.some((id) => evidenceIds.has(id)));
+  return claims
+    .filter((claim) => claim.companyId === bundle.companyId && claim.state === "supported" && claim.evidenceIds.some((id) => evidenceIds.has(id)))
+    .map((claim) => ({ ...claim, evidenceIds: claim.evidenceIds.filter((id) => evidenceIds.has(id)) }));
 }
 
 function dimension(
@@ -19,8 +21,15 @@ function dimension(
   known: boolean,
   evidenceIds: string[],
   reason: string,
+  points = known ? possiblePoints : 0,
 ): AssessmentDimension {
-  return { dimensionId, points: known ? possiblePoints : 0, possiblePoints, known, reason, evidenceIds };
+  return { dimensionId, points, possiblePoints, known, reason, evidenceIds: [...new Set(evidenceIds)] };
+}
+
+function isPositive(value: ClaimCandidate["value"]): boolean {
+  if (typeof value === "number") return value > 0;
+  if (typeof value === "boolean") return value;
+  return value.trim() !== "" && !["0", "no", "none", "false", "unknown"].includes(value.trim().toLocaleLowerCase());
 }
 
 function founderIdentity(bundle: CompanyEvidenceBundle): AssessmentDimension {
@@ -37,25 +46,31 @@ function founderProof(bundle: CompanyEvidenceBundle): AssessmentDimension {
 }
 
 function marketCategory(bundle: CompanyEvidenceBundle): AssessmentDimension {
-  const known = bundle.normalizedCompany.primaryIndustry !== null;
-  const ids = known ? evidenceBySource(bundle, "clay_csv").map((record) => record.evidenceId) : [];
+  const ids = evidenceBySource(bundle, "clay_csv").map((record) => record.evidenceId);
+  const known = bundle.normalizedCompany.primaryIndustry !== null && ids.length > 0;
   return dimension("market_category", 3, known, ids, known ? "A company category is identified." : "No company category is identified.");
 }
 
 function problemClarity(bundle: CompanyEvidenceBundle): AssessmentDimension {
-  const hasDescription = bundle.normalizedCompany.description !== null || evidenceBySource(bundle, "company_website")
-    .some((record) => {
+  const clayIds = evidenceBySource(bundle, "clay_csv").map((record) => record.evidenceId);
+  const websiteRecords = evidenceBySource(bundle, "company_website").filter((record) => {
       const description = payload(record).description;
       return typeof description === "string" && description.trim() !== "";
     });
-  const ids = hasDescription ? bundle.evidence.filter((record) => record.sourceType === "clay_csv" || record.sourceType === "company_website").map((record) => record.evidenceId) : [];
+  const ids = [
+    ...(bundle.normalizedCompany.description !== null ? clayIds : []),
+    ...websiteRecords.map((record) => record.evidenceId),
+  ];
+  const hasDescription = ids.length > 0;
   return dimension("problem_clarity", 3, hasDescription, ids, hasDescription ? "A product or problem description is available." : "No product or problem description is available.");
 }
 
 function directMarketEvidence(bundle: CompanyEvidenceBundle, claims: ClaimCandidate[]): AssessmentDimension {
   const matches = citedSupportedClaims(bundle, claims).filter((claim) => /market|customer|buyer/i.test(claim.predicate));
   const ids = matches.flatMap((claim) => claim.evidenceIds);
-  return dimension("direct_market_evidence", 4, ids.length > 0, ids, ids.length > 0 ? "Cited market or customer evidence is available." : "No direct market evidence is available.");
+  const known = ids.length > 0;
+  const positive = matches.some((claim) => isPositive(claim.value));
+  return dimension("direct_market_evidence", 4, known, ids, known ? positive ? "Positive cited market or customer evidence is available." : "Cited market or customer evidence is non-positive." : "No direct market evidence is available.", positive ? 4 : 0);
 }
 
 function liveProduct(bundle: CompanyEvidenceBundle): AssessmentDimension {
@@ -87,19 +102,25 @@ function recentGithubActivity(bundle: CompanyEvidenceBundle): AssessmentDimensio
 function customerEvidence(bundle: CompanyEvidenceBundle, claims: ClaimCandidate[]): AssessmentDimension {
   const matches = citedSupportedClaims(bundle, claims).filter((claim) => /customer|client|contract/i.test(claim.predicate));
   const ids = matches.flatMap((claim) => claim.evidenceIds);
-  return dimension("customer_evidence", 4, ids.length > 0, ids, ids.length > 0 ? "Cited customer evidence is available." : "No customer evidence is available.");
+  const known = ids.length > 0;
+  const positive = matches.some((claim) => isPositive(claim.value));
+  return dimension("customer_evidence", 4, known, ids, known ? positive ? "Positive cited customer evidence is available." : "Cited customer evidence is zero or negative." : "No customer evidence is available.", positive ? 4 : 0);
 }
 
 function revenueEvidence(bundle: CompanyEvidenceBundle, claims: ClaimCandidate[]): AssessmentDimension {
   const matches = citedSupportedClaims(bundle, claims).filter((claim) => /revenue|arr|mrr|payment/i.test(claim.predicate));
   const ids = matches.flatMap((claim) => claim.evidenceIds);
-  return dimension("revenue_evidence", 4, ids.length > 0, ids, ids.length > 0 ? "Cited revenue or payment evidence is available." : "No revenue or payment evidence is available.");
+  const known = ids.length > 0;
+  const positive = matches.some((claim) => isPositive(claim.value));
+  return dimension("revenue_evidence", 4, known, ids, known ? positive ? "Positive cited revenue or payment evidence is available." : "Cited revenue or payment evidence is zero or negative." : "No revenue or payment evidence is available.", positive ? 4 : 0);
 }
 
 function usageEvidence(bundle: CompanyEvidenceBundle, claims: ClaimCandidate[]): AssessmentDimension {
   const matches = citedSupportedClaims(bundle, claims).filter((claim) => /usage|retention|active.?user/i.test(claim.predicate));
   const ids = matches.flatMap((claim) => claim.evidenceIds);
-  return dimension("usage_or_retention", 2, ids.length > 0, ids, ids.length > 0 ? "Cited usage or retention evidence is available." : "No usage or retention evidence is available.");
+  const known = ids.length > 0;
+  const positive = matches.some((claim) => isPositive(claim.value));
+  return dimension("usage_or_retention", 2, known, ids, known ? positive ? "Positive cited usage or retention evidence is available." : "Cited usage or retention evidence is zero or negative." : "No usage or retention evidence is available.", positive ? 2 : 0);
 }
 
 function axis(axis: AssessmentAxis["axis"], dimensions: AssessmentDimension[]): AssessmentAxis {

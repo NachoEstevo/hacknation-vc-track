@@ -56,6 +56,48 @@ describe("evaluateCompany", () => {
     expect(result.evidenceCoverage).toBe(0);
   });
 
+  it("does not treat normalized fields as known without Clay evidence", () => {
+    const result = evaluateCompany(thesis([criterion()]), { ...bundle, evidence: [] }, []);
+
+    expect(result.criteria[0]!.state).toBe("missing");
+    expect(result.thesisFit).toBeNull();
+    expect(result.evidenceCoverage).toBe(0);
+    expect(result.recommendation).toBe("needs_evidence");
+  });
+
+  it("makes a confirmed required mismatch a blocking conflict", () => {
+    const result = evaluateCompany(thesis([criterion({ expectedValue: "GB" })]), bundle, []);
+
+    expect(result.criteria[0]!.state).toBe("conflict");
+    expect(result.recommendation).toBe("pass_for_thesis");
+  });
+
+  it("conflicts on an excluded match and treats a known excluded nonmatch as a fit match", () => {
+    const matching = evaluateCompany(thesis([criterion({ requirement: "excluded", expectedValue: "US" })]), bundle, []);
+    const nonmatching = evaluateCompany(thesis([criterion({ requirement: "excluded", expectedValue: "GB" })]), bundle, []);
+
+    expect(matching.criteria[0]!.state).toBe("conflict");
+    expect(matching.recommendation).toBe("pass_for_thesis");
+    expect(nonmatching.criteria[0]!.state).toBe("match");
+    expect(nonmatching.thesisFit).toBe(100);
+    expect(nonmatching.recommendation).toBe("investigate");
+  });
+
+  it("ignores a foreign-company claim", () => {
+    const foreignClaim = { ...claim("country", "US"), companyId: "other-company" };
+    const result = evaluateCompany(thesis([criterion({ category: "stage" })]), bundle, [foreignClaim]);
+
+    expect(result.criteria[0]!.state).toBe("missing");
+  });
+
+  it("emits only claim evidence IDs that exist in the company bundle", () => {
+    const mixedIdsClaim = { ...claim("country", "US"), evidenceIds: ["claim-evidence", "ghost"] };
+    const result = evaluateCompany(thesis([criterion({ category: "stage" })]), bundle, [mixedIdsClaim]);
+
+    expect(result.criteria[0]!.state).toBe("match");
+    expect(result.criteria[0]!.evidenceIds).toEqual(["claim-evidence"]);
+  });
+
   it("treats an unverified claim as missing evidence", () => {
     const result = evaluateCompany(thesis([criterion({ category: "stage", expectedValue: "Seed" })]), bundle, [
       claim("country", "US", "unverified"),

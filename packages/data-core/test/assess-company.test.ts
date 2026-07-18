@@ -87,4 +87,49 @@ describe("assessCompany", () => {
     expect(traction.coverage).toBe(0);
     expect(traction.dimensions.every((dimension) => dimension.known === false && dimension.points === 0)).toBe(true);
   });
+
+  it("does not emit material known dimensions from uncited normalized fields", () => {
+    const uncitedBundle = bundle([]);
+    uncitedBundle.normalizedCompany.description = "Populated but uncited description";
+    uncitedBundle.normalizedCompany.primaryIndustry = "Software";
+
+    const axes = assessCompany(uncitedBundle, []);
+
+    expect(axes.every((axis) => axis.coverage === 0 && axis.score === null)).toBe(true);
+    expect(axes.flatMap((axis) => axis.dimensions).every((dimension) => dimension.known === false)).toBe(true);
+  });
+
+  it("ignores supported claims from another company", () => {
+    const validEvidence = evidence("valid", "founder_document");
+    const foreignClaim = { ...claim("revenue", 1_000, ["valid"]), companyId: "other-company" };
+
+    const traction = assessCompany(bundle([validEvidence]), [foreignClaim]).find((axis) => axis.axis === "traction")!;
+
+    expect(traction.coverage).toBe(0);
+    expect(traction.score).toBeNull();
+  });
+
+  it("keeps zero traction values known with coverage but awards zero quality points", () => {
+    const validEvidence = evidence("valid", "founder_document");
+    const traction = assessCompany(bundle([validEvidence]), [
+      claim("customers", 0, ["valid"]),
+      claim("revenue", 0, ["valid"]),
+    ]).find((axis) => axis.axis === "traction")!;
+
+    expect(traction.coverage).toBe(80);
+    expect(traction.score).toBe(0);
+    expect(traction.dimensions.slice(0, 2).map((dimension) => ({ known: dimension.known, points: dimension.points }))).toEqual([
+      { known: true, points: 0 },
+      { known: true, points: 0 },
+    ]);
+  });
+
+  it("intersects assessment claim evidence IDs with the bundle", () => {
+    const validEvidence = evidence("valid", "founder_document");
+    const traction = assessCompany(bundle([validEvidence]), [
+      claim("revenue", 10, ["valid", "ghost"]),
+    ]).find((axis) => axis.axis === "traction")!;
+
+    expect(traction.dimensions.find((dimension) => dimension.dimensionId === "revenue_evidence")!.evidenceIds).toEqual(["valid"]);
+  });
 });

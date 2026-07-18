@@ -59,4 +59,16 @@ describe("validateFundThesis", () => {
   ])("rejects invalid data at %s", (path, invalidThesis) => {
     expect(issuesFor(invalidThesis)).toContain(path);
   });
+
+  it.each([
+    ["exists with false", { operator: "exists", expectedValue: false }],
+    ["not_exists with true", { operator: "not_exists", expectedValue: true }],
+    ["empty equals", { operator: "equals", expectedValue: "   " }],
+    ["empty contains", { operator: "contains", expectedValue: "   " }],
+  ])("rejects %s at the scalar value path", (_case, invalidCriterion) => {
+    expect(issuesFor({
+      ...thesis,
+      criteria: [{ ...thesis.criteria[0]!, ...invalidCriterion }],
+    })).toContain("criteria[0].expectedValue");
+  });
 });
