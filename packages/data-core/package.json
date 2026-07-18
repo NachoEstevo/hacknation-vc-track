@@ -13,6 +13,7 @@
   "dependencies": {
     "cheerio": "^1.2.0",
     "csv-parse": "^6.1.0",
+    "openai": "^6.48.0",
     "robots-parser": "^3.0.1"
   },
   "devDependencies": {

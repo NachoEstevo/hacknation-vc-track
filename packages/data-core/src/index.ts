@@ -19,3 +19,6 @@ export * from "./briefs/validate-thesis.js";
 export * from "./briefs/evaluate-company.js";
 export * from "./briefs/assess-company.js";
 export * from "./briefs/recommend-company.js";
+export * from "./briefs/openai-config.js";
+export * from "./briefs/openai-structured-tasks.js";
+export * from "./briefs/openai-schemas.js";
