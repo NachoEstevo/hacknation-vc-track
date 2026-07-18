@@ -99,6 +99,29 @@ describe("calculateClaimTrust", () => {
     }).corroboration).toBe(corroboration);
   });
 
+  it("does not award corroboration for an unknown evidence ID", () => {
+    expect(calculateClaimTrust({
+      evidence: [evidence("primary", "stripe_private")],
+      directness: "direct_measurement",
+      independentSupportingEvidenceIds: ["invented"],
+      evaluatedAt: EVALUATED_AT,
+      hasConflict: false,
+    }).corroboration).toBe(0);
+  });
+
+  it("counts only unique known IDs in a mixed corroboration list", () => {
+    expect(calculateClaimTrust({
+      evidence: [
+        evidence("primary", "stripe_private"),
+        evidence("support-1", "company_website"),
+      ],
+      directness: "direct_measurement",
+      independentSupportingEvidenceIds: ["support-1", "invented", "support-1"],
+      evaluatedAt: EVALUATED_AT,
+      hasConflict: false,
+    }).corroboration).toBe(10);
+  });
+
   it("lets a conflict override an otherwise supported total", () => {
     const result = calculateClaimTrust({
       evidence: [evidence("stripe", "stripe_private")],

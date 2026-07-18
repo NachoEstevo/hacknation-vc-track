@@ -10,7 +10,7 @@ const evidence: EvidenceRecord[] = [{
   snapshotPath: null,
   capturedAt: "2026-07-18T00:00:00.000Z",
   excerpt: "Annual recurring revenue is $2.5M across 120 customers.",
-  payload: { arr: "$2.5M", customers: 120, growthPercent: 35 },
+  payload: { arr: "$2.5M", customers: 120, growthPercent: "35%" },
   verificationState: "verified",
   visibility: "investor_private",
 }];
@@ -86,6 +86,50 @@ describe("validateBriefCitations", () => {
       valid: false,
       errors: [{ code: "unsupported_numeric_value", section: "risks", statementIndex: 0 }],
     });
+  });
+
+  it.each([
+    ["$35", "35%"],
+    ["35%", "$35"],
+    ["35", "35%"],
+    ["35", "$35"],
+  ])("rejects cross-unit numeric grounding", (citedValue, analysisValue) => {
+    const unitEvidence: EvidenceRecord[] = [{
+      ...evidence[0]!,
+      excerpt: `Reported value: ${citedValue}.`,
+      payload: null,
+    }];
+
+    expect(validateBriefCitations(brief({
+      strengths: [{
+        text: `The relevant value is ${analysisValue}.`,
+        statementKind: "analysis",
+        evidenceIds: ["stripe"],
+      }],
+    }), unitEvidence)).toEqual({
+      valid: false,
+      errors: [{ code: "unsupported_numeric_value", section: "strengths", statementIndex: 0 }],
+    });
+  });
+
+  it.each([
+    ["$2,500", "$2500"],
+    ["$2,500,000", "$2.5M"],
+    ["£1,200", "£1.2K"],
+  ])("accepts compatible currency grouping and magnitude formatting", (citedValue, analysisValue) => {
+    const currencyEvidence: EvidenceRecord[] = [{
+      ...evidence[0]!,
+      excerpt: `Reported value: ${citedValue}.`,
+      payload: null,
+    }];
+
+    expect(validateBriefCitations(brief({
+      strengths: [{
+        text: `The relevant value is ${analysisValue}.`,
+        statementKind: "analysis",
+        evidenceIds: ["stripe"],
+      }],
+    }), currencyEvidence)).toEqual({ valid: true, errors: [] });
   });
 
   it("allows uncited uncertainty when it names a declared missing field", () => {

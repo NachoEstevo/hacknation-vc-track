@@ -39,7 +39,10 @@ function calculateRecency(capturedAt: string, evaluatedAt: string): number {
 export function calculateClaimTrust(input: CalculateClaimTrustInput): ClaimTrustBreakdown {
   const sourceReliability = Math.max(0, ...input.evidence.map((item) => SOURCE_POINTS[item.sourceType]));
   const directness = DIRECTNESS_POINTS[input.directness];
-  const supportingEvidenceCount = new Set(input.independentSupportingEvidenceIds).size;
+  const knownEvidenceIds = new Set(input.evidence.map((item) => item.evidenceId));
+  const supportingEvidenceCount = new Set(
+    input.independentSupportingEvidenceIds.filter((evidenceId) => knownEvidenceIds.has(evidenceId)),
+  ).size;
   const corroboration = supportingEvidenceCount >= 2 ? 20 : supportingEvidenceCount === 1 ? 10 : 0;
   const recency = Math.max(
     0,
