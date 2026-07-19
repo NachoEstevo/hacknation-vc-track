@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Sparkles } from "lucide-react";
 import { Button, ButtonLink } from "@/components/pencil";
@@ -13,6 +13,51 @@ const fallbackQuery =
   "Technical founders building developer infrastructure with a working product, before institutional seed.";
 
 const DEFAULT_CHECK_RANGE = { currency: "USD" as const, min: 100_000, max: 750_000 };
+
+/**
+ * Live mirror of what undr understands from the investor's own words: the
+ * same extractor that builds the saved thesis runs on every keystroke, so
+ * the chips below the textarea always reflect the current profile.
+ */
+function DetectedProfile({ query }: { query: string }) {
+  const draft = useMemo(() => thesisChipDraftFromQuery(query), [query]);
+  const groups = [
+    { label: "Sectors", values: draft.sectors, exclude: false },
+    { label: "Stage", values: draft.stages, exclude: false },
+    { label: "Geography", values: draft.geographies, exclude: false },
+    { label: "Signals", values: draft.signals, exclude: false },
+    { label: "Excludes", values: draft.exclusions, exclude: true },
+  ].filter((group) => group.values.length > 0);
+
+  return (
+    <div className={styles.detected} aria-live="polite">
+      <p className={styles.detectedTitle}>Your profile, as undr reads it</p>
+      {groups.length === 0 ? (
+        <p className={styles.detectedEmpty}>
+          Keep writing — sectors, stage, geography and signals will appear here
+          automatically and travel with every search you run.
+        </p>
+      ) : (
+        <div className={styles.detectedGroups}>
+          {groups.map((group) => (
+            <div key={group.label} className={styles.detectedGroup}>
+              <span className={styles.detectedLabel}>{group.label}</span>
+              {group.values.map((value) => (
+                <span
+                  key={value}
+                  className={styles.detectedChip}
+                  data-exclude={group.exclude ? "true" : undefined}
+                >
+                  {value}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function HydratedInvestorThesisForm({
   initialQuery,
@@ -103,6 +148,8 @@ function HydratedInvestorThesisForm({
             </span>
           </div>
         </div>
+
+        <DetectedProfile query={query} />
 
         <p className={styles.matchNote}>
           {catalogCount} seed companies indexed — undr will score and explain every
