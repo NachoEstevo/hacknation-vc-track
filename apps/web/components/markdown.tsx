@@ -26,10 +26,16 @@ const COMPONENTS = {
   a: ({ children, href }: { children?: React.ReactNode; href?: string }) => {
     if (!href) return <span>{children}</span>;
     const host = hostnameOf(href);
+    const label = typeof children === "string"
+      ? children
+      : Array.isArray(children) && children.length === 1 && typeof children[0] === "string"
+        ? children[0]
+        : null;
+    const showHost = host !== null && label !== host && label !== `www.${host}`;
     return (
       <a href={href} target="_blank" rel="noreferrer noopener" className={styles.citation} title={href}>
         <span className={styles.citationLabel}>{children}</span>
-        {host ? <span className={styles.citationHost}>{host}</span> : null}
+        {showHost ? <span className={styles.citationHost}>{host}</span> : null}
       </a>
     );
   },
