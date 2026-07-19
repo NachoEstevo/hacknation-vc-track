@@ -63,8 +63,8 @@ export interface SearchSession {
   updatedAt: string;
 }
 
-export const TARGET_CANDIDATE_OPTIONS = [1, 3, 5] as const;
-export const DEFAULT_TARGET_CANDIDATES = 3;
+export const TARGET_CANDIDATE_OPTIONS = [1, 2, 3] as const;
+export const DEFAULT_TARGET_CANDIDATES = 2;
 
 function isTargetCandidates(value: unknown): value is number {
   return typeof value === "number" && Number.isInteger(value) && value >= 1 && value <= 10;
