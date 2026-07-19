@@ -20,7 +20,7 @@ The live artifact used both defaults shown above. Thesis `generatedAt` and `prom
 
 ## Runbook
 
-With npm 11 in PowerShell, use the verified double separator. The first `--` ends npm's own options and the second is consumed while forwarding, so the CLI receives `--companies` as its first flag rather than a literal separator.
+With npm 11.6.2 in PowerShell, use the verified double separator. The first `--` ends npm's own options; npm forwards the second separator literally to the script, and this CLI intentionally consumes that leading separator. The commands below therefore work as written.
 
 First parse only:
 

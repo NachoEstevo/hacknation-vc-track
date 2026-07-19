@@ -28,6 +28,6 @@ The 2026-07-18 live analysis of the exact 50-company source snapshot and public-
 
 ## `briefs/demo-investment-briefs-summary.json`
 
-A CLI-generated summary from the same run with actual model names, timestamps, counts, selected company identities, failures, and provenance. The 50 committed Clay discovery records are used internally for normalization and ranking but never published; the artifact exposes 38 website and one GitHub records, all labeled `public`.
+A CLI-generated summary from the same run with actual model names, timestamps, counts, selected company identities, failures, and provenance. The 50 committed Clay discovery records are used internally for normalization and ranking but never published; the artifact exposes 35 website records and one GitHub record: 36 public records and 0 private records.
 
 See `docs/investment-brief-engine.md` for commands, scoring, retry behavior, and interpretation limits.
