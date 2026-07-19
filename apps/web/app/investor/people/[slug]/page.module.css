@@ -165,14 +165,45 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 28px;
+  padding: 32px 40px 36px;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
 }
 
 .dossierBody {
-  font-size: 14px;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+
+/* Document-grade rhythm for the generated dossier: section headings act as
+   ruled dividers, lists breathe, markers pick up the accent. Scoped under
+   .dossier to outrank the generic .markdown element styles. */
+
+.dossier .dossierBody h3 {
+  margin: 30px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  font-size: 19px;
+  letter-spacing: -0.01em;
+}
+
+.dossier .dossierBody > h3:first-child {
+  margin-top: 0;
+}
+
+.dossier .dossierBody p {
+  margin: 0 0 12px;
+}
+
+.dossier .dossierBody ul,
+.dossier .dossierBody ol {
+  margin: 0 0 14px;
+  gap: 7px;
+}
+
+.dossier .dossierBody li::marker {
+  color: var(--accent);
 }
 
 .activityList {
