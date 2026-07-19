@@ -471,7 +471,7 @@ export async function POST(request: NextRequest) {
     // With Tavily on, Claude's built-in search is a metered backstop (it is
     // the expensive engine) — a handful of uses per run, not one per angle.
     tools.web_search = anthropic.tools.webSearch_20250305({
-      maxUses: isTavilyEnabled() ? Math.min(4, 2 + Math.ceil(target / 3)) : Math.min(16, 6 + target),
+      maxUses: isTavilyEnabled() ? Math.min(6, 3 + Math.ceil(target / 3)) : Math.min(16, 6 + target),
     });
   }
 
@@ -480,8 +480,8 @@ export async function POST(request: NextRequest) {
     // Per-run budgets: Tavily credits are metered, so the caps live in the
     // tools themselves rather than trusting the prompt. The search budget
     // mirrors web_search's so every angle can run on both engines.
-    let tavilySearchesLeft = Math.min(18, 8 + target);
-    let pageReadsLeft = 5;
+    let tavilySearchesLeft = Math.min(26, 12 + target * 2);
+    let pageReadsLeft = 8;
 
     tools.tavily_search = defineTool({
       description:
@@ -539,7 +539,7 @@ export async function POST(request: NextRequest) {
     // Step and search budgets scale with the requested bench size. Dual-engine
     // searching burns roughly twice the steps per angle, so the ceiling grows
     // when Tavily is on.
-    stopWhen: stepCountIs(tavilyEnabled ? Math.min(48, 16 + target * 4) : Math.min(40, 12 + target * 3)),
+    stopWhen: stepCountIs(tavilyEnabled ? Math.min(56, 20 + target * 4) : Math.min(44, 14 + target * 3)),
     // Per-step ceiling: narration is deliberately thin (see prompt), so a
     // step never needs anywhere near the old 12k budget.
     maxOutputTokens: 4000,
