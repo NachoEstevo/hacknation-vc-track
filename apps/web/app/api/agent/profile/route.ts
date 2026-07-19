@@ -194,7 +194,17 @@ Research this person now and write the dossier.`;
     system: `${PROFILE_SYSTEM}${tavilyNote}\n\n${AGENT_SECURITY_PROMPT}`,
     messages,
     tools,
-    stopWhen: stepCountIs(8),
+    // Write-out fuse: research gets the first 7 steps; from step 7 the tools
+    // are cut off, so a run can never end as searches-with-no-dossier when
+    // the step ceiling hits (the failure mode was a blank profile page).
+    prepareStep: ({ stepNumber }: { stepNumber: number }) => {
+      if (stepNumber < 7) return {};
+      return {
+        toolChoice: "none" as const,
+        system: `${PROFILE_SYSTEM}\n\n${AGENT_SECURITY_PROMPT}\n\nResearch is over for this run — tools are disabled. Write the complete dossier NOW from the evidence already gathered, following the exact structure. Do not apologize for unfinished research; fold gaps into Risks & unknowns.`,
+      };
+    },
+    stopWhen: stepCountIs(10),
     maxOutputTokens: 6000,
     abortSignal: agentAbortSignal(request),
     experimental_transform: smoothStream(),
