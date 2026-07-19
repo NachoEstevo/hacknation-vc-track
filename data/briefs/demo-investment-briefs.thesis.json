@@ -15,13 +15,22 @@
       ]
     },
     {
-      "criterionId": "industry-1",
-      "category": "industry",
-      "label": "B2B software",
+      "criterionId": "industry-1-b2b",
+      "category": "market",
+      "label": "B2B business model",
       "requirement": "required",
-      "weight": 5,
+      "weight": 3,
       "operator": "equals",
-      "expectedValue": "B2B software"
+      "expectedValue": true
+    },
+    {
+      "criterionId": "industry-1-software",
+      "category": "industry",
+      "label": "Software product",
+      "requirement": "required",
+      "weight": 2,
+      "operator": "equals",
+      "expectedValue": true
     },
     {
       "criterionId": "company-size-1",

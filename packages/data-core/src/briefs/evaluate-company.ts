@@ -5,7 +5,6 @@ import type { ClaimCandidate, CompanyEvaluation, CompanyEvidenceBundle, Criterio
 interface CandidateValue {
   value: string | number | boolean;
   evidenceIds: string[];
-  conflicted: boolean;
 }
 
 function normalized(value: string): string {
@@ -16,16 +15,25 @@ function fieldValues(bundle: CompanyEvidenceBundle, criterion: ThesisCriterion):
   const company = bundle.normalizedCompany;
   const clayEvidenceIds = bundle.evidence.filter((record) => record.sourceType === "clay_csv").map((record) => record.evidenceId);
   if (clayEvidenceIds.length === 0) return [];
-  const values: Array<string | null> = criterion.category === "geography"
-    ? [company.countryCode, company.location]
+  const values: Array<string | boolean | null> = criterion.category === "geography"
+    ? [company.countryCode ?? company.location]
     : criterion.category === "industry"
-      ? [company.primaryIndustry]
+      ? industryValues(company.primaryIndustry, criterion)
       : criterion.category === "company_size"
         ? []
         : criterion.category === "product" || criterion.category === "market"
           ? [company.description]
           : [];
-  return values.filter((value): value is string => value !== null).map((value) => ({ value, evidenceIds: clayEvidenceIds, conflicted: false }));
+  return values.filter((value): value is string | boolean => value !== null).map((value) => ({ value, evidenceIds: clayEvidenceIds }));
+}
+
+function industryValues(primaryIndustry: string | null, criterion: ThesisCriterion): Array<string | boolean | null> {
+  if (!primaryIndustry) return [];
+  const isSoftwareCriterion = criterion.expectedValue === true
+    && (criterion.criterionId.endsWith("-software") || /\bsoftware\b/iu.test(criterion.label));
+  if (isSoftwareCriterion) return /\bsoftware\b/iu.test(primaryIndustry) ? [true] : [];
+  if (typeof criterion.expectedValue !== "string") return [];
+  return normalized(primaryIndustry) === normalized(criterion.expectedValue) ? [primaryIndustry] : [];
 }
 
 interface NumericRange {
@@ -65,11 +73,10 @@ function relevantClaim(claim: ClaimCandidate, criterion: ThesisCriterion): boole
 function claimValues(bundle: CompanyEvidenceBundle, criterion: ThesisCriterion, claims: ClaimCandidate[]): CandidateValue[] {
   const knownEvidenceIds = new Set(bundle.evidence.map((record) => record.evidenceId));
   return claims
-    .filter((claim) => claim.companyId === bundle.companyId && claim.state !== "unverified" && relevantClaim(claim, criterion) && claim.evidenceIds.some((id) => knownEvidenceIds.has(id)))
+    .filter((claim) => claim.companyId === bundle.companyId && claim.state === "supported" && relevantClaim(claim, criterion) && claim.evidenceIds.some((id) => knownEvidenceIds.has(id)))
     .map((claim) => ({
       value: claim.value,
       evidenceIds: claim.evidenceIds.filter((id) => knownEvidenceIds.has(id)),
-      conflicted: claim.state === "conflicted",
     }));
 }
 
@@ -98,11 +105,17 @@ function comparable(operator: ThesisCriterion["operator"], expectedValue: Thesis
 function evaluateCriterion(bundle: CompanyEvidenceBundle, criterion: ThesisCriterion, claims: ClaimCandidate[]): CriterionEvaluation {
   const sizeEvaluation = companySizeEvaluation(bundle, criterion);
   if (sizeEvaluation) return sizeEvaluation;
-  const candidates = [...fieldValues(bundle, criterion), ...claimValues(bundle, criterion, claims)]
+  const normalizedCandidates = fieldValues(bundle, criterion);
+  const isAuthoritative = criterion.category === "geography" || criterion.category === "industry";
+  const candidates = [
+    ...normalizedCandidates,
+    ...(isAuthoritative && normalizedCandidates.length > 0 ? [] : claimValues(bundle, criterion, claims)),
+  ]
     .filter((candidate) => comparable(criterion.operator, criterion.expectedValue, candidate));
   const evidenceIds = [...new Set(candidates.flatMap((candidate) => candidate.evidenceIds))];
   const hasMatch = candidates.some((candidate) => matches(criterion.operator, criterion.expectedValue, candidate));
-  const hasConflict = candidates.some((candidate) => candidate.conflicted);
+  const hasNonMatch = candidates.some((candidate) => !matches(criterion.operator, criterion.expectedValue, candidate));
+  const hasConflict = hasMatch && hasNonMatch;
   const state = candidates.length === 0 ? "missing"
     : hasConflict ? "conflict"
       : criterion.requirement === "excluded" ? hasMatch ? "conflict" : "match"

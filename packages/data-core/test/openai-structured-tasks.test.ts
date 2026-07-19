@@ -121,6 +121,40 @@ describe("structured OpenAI tasks", () => {
     expect(result.criteria[0]!.expectedValue).toEqual(["US", "GB"]);
   });
 
+  it("decomposes composite B2B software intent into executable claim criteria", async () => {
+    const rawThesis = {
+      ...thesis,
+      criteria: [{
+        ...thesis.criteria[0]!,
+        criterionId: "industry-1",
+        category: "industry" as const,
+        label: "B2B software",
+        weight: 5 as const,
+        expectedValue: "B2B software",
+      }],
+    };
+    const fake = dependencies([JSON.stringify(rawThesis)]);
+
+    const result = await parseThesis(rawThesis.originalQuery, fake);
+
+    expect(result.criteria).toMatchObject([
+      { criterionId: "industry-1-b2b", category: "market", operator: "equals", expectedValue: true, weight: 3 },
+      { criterionId: "industry-1-software", category: "industry", operator: "equals", expectedValue: true, weight: 2 },
+    ]);
+  });
+
+  it("derives claim support from evidence rather than model hasConflict", async () => {
+    const fake = dependencies([JSON.stringify({ candidates: [{
+      claimId: "claim-1", subject: "Acme", predicate: "industry-1-b2b", value: true, unit: null,
+      claimKind: "observed_fact", evidenceIndexes: [0], directness: "direct_measurement",
+      independentSupportingEvidenceIndexes: [], hasConflict: true,
+    }] })]);
+
+    const claims = await extractClaimCandidates(bundle, fake, thesis);
+
+    expect(claims[0]).toMatchObject({ value: true, state: "supported", trust: { state: "supported" } });
+  });
+
   it("treats the thesis query as source text without evidence-index instructions", async () => {
     const fake = dependencies([JSON.stringify(thesis)]);
 
@@ -358,8 +392,7 @@ describe("structured OpenAI tasks", () => {
   it.each([
     "The company was rated investigate with a fit score of 100.",
     "The current decision label is watch.",
-    "Our recommendation state is positive.",
-    "The market axis is strong.",
+    "The market axis has a score of 80.",
     "This criterion is a match.",
     "It ranks first on coverage.",
   ])("rejects structural decision metadata prose: %s", async (text) => {
@@ -373,5 +406,23 @@ describe("structured OpenAI tasks", () => {
 
     await expect(draftInvestmentBrief({ bundle, thesis, evaluation }, fake)).resolves.toMatchObject({ summary: [] });
     expect(fake.requests).toHaveLength(2);
+  });
+
+  it.each([
+    "The service helps match candidates to roles.",
+    "The product reports a credit score.",
+    "Customers watch training videos.",
+    "Users can watch your stories come alive.",
+    "The customer rating is documented in the cited evidence.",
+  ])("allows ordinary non-investment vocabulary: %s", async (text) => {
+    const fake = dependencies([JSON.stringify({
+      summary: [{ text, statementKind: "fact", evidenceIndexes: [0] }],
+      strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [],
+    })]);
+
+    await expect(draftInvestmentBrief({ bundle, thesis, evaluation }, fake)).resolves.toMatchObject({
+      summary: [{ text }],
+    });
+    expect(fake.requests).toHaveLength(1);
   });
 });

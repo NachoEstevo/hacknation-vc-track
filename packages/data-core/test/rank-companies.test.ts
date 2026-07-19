@@ -25,7 +25,7 @@ function evaluation(
 }
 
 describe("rankCompanies", () => {
-  it("ranks by known thesis fit, coverage, Product/Execution score, then stable company ID", () => {
+  it("ranks by coverage-adjusted thesis fit, coverage, Product/Execution score, then stable company ID", () => {
     const result = rankCompanies([
       evaluation("missing-fit", null, 100, 100),
       evaluation("lower-fit", 80, 100, 100),
@@ -36,12 +36,36 @@ describe("rankCompanies", () => {
     ]);
 
     expect(result.map(({ rank, evaluation: item }) => [rank, item.companyId])).toEqual([
-      [1, "company-a"],
-      [2, "company-b"],
-      [3, "lower-product"],
-      [4, "low-coverage"],
-      [5, "lower-fit"],
+      [1, "lower-fit"],
+      [2, "company-a"],
+      [3, "company-b"],
+      [4, "lower-product"],
+      [5, "low-coverage"],
       [6, "missing-fit"],
+    ]);
+  });
+
+  it("does not let perfect known fit with low coverage outrank stronger total support", () => {
+    const result = rankCompanies([
+      evaluation("perfect-low-coverage", 100, 43.47826086956522, 100),
+      evaluation("supported", 84.375, 69.56521739130434, 80),
+    ]);
+
+    expect(result.map(({ evaluation: item }) => item.companyId)).toEqual([
+      "supported",
+      "perfect-low-coverage",
+    ]);
+  });
+
+  it("prefers coverage when adjusted fit is equal", () => {
+    const result = rankCompanies([
+      evaluation("higher-fit", 100, 50, 100),
+      evaluation("higher-coverage", 50, 100, 0),
+    ]);
+
+    expect(result.map(({ evaluation: item }) => item.companyId)).toEqual([
+      "higher-coverage",
+      "higher-fit",
     ]);
   });
 

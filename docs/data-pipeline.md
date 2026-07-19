@@ -61,7 +61,7 @@ Outputs:
 
 The brief engine consumes only `data/source/clay-us-uk-early-software.csv` and `data/enriched/company-web-profiles.json` for the demo run. It parses the human thesis into a reviewable file and stops before company-level model calls. An operator must inspect and explicitly accept that file before the 50-company analysis can start.
 
-The final 2026-07-18 accepted run evaluated and ranked all 50 companies and produced a non-degenerate fit distribution. It requested three briefs, generated two citation-valid briefs, and retained one sanitized draft failure, so the result is honestly `partial`. The top three match the canonical US/UK geography and the deterministically derived self-employed/below-10 size criterion. They still conflict with the required B2B-software criterion and lack supported stage/traction claims, so all remain `pass_for_thesis`; this is not rewritten into a positive result.
+The final accepted run generated at `2026-07-19T00:17:19.695Z` evaluated and ranked all 50 companies and produced a non-degenerate fit distribution. It requested and generated three citation-valid briefs with no failures, so the result is `completed`. The composite B2B-software thesis input is represented as separate B2B and software criteria: B2B is missing for all 50, software taxonomy matches 4 and is missing for 46, and neither is manufactured as a conflict from unequal taxonomy or a model conflict flag. Ranking uses coverage-adjusted fit so sparse-evidence perfect known fit cannot outrank stronger total support. The top three are Niya, Tech On Toast, and emailexpert; all are `investigate`, with 60.870-69.565% coverage and supported software and/or visible-execution evidence.
 
 Outputs:
 

@@ -62,6 +62,69 @@ describe("evaluateCompany", () => {
     expect(result.recommendation).toBe("investigate");
   });
 
+  it("keeps Drivenly geography matched when a model claim is marked conflicted", () => {
+    const result = evaluateCompany(thesis([
+      criterion({ criterionId: "geography-1", operator: "one_of", expectedValue: ["US", "GB"] }),
+    ]), {
+      ...bundle,
+      companyName: "Drivenly | AI Growth Partner",
+      normalizedCompany: {
+        ...bundle.normalizedCompany,
+        name: "Drivenly | AI Growth Partner",
+        countryCode: "US",
+        location: "Salt Lake City, Utah, United States",
+        primaryIndustry: "Advertising Services",
+        sizeBand: "2-10 employees",
+      },
+    }, [claim("geography-1", "GB", "conflicted")]);
+
+    expect(result.criteria[0]!.state).toBe("match");
+  });
+
+  it("matches Zendr Business on supported B2B and authoritative software taxonomy", () => {
+    const result = evaluateCompany(thesis([
+      criterion({ criterionId: "industry-1-b2b", category: "market", label: "B2B business model", expectedValue: true }),
+      criterion({ criterionId: "industry-1-software", category: "industry", label: "Software product", expectedValue: true }),
+    ]), {
+      ...bundle,
+      companyName: "Zendr Business",
+      normalizedCompany: {
+        ...bundle.normalizedCompany,
+        name: "Zendr Business",
+        primaryIndustry: "Mobile Computing Software Products",
+      },
+    }, [claim("industry-1-b2b", true)]);
+
+    expect(result.criteria.map(({ state }) => state)).toEqual(["match", "match"]);
+  });
+
+  it("treats a non-software taxonomy as unknown without supported negative evidence", () => {
+    const result = evaluateCompany(thesis([
+      criterion({ criterionId: "industry-1-software", category: "industry", label: "Software product", expectedValue: true }),
+    ]), {
+      ...bundle,
+      normalizedCompany: { ...bundle.normalizedCompany, primaryIndustry: "Education" },
+    }, []);
+
+    expect(result.criteria[0]!.state).toBe("missing");
+  });
+
+  it.each(["Julian Jewel's AI Bot", "Steal These Thoughts!"])(
+    "requires supported negative evidence before conflicting %s with B2B/software",
+    (companyName) => {
+      const result = evaluateCompany(thesis([
+        criterion({ criterionId: "industry-1-b2b", category: "market", label: "B2B business model", expectedValue: true }),
+        criterion({ criterionId: "industry-1-software", category: "industry", label: "Software product", expectedValue: true }),
+      ]), {
+        ...bundle,
+        companyName,
+        normalizedCompany: { ...bundle.normalizedCompany, name: companyName, primaryIndustry: "Education" },
+      }, [claim("industry-1-b2b", false), claim("industry-1-software", false)]);
+
+      expect(result.criteria.map(({ state }) => state)).toEqual(["conflict", "conflict"]);
+    },
+  );
+
   it("marks an incomparable team-size representation missing rather than conflicting", () => {
     const result = evaluateCompany(thesis([
       criterion({ category: "company_size", operator: "lte", expectedValue: 9 }),
@@ -94,9 +157,9 @@ describe("evaluateCompany", () => {
       criterion({ criterionId: "excluded", category: "exclusion", label: "Excluded", requirement: "excluded", weight: 1, expectedValue: true }),
     ]), bundle, [claim("excluded", true)]);
 
-    expect(result.criteria.map((item) => item.state)).toEqual(["match", "partial", "missing", "conflict"]);
-    expect(result.thesisFit).toBeCloseTo((5 + 1.5 + 0) / (5 + 3 + 1) * 100);
-    expect(result.evidenceCoverage).toBeCloseTo((5 + 3 + 1) / 11 * 100);
+    expect(result.criteria.map((item) => item.state)).toEqual(["match", "missing", "missing", "conflict"]);
+    expect(result.thesisFit).toBeCloseTo((5 + 0) / (5 + 1) * 100);
+    expect(result.evidenceCoverage).toBeCloseTo((5 + 1) / 11 * 100);
     expect(result.criteria.every((item) => item.reason.length > 0 && Array.isArray(item.evidenceIds))).toBe(true);
   });
 

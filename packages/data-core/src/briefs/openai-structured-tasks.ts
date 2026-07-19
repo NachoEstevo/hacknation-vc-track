@@ -185,7 +185,7 @@ function claimCandidates(value: unknown, bundle: CompanyEvidenceBundle): ClaimCa
       directness: candidate.directness as ClaimDirectness,
       independentSupportingEvidenceIds: supportingIndexes.map((index) => bundle.evidence[index]!.evidenceId),
       evaluatedAt: evaluationTime(bundle),
-      hasConflict: candidate.hasConflict,
+      hasConflict: false,
     });
     return {
       claimId: candidate.claimId, companyId: bundle.companyId, subject: candidate.subject, predicate: candidate.predicate,
