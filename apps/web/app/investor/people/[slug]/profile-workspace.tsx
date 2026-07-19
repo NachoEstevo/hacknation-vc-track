@@ -63,14 +63,26 @@ function readStoredDossier(slug: string): StoredDossier | null {
   }
 }
 
+/**
+ * The document starts at its first ### heading — anything the model streamed
+ * before it ("I'll research…", "Let me compile…") is process narration, not
+ * dossier. Falls through untouched when no heading exists yet (early stream).
+ */
+function trimToDossier(text: string): string {
+  const match = /^###\s/m.exec(text);
+  return match && match.index > 0 ? text.slice(match.index) : text;
+}
+
 function dossierTextOf(messages: UIMessage[]): string {
   for (let index = messages.length - 1; index >= 0; index -= 1) {
     const message = messages[index];
     if (!message || message.role !== "assistant") continue;
-    return (message.parts as AnyPart[])
-      .filter((part): part is AnyPart & { text: string } => part.type === "text" && typeof part.text === "string")
-      .map((part) => part.text)
-      .join("\n\n");
+    return trimToDossier(
+      (message.parts as AnyPart[])
+        .filter((part): part is AnyPart & { text: string } => part.type === "text" && typeof part.text === "string")
+        .map((part) => part.text)
+        .join("\n\n"),
+    );
   }
   return "";
 }
@@ -184,7 +196,8 @@ function HydratedProfile({ slug }: { slug: string }) {
   const streamedDossier = dossierTextOf(messages);
   const activity = researchActivityOf(messages);
   const isBusy = status === "submitted" || status === "streaming";
-  const dossier = cached?.markdown && !isBusy && !streamedDossier ? cached.markdown : streamedDossier;
+  // Older cached dossiers may still carry pre-dossier narration — trim on read.
+  const dossier = cached?.markdown && !isBusy && !streamedDossier ? trimToDossier(cached.markdown) : streamedDossier;
 
   function requestDossier() {
     if (!stub) return;
