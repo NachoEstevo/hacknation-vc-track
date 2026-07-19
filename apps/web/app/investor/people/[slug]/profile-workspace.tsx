@@ -240,6 +240,10 @@ function HydratedProfile({ slug }: { slug: string }) {
 
   return (
     <div className={styles.page}>
+      <p className={styles.printProvenance}>
+        undr · researched dossier
+        {cached ? ` · generated ${new Date(cached.generatedAt).toLocaleDateString("en-US")}` : ""}
+      </p>
       <div className={styles.topBar}>
         <Link href={"/investor/search" as Route} className={styles.backLink}>
           <ArrowLeft aria-hidden="true" />
