@@ -32,6 +32,7 @@ import {
   type ReactNode,
 } from "react";
 import { useChat } from "@ai-sdk/react";
+import { announceUsageChange } from "@/lib/usage/usage-events";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { Button, ChatUserBubble, PersonCard } from "@/components/pencil";
 import { Markdown } from "@/components/markdown";
@@ -41,6 +42,27 @@ import { DEFAULT_TARGET_CANDIDATES } from "@/lib/search";
 import styles from "./page.module.css";
 
 const CHAT_STORAGE_KEY = "undr.sourcing-chat.v1";
+const CHAT_USAGE_ID_KEY = "undr.chat-usage-id.v1";
+
+/**
+ * Stable id for the CURRENT conversation's usage accounting (10 messages per
+ * chat). Reloads mid-conversation reuse it — retrying the same turn never
+ * double-charges — and starting a new exploration rotates it, opening a
+ * fresh message pool.
+ */
+function chatUsageId(rotate = false): string {
+  try {
+    if (!rotate) {
+      const existing = sessionStorage.getItem(CHAT_USAGE_ID_KEY);
+      if (existing) return existing;
+    }
+    const fresh = crypto.randomUUID();
+    sessionStorage.setItem(CHAT_USAGE_ID_KEY, fresh);
+    return fresh;
+  } catch {
+    return "local-chat";
+  }
+}
 const CANDIDATES_STORAGE_KEY = "undr.sourcing-candidates.v1";
 const CHAT_ARCHIVE_KEY = "undr.sourcing-chat-archive.v1";
 const CHAT_ARCHIVE_LIMIT = 6;
@@ -455,8 +477,9 @@ function HydratedSearchWorkspace() {
     setMessages([]);
     void sendMessage(
       { text: searchSession.query },
-      { body: { thesis: thesisContext, controls: searchControls } },
+      { body: { thesis: thesisContext, controls: searchControls, chatId: chatUsageId(true) } },
     );
+    announceUsageChange();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchSession?.updatedAt]);
 
@@ -496,9 +519,14 @@ function HydratedSearchWorkspace() {
       {
         text: `[auto] Continue searching: ${candidates.length} of ${targetCandidates} requested candidates reported so far. Research new angles and report the missing ones.`,
       },
-      { body: { thesis: thesisContext, controls: searchControls } },
+      { body: { thesis: thesisContext, controls: searchControls, chatId: chatUsageId() } },
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
+  // Settled turns refresh the sidebar usage meter.
+  useEffect(() => {
+    if (status === "ready" || status === "error") announceUsageChange();
   }, [status]);
 
   // Persist the thread continuously (throttled while streaming) so a reload
@@ -561,7 +589,8 @@ function HydratedSearchWorkspace() {
     setFeedback("");
     manualStopRef.current = false;
     autoContinuesRef.current = 0;
-    void sendMessage({ text }, { body: { thesis: thesisContext, controls: searchControls } });
+    void sendMessage({ text }, { body: { thesis: thesisContext, controls: searchControls, chatId: chatUsageId() } });
+    announceUsageChange();
   }
 
   function startNewChat() {
@@ -576,6 +605,7 @@ function HydratedSearchWorkspace() {
     setMessages([]);
     setDraft("");
     setFeedback("");
+    chatUsageId(true);
     try {
       sessionStorage.removeItem(CHAT_STORAGE_KEY);
     } catch {

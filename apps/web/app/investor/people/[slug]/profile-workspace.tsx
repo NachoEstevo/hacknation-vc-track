@@ -23,6 +23,7 @@ import { Markdown } from "@/components/markdown";
 import { useWorkspace } from "@/components/workspace-provider";
 import { isCandidateReport, thesisContextFor, type CandidateReport } from "@/lib/ai/sourcing-schema";
 import { mergePersonLinks, type PersonLink } from "@/lib/search/contact-links";
+import { announceUsageChange } from "@/lib/usage/usage-events";
 import styles from "./page.module.css";
 
 const CANDIDATES_STORAGE_KEY = "undr.sourcing-candidates.v1";
@@ -50,9 +51,6 @@ function usageKeyFor(slug: string, rotate = false): string {
   }
 }
 
-function announceUsageChange(): void {
-  window.dispatchEvent(new CustomEvent("undr:usage-changed"));
-}
 
 type AnyPart = { type: string } & Record<string, unknown>;
 
