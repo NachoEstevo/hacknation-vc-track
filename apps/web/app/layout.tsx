@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { AnonymousSession } from "@/components/anonymous-session";
 import { WorkspaceProvider } from "@/components/workspace-provider";
 import { bodyFont, displayFont, monoFont } from "@/lib/fonts";
 import "./globals.css";
@@ -20,7 +21,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${bodyFont.variable} ${displayFont.variable} ${monoFont.variable}`}
       data-scroll-behavior="smooth"
     >
-      <body><WorkspaceProvider>{children}</WorkspaceProvider></body>
+      <body>
+        <AnonymousSession />
+        <WorkspaceProvider>{children}</WorkspaceProvider>
+      </body>
     </html>
   );
 }
