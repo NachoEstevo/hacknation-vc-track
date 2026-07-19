@@ -1,0 +1,1943 @@
+{
+  "generatedAt": "2026-07-18T20:09:25.877Z",
+  "results": [
+    {
+      "stableId": "73c89d3320e06114f6241365",
+      "name": "Icon",
+      "domain": "icon.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:08:54.189Z",
+      "pages": [
+        {
+          "url": "https://icon.com/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "The Human Admaker | IconLinkedInLinkedInLinkedInLinkedInLinkedInLinkedInLinkedInXXLinkedInLinkedInXXInstagramXLinkedInLinkedInXXInstagramLinkedInXXLinkedInLinkedInXFrame.ioLinkedInXLinkedInXFacebookYouTubeInstagramTikTok",
+        "description": "6 Human UGC ads filmed & edited for $999 (100% real / not AI). We find creators, ship product, write scripts or use yours, coach creators, & edit videos (2 creators × 3 ads each). Powered by Admaker 2.0 software: track + review ads, reuse assets, launch + analyze, & more.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://linkedin.com/in/richardnguyen1995/",
+            "https://linkedin.com/in/darylluketerry/",
+            "https://linkedin.com/in/kevinleeme/",
+            "https://linkedin.com/in/genoquaid/",
+            "https://linkedin.com/in/chloe-greeley/",
+            "https://linkedin.com/in/braxtonmanley/",
+            "https://linkedin.com/in/kennanfrost",
+            "https://linkedin.com/company/the-founders-fund",
+            "https://linkedin.com/in/markchen90",
+            "https://linkedin.com/in/raisuddinkhan",
+            "https://linkedin.com/feed/update/urn:li:activity:7292601719627079680/",
+            "https://linkedin.com/company/icon"
+          ],
+          "github": [],
+          "x": [
+            "https://x.com/intent/user?screen_name=icon",
+            "https://x.com/foundersfund",
+            "https://x.com/markchen90",
+            "https://x.com/saquon",
+            "https://x.com/RomanEcom",
+            "https://x.com/icon/status/1886836061378372064"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [
+            "https://icon.com/pricing"
+          ],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "bee91b889a2a1e541342640d",
+      "name": "The CTO Journal",
+      "domain": "thectojournal.com",
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:08:54.193Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "https://thectojournal.com/",
+          "reason": "getaddrinfo ENOTFOUND thectojournal.com"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "0186b70d0e326a1dbbaacac5",
+      "name": "Career Principles",
+      "domain": "careerprinciples.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:08:54.193Z",
+      "pages": [
+        {
+          "url": "https://www.careerprinciples.com/",
+          "status": 200
+        },
+        {
+          "url": "https://www.careerprinciples.com/about",
+          "status": 200
+        },
+        {
+          "url": "https://www.careerprinciples.com/for-teams",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Career Principles",
+        "description": "Level up your business career and gain real world skills with our online courses including Excel, PowerPoint, Financial Modelling and more! Visit us today.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/careerprinciples/?viewAsMember=true"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "56c9fcb30eeb2560eea94b4f",
+      "name": "The Human Ai Institute",
+      "domain": "human-ai.institute",
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:08:54.193Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "https://human-ai.institute/",
+          "reason": "This operation was aborted"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "67eff7a89eb205c7333efe31",
+      "name": "GPT Journal",
+      "domain": null,
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:08:54.293Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "",
+          "reason": "missing_domain"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "f85288483c7608849341ac86",
+      "name": "Multiples.vc",
+      "domain": "multiples.vc",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:08:54.293Z",
+      "pages": [
+        {
+          "url": "https://multiples.vc/",
+          "status": 200
+        },
+        {
+          "url": "https://multiples.vc/data",
+          "status": 200
+        },
+        {
+          "url": "https://multiples.vc/companies",
+          "status": 200
+        },
+        {
+          "url": "https://multiples.vc/corporate-development",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Multiples.vc - Public Comps and Private Valuation Multiples",
+        "description": "Benchmark valuation multiples for public comps, M&A deals and VC rounds.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/multiples-vc/"
+          ],
+          "github": [],
+          "x": [
+            "https://x.com/multiples_vc"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [
+            "https://multiples.vc/pricing"
+          ],
+          "changelog": [],
+          "product": [
+            "https://multiples.vc/solutions/mcp",
+            "https://multiples.vc/fund-services"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "9525a62b551256f05c18e7c7",
+      "name": "e2eML",
+      "domain": "e2eml.school",
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:08:54.948Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "https://e2eml.school/",
+          "reason": "Target must resolve only to the public internet"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "ec3b21e1a575c1f1dec19f98",
+      "name": "AI Connect | Data & AI Delivery Partner",
+      "domain": "ai-connect.co.uk",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:08:55.489Z",
+      "pages": [
+        {
+          "url": "https://ai-connect.co.uk/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "AI Connect",
+        "description": "Scaling AI Teams. Building AI Products.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/the-data-gals/posts/?feedView=all",
+            "https://www.linkedin.com/company/ai-connectltd/posts/?feedView=all",
+            "https://www.linkedin.com/company/105811851/admin/dashboard/"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": [
+            "https://ai-connect.co.uk/#solutions",
+            "https://ai-connect.co.uk/#products"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "1259cc5339fa8610ecf8aaaf",
+      "name": "ProInteractive",
+      "domain": "prointeractive.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:08:55.700Z",
+      "pages": [
+        {
+          "url": "https://www.prointeractive.com/",
+          "status": 200
+        },
+        {
+          "url": "https://www.prointeractive.com/lead-generation-services/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "ProInteractive®",
+        "description": "ProInteractive® is a customer acquisition platform that makes it easy & simple for companies to acquire new customer leads to fuel their growth.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/prointeractive/"
+          ],
+          "github": [],
+          "x": [
+            "https://twitter.com/Prointeractive/"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": [
+            "https://www.prointeractive.com/lead-generation-services/"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "608a1fe17b48509ca0acdf81",
+      "name": "Hustle Badger",
+      "domain": "hustlebadger.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:08:55.813Z",
+      "pages": [
+        {
+          "url": "https://www.hustlebadger.com/",
+          "status": 200
+        },
+        {
+          "url": "https://www.hustlebadger.com/about/",
+          "status": 200
+        },
+        {
+          "url": "https://www.hustlebadger.com/about/private-workshops/",
+          "status": 200
+        },
+        {
+          "url": "https://www.hustlebadger.com/what-do-product-teams-do/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Hustle Badger",
+        "description": "Hustle Badger is your go-to product resource for practical how-to guides, case studies and templates to help you get the job done.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/hustle-badger",
+            "https://www.linkedin.com/in/edbiden/"
+          ],
+          "github": [],
+          "x": [
+            "https://twitter.com/hustlebadger"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [
+            "https://www.hustlebadger.com/subscribe/"
+          ],
+          "changelog": [],
+          "product": [
+            "https://www.hustlebadger.com/what-do-product-teams-do/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-management-resources/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-write-a-great-product-strategy/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/vision-strategy/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/user-research/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/analytics/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/competitor-positioning/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-market-fit/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-execution/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/planning-development/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/objectives-communication/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/velocity-quality/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/people/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/hiring/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/performance-review-template-examples-amp-guide/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/team-dynamics/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-manager-career-path/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-become-a-product-manager/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/interviews-2/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/networking/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/career-development-plan/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/30-60-90-day-plan-vps/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/case-studies/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/companies/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/industry/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/interviews/",
+            "https://www.hustlebadger.com/product-neo-mba/",
+            "https://www.hustlebadger.com/courses/product-strategy-course/",
+            "https://www.hustlebadger.com/courses/product-discovery-course/",
+            "https://www.hustlebadger.com/courses/product-analytics-course/",
+            "https://www.hustlebadger.com/courses/product-execution-course/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/prd-template-examples/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/amazon-working-backwards-process/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/write-a-pm-resume/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-management-case-studies/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/okrs-template-examples-and-guide/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-backlog/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/ai-maturity-model/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/stakeholder-engagement-plan/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-launch-plan-template-examples-guide/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/high-velocity-decision-making/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-increase-product-team-velocity/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-roadmap-templates/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/decide-framework/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-do-a-product-audit/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-create-a-solid-hiring-plan/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/creating-a-strategy-development-plan/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-set-a-compelling-product-vision/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-vision-examples/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/developing-the-pillars-of-your-product-strategy/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-strategy-examples/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-build-an-opportunity-solution-tree/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-principles/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/tam-sam-som/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/discovery/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/design-thinking/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-build-continuous-product-discovery-habits/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/jobs-to-be-done-template/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/jobs-to-be-done-examples/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/customer-journey-mapping/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/customer-journey-map-examples/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/ideation-session/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/qualitative-user-research/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/building-an-impact-model-for-your-product-roadmap/",
+            "https://www.hustlebadger.com/metrics/product-metrics/",
+            "https://www.hustlebadger.com/metrics/product-success-metrics/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-experimentation/",
+            "https://www.hustlebadger.com/metrics/intro-a-b-testing-in-product-management/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/7-powers-establishing-your-competitive-moat/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/competitor-analysis/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/what-is-a-product-requirements-document-prd/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-backlog-example/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-run-a-quarterly-planning-cycle/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-roadmap-examples/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/project-management-for-pms/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/okr-template/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/progress-vs-pacing-setting-great-product-okrs/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/executive-communication/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/collaborating-with-sales-teams/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/running-effective-agile-ceremonies/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/building-your-product-operating-model/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-run-a-great-product-review/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-review-examples/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-run-delivery-reviews/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/inclusive-hiring/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/20-product-manager-interview-questions/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/competency-framework-template/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-give-good-feedback/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/leading-without-authority/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/managing-conflict/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/levels-of-delegation/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/managing-up/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/working-with-founders/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/soft-skills/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/hard-skills/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/9x-product-manager-resume-examples/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/common-product-manager-interview-questions/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/interview-preparation-tips/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-find-a-mentor/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-get-a-first-round-interview-without-applying/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/technical-product-manager/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/ai-terminology-cheat-sheet/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/agents-101/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/ai-evals/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/claude-code/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/project-installing-claude-code/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/project-meeting-summarizer/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/project-prd-reviewer/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/jeff-bezos-leadership-principles/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/amazon-behavioral-interview-questions/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/understanding-amazon-leadership-principles/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/booking-com-experimentation-culture/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/superhuman-product-market-fit-case-study/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/jacob-bank/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/carlotta-negri-di-sanfront/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/maud-larpent/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/matt-lemay/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/jason-knight/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/simon-waldman/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/lindsey-jayne/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/joe-tinston/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/todd-green/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/mirela-mus/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/product-strategy-example-ed-biden/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/digital-transformation/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/enterprise-product-management/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/the-post-zero-interest-survival-guide/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/the-ai-platform-shift/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/how-to-use-chatgpt/",
+            "https://www.hustlebadger.com/courses/product-strategy-course/welcome-to-product-strategy/",
+            "https://www.hustlebadger.com/what-do-product-teams-do/#content",
+            "https://www.hustlebadger.com/what-do-product-teams-do/#elementor-action%3Aaction%3Dpopup%3Aclose%26settings%3DeyJkb19ub3Rfc2hvd19hZ2FpbiI6IiJ9"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "a3c90fe94c05cebcdc02f873",
+      "name": "AI Tech Supports",
+      "domain": null,
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:08:56.316Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "",
+          "reason": "missing_domain"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "d7062aa9bafac79fcb3ab0e1",
+      "name": "AIEntertainment (tm)",
+      "domain": "freename.io",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:08:56.316Z",
+      "pages": [
+        {
+          "url": "https://freename.com/home/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Web3 Domain & Custom TLD Accredited Registrar | Freename",
+        "description": "Register Web3 domains, custom TLDs, or import domains. Replace long wallet addresses and earn 50% royalties. Get your perfect name on Freename",
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": [
+            "https://freename.com/apis/global-resolution-api"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "a9f23a94ec8713789cefb255",
+      "name": "Promise",
+      "domain": "promise.ai",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:08:57.000Z",
+      "pages": [
+        {
+          "url": "https://www.promise.ai/",
+          "status": 200
+        },
+        {
+          "url": "https://www.promise.ai/about",
+          "status": 200
+        },
+        {
+          "url": "https://www.promise.ai/the-generation-company",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Promise Advanced Imagination | Entertainment Studio",
+        "description": "Promise is an entertainment studio built for the GenAI era, reimagining how visionary artists create film, series, and new forms of storytelling.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/promiseai/"
+          ],
+          "github": [],
+          "x": [
+            "https://x.com/promise_ai"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": [
+            "https://www.promise.ai/post/inside-harlan-coben-s-final-twist-using-hybrid-production-to-reconstruct-crime-scenes"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "e6ee890738e995a0d2a1d58c",
+      "name": "outbranded",
+      "domain": null,
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:08:59.134Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "",
+          "reason": "missing_domain"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "3e49508e917dd9f8d37b49e3",
+      "name": "Paypr.work [ˈpeɪpəwəːk]",
+      "domain": "paypr.work",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:08:59.135Z",
+      "pages": [
+        {
+          "url": "https://paypr.work/",
+          "status": 200
+        },
+        {
+          "url": "https://paypr.work/about-us/",
+          "status": 200
+        },
+        {
+          "url": "https://paypr.work/our-team/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Paypr.work",
+        "description": "Chances are, you’ve landed on our webpage out of curiosity, having discovered us through our engaging LinkedIn posts and simplified payment visuals?",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/in/sandra-mianda/",
+            "https://www.linkedin.com/company/paypr-work/",
+            "https://www.linkedin.com/company/paypr-work/?viewAsMember=true",
+            "https://www.linkedin.com/in/piamitchellco",
+            "https://www.linkedin.com/in/francisco-chambel-114758301",
+            "https://www.linkedin.com/in/israel-ogunniyi-b744a9115/"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [
+            "https://paypr.work/pricing/",
+            "https://paypr.work/pricing"
+          ],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "3001263b68d8774de222c74b",
+      "name": "Bemba",
+      "domain": "bemba.tv",
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:08:59.485Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "https://bemba.tv/",
+          "reason": "getaddrinfo ENOTFOUND bemba.tv"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "4a4e49add92defbda7ebe49d",
+      "name": "Medly AI",
+      "domain": "medlyai.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:08:59.631Z",
+      "pages": [
+        {
+          "url": "https://www.medlyai.com/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Medly AI",
+        "description": "AI tutor for GCSE, A-Level, IB, AP and SAT exams. Personalised exam practice, instant AI-powered marking, and curriculum-aligned feedback.",
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "e4c7c56177145d1f44270ad2",
+      "name": "RecXchange – The Recruiter Xchange",
+      "domain": "recxchange.io",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:00.023Z",
+      "pages": [
+        {
+          "url": "https://www.recxchange.io/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "AMIVY Designs",
+        "description": "AMIVY Designs is a premium web design, development and digital branding agency, an Andrews Recruitment Group company. AMIVY Designs fully designed, developed and maintains the RecXchange website (recxchange.io).",
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [
+            "https://www.recxchange.io/pricing"
+          ],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": [
+          {
+            "name": "Tom Andrews",
+            "role": "CEO & Co-Founder",
+            "profileUrls": [
+              "https://andrews-recruitment.com",
+              "https://www.linkedin.com/in/tom-g-andrews"
+            ],
+            "evidenceUrl": "https://www.recxchange.io/",
+            "extractionMethod": "json_ld",
+            "state": "candidate_only"
+          },
+          {
+            "name": "James Brown",
+            "role": "CTO & Co-Founder",
+            "profileUrls": [],
+            "evidenceUrl": "https://www.recxchange.io/",
+            "extractionMethod": "json_ld",
+            "state": "candidate_only"
+          }
+        ]
+      },
+      "github": []
+    },
+    {
+      "stableId": "44e4e3a9871201b3d08575a3",
+      "name": "AI for Global Goals",
+      "domain": "globalgoals.ai",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:00.667Z",
+      "pages": [
+        {
+          "url": "https://www.globalgoals.ai/",
+          "status": 200
+        },
+        {
+          "url": "https://www.globalgoals.ai/company",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "AI for Global Goals",
+        "description": "World-class AI education at global scale. OxML, Elandi, and the Enterprise AI Academy — 8,000+ practitioners trained across 142 countries since 2019.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/ai-for-global-goals/"
+          ],
+          "github": [],
+          "x": [
+            "https://twitter.com/GlobalGoalsAI"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [
+            "https://www.globalgoals.ai/enterprise-ai"
+          ],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "6ac80023f18d48fad97302b1",
+      "name": "Data Science for Social Good Foundation",
+      "domain": "datascienceforsocialgood.org",
+      "status": "partial",
+      "capturedAt": "2026-07-18T20:09:00.889Z",
+      "pages": [
+        {
+          "url": "https://datascienceforsocialgood.org/",
+          "status": 200
+        },
+        {
+          "url": "https://datascienceforsocialgood.org/about/",
+          "status": 200
+        }
+      ],
+      "failures": [
+        {
+          "url": "https://datascienceforsocialgood.org/education/",
+          "reason": "http_404"
+        },
+        {
+          "url": "https://datascienceforsocialgood.org/community/",
+          "reason": "http_403"
+        }
+      ],
+      "profile": {
+        "name": "KPKTOTO",
+        "description": "Our mission\nData Science for Social Good\nOur mission is to foster the use of data science for positive social impact. We",
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [
+            "https://www.datascienceforsocialgood.org/about/"
+          ],
+          "product": [
+            "https://datascienceforsocialgood.org/tools-solutions/"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "8f286cfba3044984fe57e524",
+      "name": "RollUpEurope",
+      "domain": null,
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:09:01.561Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "",
+          "reason": "missing_domain"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "9f4aa9874161bf1c168aa89c",
+      "name": "RunRex",
+      "domain": "runrex.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:01.561Z",
+      "pages": [
+        {
+          "url": "https://runrex.com/",
+          "status": 200
+        },
+        {
+          "url": "https://runrex.com/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Bola88 IDN Play Pengalaman Premium Server IDN Slot",
+        "description": "Bola88 menghadirkan informasi terpercaya dan terupdate dengan pengalaman pengguna modern, tampilan premium, akses responsif, serta navigasi yang elegan untuk berbagai kebutuhan informasi digital.",
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "64c6360c5f16108843e90885",
+      "name": "Zendr Business",
+      "domain": "zendrapp.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:01.860Z",
+      "pages": [
+        {
+          "url": "https://www.zendrapp.com/",
+          "status": 200
+        },
+        {
+          "url": "https://www.zendrapp.com/features/team-management",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Zendr",
+        "description": "Collect payments, manage sales, track inventory, empower teams, and serve customers - all in one platform. Tailored for wholesalers & suppliers with fees as low as 0.3%. FCA-authorised, powered by Open Banking.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/zendr-pay-pick/"
+          ],
+          "github": [],
+          "x": [
+            "https://x.com/Zendrpayandpick"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [
+            "https://www.zendrapp.com/pricing",
+            "https://www.zendrapp.com/pricing#faqs"
+          ],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "e07eeea747405e13388b2a61",
+      "name": "The Social Intelligence Lab",
+      "domain": "thesilab.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:02.696Z",
+      "pages": [
+        {
+          "url": "https://www.thesilab.com/",
+          "status": 200
+        },
+        {
+          "url": "https://www.thesilab.com/about",
+          "status": 200
+        },
+        {
+          "url": "https://www.thesilab.com/agency/listen-learn-research",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "The Social Intelligence Lab | The SI Lab",
+        "description": "A global community for social listening professionals to get the resources, skills, and connections they need to get the most out of social and internet data. Join today.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/in/drjillianney/",
+            "https://www.linkedin.com/company/listen-&-learn-research/"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": [
+            "https://www.thesilab.com/resources/tech-demos"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "9a11ef4fb87dff27e1f5c0b8",
+      "name": "WiBT Women in Blockchain Talks",
+      "domain": "womeninblockchaintalks.com",
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:09:03.427Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "https://womeninblockchaintalks.com/",
+          "reason": "getaddrinfo ENOTFOUND womeninblockchaintalks.com"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "dd5caa7180039cc3119d9849",
+      "name": "fast.ai",
+      "domain": "fast.ai",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:03.540Z",
+      "pages": [
+        {
+          "url": "https://www.fast.ai/",
+          "status": 200
+        },
+        {
+          "url": "https://www.fast.ai/about.html",
+          "status": 200
+        },
+        {
+          "url": "https://www.fast.ai/posts/2017-11-02-ethics.html",
+          "status": 200
+        },
+        {
+          "url": "https://www.fast.ai/posts/2018-04-19-facebook.html",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "fast.ai—Making neural nets uncool again – fast.ai",
+        "description": null,
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [
+            "https://github.com/fastai"
+          ],
+          "x": [
+            "https://twitter.com/fastdotai",
+            "https://twitter.com/kumailn/status/925828976882282496",
+            "https://twitter.com/lauraelizdavis/status/874685885408833536",
+            "https://twitter.com/pmddomingos/status/910388223142010880",
+            "https://twitter.com/random_walker/status/901851127624458240",
+            "https://twitter.com/jessamyn/status/900867154412699649",
+            "https://twitter.com/jessamyn/status/901476036956782593",
+            "https://twitter.com/zeynep/status/973271727798083584",
+            "https://twitter.com/drewharwell/status/984144729574199296",
+            "https://twitter.com/omojumiller"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [
+            "https://www.fast.ai/posts/2021-07-15-fastconda.html"
+          ],
+          "product": [
+            "https://www.fast.ai/posts/2025-11-07-solveit-features.html",
+            "https://www.fast.ai/posts/2023-12-12-launch.html",
+            "https://www.fast.ai/posts/2023-11-07-dislightenment.html",
+            "https://www.fast.ai/posts/2022-07-28-nbdev2.html",
+            "https://www.fast.ai/posts/2020-01-19-blog_screenshots.html",
+            "https://www.fast.ai/posts/2019-05-03-decrappify.html",
+            "https://www.fast.ai/posts/2019-01-02-one-year-of-deep-learning.html",
+            "https://www.fast.ai/posts/2017-11-13-validation-sets.html",
+            "https://www.fast.ai/posts/2017-11-02-ethics.html#myths-this-is-a-neutral-platform-how-users-use-my-tech-isnt-my-fault-algorithms-are-impartial"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": [
+        {
+          "status": "ok",
+          "sourceUrl": "https://github.com/fastai",
+          "accountType": "organization",
+          "login": "fastai",
+          "publicRepos": 124,
+          "followers": 5363,
+          "createdAt": "2016-07-20T00:25:03Z",
+          "latestPushAt": "2026-07-11T07:43:19Z",
+          "latestRepositoryUpdateAt": "2026-07-18T19:40:44Z",
+          "totalStarsSampled": 81503,
+          "note": "Public GitHub activity only; not proof of company ownership or traction."
+        }
+      ]
+    },
+    {
+      "stableId": "9106d5917c21ae28062b6e72",
+      "name": "AI for Non-Techies",
+      "domain": "nontechies.ai",
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:09:03.600Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "https://nontechies.ai/",
+          "reason": "too_large"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "07738bc0d64caad517eb18bb",
+      "name": "Bridging the Gap",
+      "domain": "bridging-the-gap.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:04.960Z",
+      "pages": [
+        {
+          "url": "https://www.bridging-the-gap.com/",
+          "status": 200
+        },
+        {
+          "url": "https://www.bridging-the-gap.com/about-our-case-studies/",
+          "status": 200
+        },
+        {
+          "url": "https://www.bridging-the-gap.com/about-bridging-the-gap/",
+          "status": 200
+        },
+        {
+          "url": "https://www.bridging-the-gap.com/business-analyst-training-courses/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Bridging the Gap",
+        "description": "We'll Help You Start Your Business Analyst Career",
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [
+            "https://www.bridging-the-gap.com/newsletter/"
+          ],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "88ed060df2893a9ac7e962b3",
+      "name": "Maddyness UK",
+      "domain": "maddyness.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:06.189Z",
+      "pages": [
+        {
+          "url": "https://www.maddyness.com/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Maddyness",
+        "description": "Toute l'actualité sur l'entrepreneuriat et l'innovation en France. Décryptages, enquêtes, conseils et ressources clés pour mieux comprendre et agir dans l'économie de demain.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/maddyness/"
+          ],
+          "github": [],
+          "x": [
+            "https://twitter.com/bymaddyness"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": [
+            "https://www.maddyness.com/2026/07/17/argent-de-votre-startup-quelles-solutions-au-dela-du-compte-courant/"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "3a28f15ed47dfb22f0b79fae",
+      "name": "Tech On Toast",
+      "domain": "techontoast.community",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:06.441Z",
+      "pages": [
+        {
+          "url": "https://www.techontoast.community/",
+          "status": 200
+        },
+        {
+          "url": "https://www.techontoast.community/about",
+          "status": 200
+        },
+        {
+          "url": "https://www.techontoast.community/",
+          "status": 200
+        },
+        {
+          "url": "https://www.techontoast.community/podcasts/people-buy-people-ruth-carpenter-on-tech-trust-and-the-ps55-to-ps11-ad-stor",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Tech on Toast - Hospitality Technology Marketplace",
+        "description": "Discover how technology and hospitality thrive together at Tech on Toast. Explore customer success stories, tune into our podcast, and access exclusive discounts through our marketplace. Join our community for industry insights, events, and more.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/tech-on-toast/"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [
+            "https://www.techontoast.community/solution/centralised-menu-and-pricing"
+          ],
+          "changelog": [],
+          "product": [
+            "https://www.techontoast.community/solution",
+            "https://www.techontoast.community/solution/centralised-menu-and-pricing",
+            "https://www.techontoast.community/solution/connectivity-it-infrastructure",
+            "https://www.techontoast.community/solution/cost-control",
+            "https://www.techontoast.community/solution/finance-payments",
+            "https://www.techontoast.community/solution/operations-efficiency"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "6a9bfc0f21f962d7a3b19fcb",
+      "name": "Image Protect",
+      "domain": "imageprotect.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:06.477Z",
+      "pages": [
+        {
+          "url": "https://www.jumpstream.ai/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Jumpstream",
+        "description": "Jumpstream gives creators and brands the power to track and control their photos across social media and the internet.",
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "4cfa8ff034bba1070fc940a9",
+      "name": "AILovesHR",
+      "domain": "ailoveshr.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:07.437Z",
+      "pages": [
+        {
+          "url": "https://ailoveshr.com/",
+          "status": 200
+        },
+        {
+          "url": "https://ailoveshr.com/about-us/",
+          "status": 200
+        },
+        {
+          "url": "https://ailoveshr.com/ethical-ai-compliance/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "AILovesHR",
+        "description": "AILovesHR, our mission is to amplify the positive impact of AI in the workplace. We prepare and guide companies in ethically integrating AI...",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/ai-loves-hr/",
+            "https://www.linkedin.com/in/arzonadi/",
+            "https://www.linkedin.com/in/bengt-petersen-00a1701a3/"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "cb543ce69ec5ac2b0a13450b",
+      "name": "Jars AI",
+      "domain": "jars.ai",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:08.994Z",
+      "pages": [
+        {
+          "url": "https://www.jars.ai/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Jars AI - Your Playable TV Studio",
+        "description": "Turn ideas into interactive 3D worlds instantly. You direct. AI agents execute. Watch your stories come alive in real time.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://linkedin.com/company/jars-ai"
+          ],
+          "github": [],
+          "x": [
+            "https://x.com/JARS_AI"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "29e95a94236c22e3dca09456",
+      "name": "Niya",
+      "domain": "niya.ai",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:09.547Z",
+      "pages": [
+        {
+          "url": "https://niya.ai/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Niya",
+        "description": "Niya provides human-centric, AI-powered executive operations combining vetted human operators with AI agents.",
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "12cd1e805e9508bd8a43af53",
+      "name": "Julian Jewel's AI Bot",
+      "domain": "jjaibot.org",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:09.714Z",
+      "pages": [
+        {
+          "url": "https://jjaibot.org/",
+          "status": 200
+        },
+        {
+          "url": "https://jjaibot.org/about-us/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Home | JJAIBOT - Official Website",
+        "description": "Julian Jewel's Artificial Intelligence Bot Home Page",
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [],
+          "x": [
+            "https://www.twitter.com/jjaibot"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "80264312dec776ea092b9234",
+      "name": "AgilityPAD",
+      "domain": "agilitypad.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:10.974Z",
+      "pages": [
+        {
+          "url": "https://agilitypad.com/",
+          "status": 200
+        },
+        {
+          "url": "https://agilitypad.com/safe-for-teams/",
+          "status": 200
+        },
+        {
+          "url": "https://agilitypad.com/safe-for-teams/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "AgilityPAD",
+        "description": "AgilityPAD is a SAFe® Silver Partner and provide training on scaled agile courses. You learn with practical case studies and get tips to pass the exam to gain your certification.",
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": [
+            "https://agilitypad.com/safe-product-owner-product-manager-popm",
+            "https://agilitypad.com/safe-agile-product-management",
+            "https://agilitypad.com/safe-product-owner-product-manager-popm/",
+            "https://agilitypad.com/safe-agile-product-management/",
+            "https://agilitypad.com/leading-safe,https://agilitypad.com/safe-scrum-master,https://agilitypad.com/safe-product-owner-product-manager-popm,https://agilitypad.com/safe-devops,https://agilitypad.com/safe-advanced-scrum-master,https://agilitypad.com/safe-lean-portfolio-management,https://agilitypad.com/safe-agile-product-management"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "103985f3d9a2524734319456",
+      "name": "SET",
+      "domain": "s-t.tv",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:11.197Z",
+      "pages": [
+        {
+          "url": "https://s-t.io/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "SET – operating system for electronic music",
+        "description": "SET is the operating system for electronic music – one shared platform for the high-functioning teams of artists, agents, clubs, promoters and labels.",
+        "socialLinks": {
+          "linkedIn": [],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "de15bb5f896e8ceac7531ad7",
+      "name": "Steal These Thoughts!",
+      "domain": "stealthesethoughts.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:12.527Z",
+      "pages": [
+        {
+          "url": "https://stealthesethoughts.com/",
+          "status": 200
+        },
+        {
+          "url": "https://stealthesethoughts.com/2025/06/06/ai-agents-learning-development-2025/",
+          "status": 200
+        },
+        {
+          "url": "https://stealthesethoughts.com/2020/01/29/building-a-modern-learning-team/",
+          "status": 200
+        },
+        {
+          "url": "https://stealthesethoughts.com/2019/02/20/these-are-skills-learning-teams-need-todays-world/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Home - Steal These Thoughts!",
+        "description": "The home of Steal These Thoughts. Get the best insights, tools & templates For The Modern L&D Pro. Get smarter every day.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/in/rstevensonuk/",
+            "https://www.linkedin.com/posts/quentinvillard_everyones-talking-about-ai-agents-most-activity-7314932604573528064-zVkC?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAh9tJkB9UJE4OAnyhMrq1bDJgNdL3gPxXU",
+            "https://www.linkedin.com/company/go-9x/",
+            "https://www.linkedin.com/pulse/skills-new-currency-ryan-roslansky"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": [
+            "https://stealthesethoughts.com/2026/06/11/ai-enablement-future-workplace-ld/",
+            "https://stealthesethoughts.com/2020/01/29/building-a-modern-learning-team/#Moving_from_production_%E2%86%92_enablement",
+            "https://stealthesethoughts.com/2023/05/10/how-to-position-your-ld-product-for-success",
+            "https://stealthesethoughts.com/2019/02/20/these-are-skills-learning-teams-need-todays-world/#2-product-management"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "fa3fb4f0fc429c0af62feeb0",
+      "name": "Intercalation",
+      "domain": "intercalation.co",
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:09:13.267Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "https://intercalation.co/",
+          "reason": "fetch failed"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "9d1236a769af23c559175b9c",
+      "name": "RigRun Ltd | B CorpTM",
+      "domain": "rigrun.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:14.139Z",
+      "pages": [
+        {
+          "url": "https://www.rigrun.com/",
+          "status": 200
+        },
+        {
+          "url": "https://www.rigrun.com/about-us",
+          "status": 200
+        },
+        {
+          "url": "https://www.rigrun.com/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "RigRun | Workforce Health - Fitness, Safety & Performance",
+        "description": "RigRun helps high-risk organisations improve workforce fitness, safety and performance through smart assessments, data and training insights.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/rigrun/"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "d718e09eca1eb52d20421584",
+      "name": "FLEXIPASS",
+      "domain": "flexipass.tech",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:15.064Z",
+      "pages": [
+        {
+          "url": "https://flexipass.tech/",
+          "status": 200
+        },
+        {
+          "url": "https://flexipass.tech/about",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "FLEXIPASS | Wallet Keys | Webkeys | Mobile Keys",
+        "description": "Enable Keyless Entry with Wallet Keys, Webkeys and Mobile Keys. Add anything from Online CheckIn, Upselling, Chat, Survey, Room Service and much more. FLEXIPASS connects with ASSA ABLOY Vingcard, Dormakaba, SALTO, TESA, Omnitec, ISEO Sofia, ASSA ABLOY SmartAir, Exivo and HOTEK hotel door locks.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/flexipass-mobile-access/?viewAsMember=true"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": [
+            "https://flexipass.tech/keyless-technologies"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "b4bad53e2788a815b7d3b81b",
+      "name": "SOFiSTiK FOR YOU",
+      "domain": "sofistikforyou.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:17.100Z",
+      "pages": [
+        {
+          "url": "https://sofistikforyou.com/",
+          "status": 200
+        },
+        {
+          "url": "https://sofistikforyou.com/about/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "SOFiSTiK FOR YOU",
+        "description": "The platform for guides, workflows, feature explanations and more about SOFiSTiK FEA. Join Structural and Bridge Engineers from around the globe, and dive into the world of SOFiSTiK FEA.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/sofistikforyou"
+          ],
+          "github": [],
+          "x": [
+            "https://twitter.com/GAltersberger"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "aa4a13ba232376416a1f8c39",
+      "name": "emailexpert",
+      "domain": "emailexpert.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:17.844Z",
+      "pages": [
+        {
+          "url": "https://emailexpert.com/",
+          "status": 200
+        },
+        {
+          "url": "https://emailexpert.com/about-emailexpert/",
+          "status": 200
+        },
+        {
+          "url": "https://emailexpert.com/add-listing/",
+          "status": 200
+        },
+        {
+          "url": "https://emailexpert.com/company-tx-software-type/saas/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "emailexpert 2026 | emailexpert",
+        "description": "News Next Event Up next Deliverability Roundtable #3 04/08/2026 6:00 pm (BST) Lauren Meyer Founder RSVP Register Deliverability Roundtable #3 04/08/2026 6:00 pm (BST) What We Got Wrong About Engagement (including Separating Human Behavior from Machine Noise) Lauren Meyer Founder Register | RSVP Details Add to calendar (.ics) Enterprise Members Upcoming Events 04/08/2026 6:00 pm […]",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/groups/3754534",
+            "https://www.linkedin.com/company/email-expert/"
+          ],
+          "github": [],
+          "x": [
+            "https://x.com/email_expert"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": [
+            "https://emailexpert.com/explore-email-solutions/",
+            "https://emailexpert.com/explore-email-solutions/?sort=random&data-storage-locations=European%2BUnion%2BOnly",
+            "https://emailexpert.com/cms/esp/",
+            "https://emailexpert.com/topics/product-market/",
+            "https://emailexpert.com/news/market/"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "80ecc83a9f655f04d59b4c92",
+      "name": "Drivenly | AI Growth Partner",
+      "domain": "drivenly.io",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:17.910Z",
+      "pages": [
+        {
+          "url": "https://drivenly.io/",
+          "status": 200
+        },
+        {
+          "url": "https://drivenly.io/about/",
+          "status": 200
+        },
+        {
+          "url": "https://drivenly.io/about/",
+          "status": 200
+        },
+        {
+          "url": "https://drivenly.io/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Drivenly",
+        "description": "Drivenly is a modern digital marketing, growth-driven, and AI marketing consultancy operating globally as a strategically led partner.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/in/joanammsnf/",
+            "https://www.linkedin.com/in/ana-le%C3%A3o-%F0%9F%8C%8E-a1b74414/",
+            "https://www.linkedin.com/in/tomas-f-marques/",
+            "https://www.linkedin.com/in/abarreiros/",
+            "https://www.linkedin.com/in/carmen-ferreira-1367083/",
+            "https://www.linkedin.com/in/marco-correia-aa6443102/",
+            "https://www.linkedin.com/in/assif-hassanaly-677346134/",
+            "https://www.linkedin.com/in/ricsgil/"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": [
+            "https://drivenly.io/problem_solving/repetitive-work-kills-productivity/"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "432817c30ec6326a20064793",
+      "name": "Xenon Connect",
+      "domain": "xenonconnect.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:18.017Z",
+      "pages": [
+        {
+          "url": "https://www.xenonconnect.com/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Xenon Connect",
+        "description": "Automated bookkeeping health checks for Xero, QuickBooks Online, FreeAgent & Sage. Spot errors fast and improve accuracy for accountants and bookkeepers.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/xenonconnect/"
+          ],
+          "github": [],
+          "x": [
+            "https://twitter.com/XenonConnect"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [
+            "https://www.xenonconnect.com/pricing/"
+          ],
+          "changelog": [
+            "https://www.xenonconnect.com/product-updates/"
+          ],
+          "product": [
+            "https://www.xenonconnect.com/product-updates/"
+          ]
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "b1f993bb9b3c5cd3d412f8d1",
+      "name": "1 Planet Only",
+      "domain": "1planetonly.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:18.516Z",
+      "pages": [
+        {
+          "url": "https://1planetonly.com/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "1 planet only – ESG – Sustainability Library & Directory",
+        "description": null,
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/1-planet-only/"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "fc5fa0b6fad74686dd997ca3",
+      "name": "Women in Blockchain",
+      "domain": null,
+      "status": "failed",
+      "capturedAt": "2026-07-18T20:09:18.970Z",
+      "pages": [],
+      "failures": [
+        {
+          "url": "",
+          "reason": "missing_domain"
+        }
+      ],
+      "profile": null,
+      "github": []
+    },
+    {
+      "stableId": "b99c997b11b260cc71b6a885",
+      "name": "The Agentic AI Community",
+      "domain": "intelligentautomationbook.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:18.970Z",
+      "pages": [
+        {
+          "url": "https://intelligentautomationbook.com/",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Intelligent Automation Book",
+        "description": "Intelligent Automation Book • Learn How to Harness Artificial Intelligence to Boost Business & Make Our World More Human.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/in/pascalbornet/",
+            "https://www.linkedin.com/in/ianbarkin/",
+            "https://www.linkedin.com/in/jochenwirtz/"
+          ],
+          "github": [],
+          "x": [
+            "https://twitter.com/pascal_bornet",
+            "https://twitter.com/ibarkin",
+            "https://twitter.com/JochenWirtz"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    },
+    {
+      "stableId": "39c8c765b23dd360e317cf87",
+      "name": "Good Ripple",
+      "domain": "nas.io",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:19.114Z",
+      "pages": [
+        {
+          "url": "https://nas.com/",
+          "status": 200
+        },
+        {
+          "url": "https://nas.com/about-us",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "Nas.com",
+        "description": "Nas.com is an AI-first business platform for solo sellers that helps people create storefronts, generate marketing content, run ads, accept payments, and sell online.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/nas-com/"
+          ],
+          "github": [],
+          "x": [
+            "https://x.com/sellwithnas"
+          ]
+        },
+        "signalLinks": {
+          "pricing": [
+            "https://nas.com/pricing"
+          ],
+          "changelog": [],
+          "product": [
+            "https://nas.com/guides/sell-products-online",
+            "https://nas.com/guides/ai-ecommerce-platform",
+            "https://nas.com/guides/sell-handmade-products-online"
+          ]
+        },
+        "founderCandidates": [
+          {
+            "name": "Nuseir Yassin",
+            "role": "Founder",
+            "profileUrls": [],
+            "evidenceUrl": "https://nas.com/about-us",
+            "extractionMethod": "json_ld",
+            "state": "candidate_only"
+          }
+        ]
+      },
+      "github": []
+    },
+    {
+      "stableId": "82cd4beebc5d71f56c42691e",
+      "name": "PlasticFree.com",
+      "domain": "plasticfree.com",
+      "status": "complete",
+      "capturedAt": "2026-07-18T20:09:20.173Z",
+      "pages": [
+        {
+          "url": "https://plasticfree.com/",
+          "status": 200
+        },
+        {
+          "url": "https://plasticfree.com/about-us",
+          "status": 200
+        }
+      ],
+      "failures": [],
+      "profile": {
+        "name": "PLASTICFREE - CREATE WHAT’S NEXT",
+        "description": "The world’s materials and new system intelligence PLATFORM. Access to plastic free innovation case studies, trending materials, connections to makers and more.",
+        "socialLinks": {
+          "linkedIn": [
+            "https://www.linkedin.com/company/plasticfree-com/"
+          ],
+          "github": [],
+          "x": []
+        },
+        "signalLinks": {
+          "pricing": [],
+          "changelog": [],
+          "product": []
+        },
+        "founderCandidates": []
+      },
+      "github": []
+    }
+  ]
+}

@@ -1,0 +1,335 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-07-19T02:30:00.000Z",
+  "profiles": [
+    {
+      "companyId": "73c89d3320e06114f6241365",
+      "companyName": "Icon",
+      "domain": "icon.com",
+      "profileOrigin": "directory_discovery",
+      "demoRole": "golden_public",
+      "oneLiner": "Human UGC production and ad workflow software for performance marketing teams.",
+      "headquarters": "New York, United States",
+      "companyLinkedInUrl": "https://linkedin.com/company/icon",
+      "founders": [
+        {
+          "founderId": "icon-kennan-frost",
+          "name": "Kennan Frost",
+          "role": "Founder",
+          "relationshipState": "admin_confirmed",
+          "relationshipConfidence": 0.98,
+          "location": "New York, United States",
+          "linkedInUrl": "https://linkedin.com/in/kennanfrost",
+          "xUrl": "https://x.com/intent/user?screen_name=icon",
+          "githubUrl": null,
+          "bio": "Repeat founder and product builder. Icon's own story page says he previously solo-founded Skio and participated in Y Combinator S20.",
+          "trackRecord": [
+            {
+              "label": "Previous company",
+              "value": "Solo-founded Skio; outcome, ARR and funding figures are first-party claims and require independent diligence.",
+              "evidenceIds": ["icon-story"]
+            },
+            {
+              "label": "Builder signal",
+              "value": "Icon describes him as an engineer and lists prior work at Pinterest, Hulu and Wieden+Kennedy.",
+              "evidenceIds": ["icon-story"]
+            },
+            {
+              "label": "Public reach",
+              "value": "Icon links his LinkedIn, X and YouTube profiles from the founder story.",
+              "evidenceIds": ["icon-story", "icon-linkedin"]
+            }
+          ],
+          "evidenceIds": ["icon-story", "icon-linkedin"]
+        }
+      ],
+      "companySignals": [
+        {
+          "label": "Commercial product",
+          "value": "Published $399/month entry offer with a three-day free trial and Admaker 2.0 software.",
+          "evidenceIds": ["icon-product"]
+        },
+        {
+          "label": "Customer proof",
+          "value": "Icon publishes 28 named customer stories and claims 288+ brands; the count is first-party until corroborated.",
+          "evidenceIds": ["icon-customers"]
+        },
+        {
+          "label": "Funding signal",
+          "value": "Icon publicly names Founders Fund and individual technology leaders among its investors; financing terms remain unverified.",
+          "evidenceIds": ["icon-investors"]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "icon-story",
+          "label": "Founder story and public profile links",
+          "sourceUrl": "https://icon.com/#story",
+          "sourceType": "company_website",
+          "verificationState": "publicly_supported",
+          "visibility": "public",
+          "capturedAt": "2026-07-19T02:10:00.000Z",
+          "note": "First-party source explicitly names Kennan Frost as Founder. The relationship was manually reviewed; performance figures remain claims, not audited facts."
+        },
+        {
+          "evidenceId": "icon-linkedin",
+          "label": "Founder LinkedIn URL linked by Icon",
+          "sourceUrl": "https://linkedin.com/in/kennanfrost",
+          "sourceType": "public_profile",
+          "verificationState": "publicly_supported",
+          "visibility": "public",
+          "capturedAt": "2026-07-19T02:10:00.000Z",
+          "note": "URL discovered from Icon's own page. No LinkedIn page content was scraped."
+        },
+        {
+          "evidenceId": "icon-product",
+          "label": "Product and pricing",
+          "sourceUrl": "https://icon.com/pricing",
+          "sourceType": "company_website",
+          "verificationState": "publicly_supported",
+          "visibility": "public",
+          "capturedAt": "2026-07-19T02:10:00.000Z",
+          "note": "Current public offer and product workflow; prices and packaging may change."
+        },
+        {
+          "evidenceId": "icon-customers",
+          "label": "Published customer stories",
+          "sourceUrl": "https://icon.com/#customers",
+          "sourceType": "company_website",
+          "verificationState": "unverified",
+          "visibility": "public",
+          "capturedAt": "2026-07-19T02:10:00.000Z",
+          "note": "Named first-party customer references are useful diligence leads, but the aggregate count is not independently verified."
+        },
+        {
+          "evidenceId": "icon-investors",
+          "label": "Published investor roster",
+          "sourceUrl": "https://icon.com/#investors",
+          "sourceType": "company_website",
+          "verificationState": "unverified",
+          "visibility": "public",
+          "capturedAt": "2026-07-19T02:10:00.000Z",
+          "note": "First-party investor names; financing amount, instrument and ownership are not established."
+        }
+      ],
+      "openQuestions": [
+        "Confirm recurring revenue and retention through a connected billing source.",
+        "Independently corroborate the Skio outcome and Icon financing terms.",
+        "Clarify founder time allocation and current operating team size."
+      ]
+    },
+    {
+      "companyId": "demo-rely-founder-submitted",
+      "companyName": "Rely",
+      "domain": "rely.business",
+      "profileOrigin": "founder_submitted",
+      "demoRole": "golden_founder_submitted",
+      "oneLiner": "A Spanish-first operating platform that helps LATAM founders form and manage US LLCs.",
+      "headquarters": "Argentina / United States",
+      "companyLinkedInUrl": null,
+      "founders": [
+        {
+          "founderId": "rely-ignacio-estevo",
+          "name": "Ignacio Estevo",
+          "role": "Co-founder and CTO",
+          "relationshipState": "founder_confirmed",
+          "relationshipConfidence": 0.95,
+          "location": "Buenos Aires, Argentina",
+          "linkedInUrl": "https://ar.linkedin.com/in/ignacio-estevo",
+          "xUrl": null,
+          "githubUrl": null,
+          "bio": "Technical co-founder focused on product, software and AI systems. His public profile shows recent hackathon products and technical education.",
+          "trackRecord": [
+            {
+              "label": "Product execution",
+              "value": "Public activity includes multiple built hackathon products and awards; outcomes should be reviewed from linked project evidence.",
+              "evidenceIds": ["rely-ignacio-linkedin"]
+            }
+          ],
+          "evidenceIds": ["rely-founder-assertion", "rely-ignacio-linkedin"]
+        },
+        {
+          "founderId": "rely-franco-ferreira",
+          "name": "Franco Ferreira",
+          "role": "Co-founder and CEO",
+          "relationshipState": "founder_confirmed",
+          "relationshipConfidence": 0.95,
+          "location": "Buenos Aires, Argentina",
+          "linkedInUrl": "https://ar.linkedin.com/in/franco-ferreira",
+          "xUrl": null,
+          "githubUrl": null,
+          "bio": "Product-minded full-stack engineer and founder. His public profile lists Rely and describes experience building and launching digital products.",
+          "trackRecord": [
+            {
+              "label": "Founder and builder signal",
+              "value": "Public profile lists Rely and a portfolio of shipped products and hackathon work.",
+              "evidenceIds": ["rely-franco-linkedin"]
+            }
+          ],
+          "evidenceIds": ["rely-founder-assertion", "rely-franco-linkedin"]
+        }
+      ],
+      "companySignals": [
+        {
+          "label": "Live product",
+          "value": "Rely publishes a working LLC formation, document, compliance and operations workflow with public pricing.",
+          "evidenceIds": ["rely-website"]
+        },
+        {
+          "label": "Paying customers",
+          "value": "55 unique paying customers, stated by the founder. Stripe verification for the last three months is planned but not connected.",
+          "evidenceIds": ["rely-customer-assertion"]
+        },
+        {
+          "label": "Customer references",
+          "value": "The public site includes named customer testimonials and dates that can be used as diligence leads.",
+          "evidenceIds": ["rely-website"]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "rely-founder-assertion",
+          "label": "Founder-provided team roles",
+          "sourceUrl": null,
+          "sourceType": "founder_assertion",
+          "verificationState": "founder_asserted",
+          "visibility": "founder_private",
+          "capturedAt": "2026-07-18T22:00:00.000Z",
+          "note": "Ignacio Estevo identified himself as co-founder/CTO and Franco Ferreira as co-founder/CEO. This is founder confirmation, not government identity verification."
+        },
+        {
+          "evidenceId": "rely-ignacio-linkedin",
+          "label": "Ignacio Estevo public profile",
+          "sourceUrl": "https://ar.linkedin.com/in/ignacio-estevo",
+          "sourceType": "public_profile",
+          "verificationState": "publicly_supported",
+          "visibility": "public",
+          "capturedAt": "2026-07-19T02:15:00.000Z",
+          "note": "Public URL and search-visible summary only; no authenticated LinkedIn scraping."
+        },
+        {
+          "evidenceId": "rely-franco-linkedin",
+          "label": "Franco Ferreira public profile",
+          "sourceUrl": "https://ar.linkedin.com/in/franco-ferreira",
+          "sourceType": "public_profile",
+          "verificationState": "publicly_supported",
+          "visibility": "public",
+          "capturedAt": "2026-07-19T02:15:00.000Z",
+          "note": "Public URL and search-visible summary only; no authenticated LinkedIn scraping."
+        },
+        {
+          "evidenceId": "rely-website",
+          "label": "Rely product, pricing and customer references",
+          "sourceUrl": "https://www.rely.business/",
+          "sourceType": "company_website",
+          "verificationState": "publicly_supported",
+          "visibility": "public",
+          "capturedAt": "2026-07-19T02:15:00.000Z",
+          "note": "First-party evidence of the live offering and named references; it does not verify revenue or customer totals."
+        },
+        {
+          "evidenceId": "rely-customer-assertion",
+          "label": "Founder-stated customer count",
+          "sourceUrl": null,
+          "sourceType": "founder_assertion",
+          "verificationState": "founder_asserted",
+          "visibility": "investor_private",
+          "capturedAt": "2026-07-18T22:00:00.000Z",
+          "note": "55 unique paying customers. Keep labeled as founder-stated until a scoped Stripe aggregate is connected and reviewed."
+        }
+      ],
+      "openQuestions": [
+        "Connect a read-only Stripe aggregate to verify unique paid customers and recent payment volume.",
+        "Add founder GitHub or portfolio ownership proof where the founders choose to disclose it.",
+        "Clarify the previously mentioned 15K metric before storing or displaying it.",
+        "Confirm fundraising target and use of funds only when the team resumes the pitch work."
+      ]
+    },
+    {
+      "companyId": "0186b70d0e326a1dbbaacac5",
+      "companyName": "Career Principles",
+      "domain": "careerprinciples.com",
+      "profileOrigin": "directory_discovery",
+      "demoRole": "review_queue",
+      "oneLiner": "Self-paced business, finance and analytics education for individuals and teams.",
+      "headquarters": "United Kingdom",
+      "companyLinkedInUrl": "https://www.linkedin.com/company/careerprinciples/",
+      "founders": [
+        {
+          "founderId": "career-principles-kenji-farre",
+          "name": "Kenji Farre",
+          "role": "Director; founder relationship needs review",
+          "relationshipState": "needs_review",
+          "relationshipConfidence": 0.78,
+          "location": "Hong Kong",
+          "linkedInUrl": "https://www.linkedin.com/in/kenji-farr%C3%A9-b14209161/",
+          "xUrl": null,
+          "githubUrl": null,
+          "bio": "Career Principles lists Kenji Farre on its executive team. Companies House lists him as an active, identity-verified director of Career Principles Ltd.",
+          "trackRecord": [
+            {
+              "label": "Relevant experience",
+              "value": "The company biography lists Cornell, Microsoft MVP status and experience at Amazon, Goldman Sachs and PwC; these are first-party biography claims.",
+              "evidenceIds": ["career-principles-team"]
+            },
+            {
+              "label": "Corporate role",
+              "value": "Companies House lists him as an active director appointed in July 2022 and marks identity requirements complete.",
+              "evidenceIds": ["career-principles-registry"]
+            }
+          ],
+          "evidenceIds": ["career-principles-team", "career-principles-registry", "career-principles-linkedin"]
+        }
+      ],
+      "companySignals": [
+        {
+          "label": "Product breadth",
+          "value": "The official site offers courses in Excel, finance, Power BI, SQL, Python and AI for business.",
+          "evidenceIds": ["career-principles-team"]
+        },
+        {
+          "label": "Audience reach",
+          "value": "The company claims 50M+ tutorial views; this is useful but not independently verified.",
+          "evidenceIds": ["career-principles-team"]
+        }
+      ],
+      "evidence": [
+        {
+          "evidenceId": "career-principles-team",
+          "label": "Official company and executive-team page",
+          "sourceUrl": "https://www.careerprinciples.com/about",
+          "sourceType": "company_website",
+          "verificationState": "publicly_supported",
+          "visibility": "public",
+          "capturedAt": "2026-07-19T02:20:00.000Z",
+          "note": "Supports current executive-team membership and biography, but does not explicitly call Kenji the founder of Career Principles."
+        },
+        {
+          "evidenceId": "career-principles-registry",
+          "label": "UK Companies House officer appointment",
+          "sourceUrl": "https://find-and-update.company-information.service.gov.uk/officers/g5vGwEfTALthVrYq8u1Mppbd1K4/appointments",
+          "sourceType": "public_registry",
+          "verificationState": "publicly_supported",
+          "visibility": "public",
+          "capturedAt": "2026-07-19T02:20:00.000Z",
+          "note": "Supports an active director relationship and identity-verification status, not the founder title."
+        },
+        {
+          "evidenceId": "career-principles-linkedin",
+          "label": "Candidate LinkedIn URL from exact-domain contact search",
+          "sourceUrl": "https://www.linkedin.com/in/kenji-farr%C3%A9-b14209161/",
+          "sourceType": "public_profile",
+          "verificationState": "unverified",
+          "visibility": "public",
+          "capturedAt": "2026-07-18T19:00:00.000Z",
+          "note": "Candidate URL only. No LinkedIn content was scraped and the founder relationship still needs confirmation."
+        }
+      ],
+      "openQuestions": [
+        "Confirm whether Kenji Farre founded Career Principles or joined as an executive/director.",
+        "Identify and confirm any co-founder through first-party or registry evidence.",
+        "Verify paid learner, B2B customer, revenue and retention metrics."
+      ]
+    }
+  ]
+}

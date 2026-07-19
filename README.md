@@ -1,113 +1,166 @@
-# undr
+# UNDR
 
-undr es un prototipo de sourcing e inteligencia para VC basado en evidencia. Parte de una tesis escrita en lenguaje natural, busca primero dentro del conocimiento disponible y conserva el razonamiento como datos estructurados: proyecto, claims, evidencia, fuente, confianza, contradicciones y preguntas abiertas.
+### Find what is under the radar.
 
-El foco de esta entrega es el recorrido de Investor / VC. El flujo de Founder / Builder aparece como siguiente etapa, pero todavía no está implementado de punta a punta.
+**UNDR is a founder-first deal intelligence platform for investors moving into early-stage startups.** Describe what you want to invest in, discover companies that match, and get a concise investment brief built from public signals, founder-provided context, and clearly labeled evidence.
 
-## Recorrido VC disponible
+Built for the **Maschmeyer Group — The VC Brain** track at HackNation.
 
-1. `/` — landing y brief inicial de sourcing.
-2. `/onboarding/role` — selección del workspace.
-3. `/onboarding/investor` — construcción editable de tesis, señales, exclusiones, geografía, etapa y rango de cheque.
-4. `/investor` — inicio del workspace y resumen de las fuentes internas.
-5. `/investor/search` — búsqueda y ranking explicable por ajuste a tesis y cobertura de evidencia.
-6. `/investor/projects/:id` y `/investor/projects/:id/evidence` — ficha del proyecto, claims, fuentes, confianza, contradicciones y próximos pasos de diligence.
-7. `/investor/compare` y `/investor/projects/:id/memo` — comparación de hasta tres proyectos y memo con citas.
-8. `/investor/pipeline`, `/investor/saved-searches` y `/investor/founders/:id/invite` — seguimiento, búsquedas guardadas e invitación controlada al founder.
+> Hackathon prototype. UNDR supports investment research; it does not provide investment advice or replace due diligence.
 
-En modo demo, pipeline, comparación, búsquedas guardadas y preferencias del workspace se conservan en `localStorage` del navegador. No son persistencia multiusuario ni una base de datos productiva.
+## The problem
 
-Los briefs y consultas activas viajan entre pantallas mediante una `SearchSession` validada en `sessionStorage`, no mediante parámetros `?q=`. Cada búsqueda guardada conserva también el snapshot estructurado de sus criterios, para que reabrirla no la reinterprete silenciosamente con una tesis distinta.
+The earlier a startup is, the less useful traditional company databases become.
 
-## Fuentes de datos y etiquetas
+Promising founders may have a product, early customers and strong execution, but no press coverage, funding announcement or polished public profile. Investors are left searching across pitch decks, company websites, LinkedIn, GitHub and spreadsheets, then deciding which claims they can actually trust.
 
-La interfaz mantiene dos universos explícitamente separados:
+This creates two failures:
 
-- `clay_csv · unverified`: catálogo real de 50 empresas en `data/source/clay-companies.csv`. Son registros públicos normalizados para discovery; sus descripciones, dominios, tamaños y URLs no constituyen evidencia de inversión verificada. Los candidatos a founder del piloto siguen marcados como `candidate_only` hasta confirmación.
-- `synthetic_demo`: seis oportunidades ficticias, con claims, evidencia y contradicciones construidos únicamente para poder recorrer búsqueda, comparación, memo y pipeline. No representan empresas ni resultados reales.
+- investors miss strong companies that are not already visible;
+- founders with less public presence struggle to make their progress legible.
 
-La ausencia de evidencia permanece como **desconocida**: no se transforma en una señal negativa. El ajuste a tesis y la cobertura de evidencia son medidas separadas, no un score universal de calidad o recomendación de inversión.
+## What UNDR does
 
-## Ejecutar localmente
+An investor can ask:
 
-Requisitos:
+> Find early-stage B2B software companies in the US or UK, with fewer than 10 people and visible execution signals.
 
-- Node.js 22 o superior.
-- npm con soporte para workspaces.
+UNDR turns that thesis into executable criteria, evaluates a company set, and returns:
 
-Desde la raíz del repo:
+- ranked companies that match the thesis;
+- founder profiles, public track record and social identity;
+- product, market, execution and traction signals;
+- a short, cited investment brief;
+- explicit gaps, conflicts and diligence questions;
+- a watchlist for companies that may become investable later.
 
-```bash
-npm install
-cp .env.example apps/web/.env.local
-npm run dev
+Founders can claim their profile, add context, and eventually connect sources such as GitHub and Stripe to support selected claims without exposing private code or customer-level data.
+
+## Why it is different
+
+### Founder-first, not database-first
+
+UNDR treats founder identity, background and execution as core investment context—not a small section underneath company metrics.
+
+### Built for sparse evidence
+
+Missing data does not silently become a bad score. UNDR separates fit from evidence coverage and shows what remains unknown.
+
+### Evidence instead of confident prose
+
+Every factual statement in a generated brief must cite known evidence. Unsupported or contradictory claims remain visibly unverified.
+
+### A path for overlooked founders
+
+A founder can improve the profile by supplying evidence or connecting sources. Visibility comes from proven progress, not an existing media footprint.
+
+## How it works
+
+```mermaid
+flowchart LR
+    A["Investor thesis in plain English"] --> B["Executable criteria"]
+    B --> C["Company and founder evidence"]
+    C --> D["Deterministic evaluation"]
+    D --> E["Cited investment brief"]
+    E --> F["Investigate or watch"]
+    G["Founder-provided context"] --> C
+    H["Public web and GitHub signals"] --> C
+    I["Connected sources — future"] --> C
 ```
 
-Abrí [http://localhost:3000](http://localhost:3000). `NEXT_PUBLIC_DEMO_MODE=true` viene configurado por defecto, por lo que el recorrido funciona sin Supabase ni otras credenciales.
+The language model helps parse the thesis, structure claims and draft concise prose. It does **not** control trusted evidence IDs, verification states, scoring, ranking or investment recommendations.
 
-Comandos principales:
+## Trust model
 
-```bash
-npm run dev        # Next.js en desarrollo
-npm run build      # build de producción local
-npm run start      # sirve el último build en http://localhost:3000
-npm run lint       # ESLint
-npm run typecheck  # TypeScript en todos los workspaces
-npm run test       # Vitest en todos los workspaces
-npm run check      # lint + typecheck + tests + build
-```
+UNDR keeps provenance visible throughout the workflow:
 
-## Variables de entorno
-
-`.env.example` contiene solamente nombres y valores seguros de ejemplo:
-
-| Variable | Uso actual |
+| State | Meaning |
 | --- | --- |
-| `NEXT_PUBLIC_DEMO_MODE` | `true` mantiene el prototipo local; usar `false` para habilitar el adaptador de Supabase si también existen sus dos variables públicas. |
-| `NEXT_PUBLIC_SUPABASE_URL` | URL pública de un proyecto Supabase propio. |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Publishable key pública. Nunca usar una service-role key en una variable `NEXT_PUBLIC_*`. |
-| `GITHUB_TOKEN` | Opcional y solo server-side; aumenta el margen de la API pública de GitHub. |
-| `OPENAI_API_KEY` | Reservada para una integración futura; el recorrido actual no la requiere. |
+| `Founder stated` | Supplied directly by a founder, not independently verified |
+| `Publicly supported` | Supported by a public company page, registry or profile |
+| `Source verified` | Confirmed through a real connected source—future production state |
+| `Needs review` | Evidence is incomplete, ambiguous or conflicting |
 
-No agregues secretos al repo. La pantalla de sign-in todavía omite la creación de cuenta en modo prototipo, y la UI no escribe el flujo VC en Supabase por defecto.
+GitHub activity can support an execution signal, but it does not prove code quality, intellectual-property ownership or investability. Stripe payment volume would not automatically be treated as accounting revenue.
 
-## Supabase opcional
+## Current prototype
 
-El repo incluye dos migraciones:
+- **101-company canonical seed:** 50 US/UK early-software companies from the original Clay export plus 51 conservatively selected US candidates.
+- **Public-web enrichment:** company pages, founder candidates, product links, pricing, changelogs and company-published social links.
+- **Investment brief engine:** deterministic thesis evaluation, evidence coverage, four assessment axes, stable ranking and citation validation.
+- **Founder-first profiles:** a fully reviewed public example, a founder-submitted Rely profile and a review-queue example.
+- **Persistence schema:** companies, founders, identities, evidence, source snapshots and enrichment runs in Supabase/Postgres.
 
-- `supabase/migrations/20260718190000_data_core.sql` — empresas, fuentes, founders, identidades, relaciones, evidencia y ejecuciones de enriquecimiento.
-- `supabase/migrations/20260718203859_product_platform_core.sql` — perfiles, roles de producto, proyectos, tesis, claims, búsquedas, evaluaciones, pipeline, watchlist, memos, invitaciones, eventos y políticas RLS.
-
-Para preparar un backend propio, instalá el Supabase CLI, vinculá explícitamente tu proyecto y aplicá las migraciones:
-
-```bash
-supabase link --project-ref YOUR_PROJECT_REF
-supabase db push
-```
-
-Luego configurá `NEXT_PUBLIC_DEMO_MODE=false`, `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` en `apps/web/.env.local`. Esto habilita los clientes SSR y la renovación de sesión; no convierte automáticamente el estado local del prototipo en persistencia real ni completa el flujo de autenticación.
-
-## Enriquecimiento público de GitHub
-
-El endpoint server-side acepta una cuenta pública y hasta 20 repositorios:
-
-```bash
-curl -X POST http://localhost:3000/api/enrichment/github \
-  -H 'Content-Type: application/json' \
-  -d '{"login":"octocat","maxRepositories":5}'
-```
-
-`GITHUB_TOKEN` es opcional; sin token se aplican los límites públicos más bajos de GitHub. La respuesta no se persiste por sí sola y representa únicamente observaciones públicas capturadas en ese momento. No verifica identidad del founder, vínculo con una empresa, ownership, tracción ni calidad del código.
-
-## Estructura del monorepo
+## Architecture
 
 ```text
-apps/web/              Next.js App Router, UI, rutas y adaptadores server-side
-packages/data-core/    normalización, deduplicación e importación reproducible
-data/                  snapshots reales y pilotos con estado de verificación
-supabase/migrations/   esquema SQL y RLS opcionales
-docs/                  decisiones de producto y pipeline de datos
-undr.pen               fuente visual de referencia
+Public websites / Clay seed / founder context / GitHub
+                           │
+                           ▼
+                  TypeScript data core
+         normalization · enrichment · provenance
+                           │
+              ┌────────────┴────────────┐
+              ▼                         ▼
+     Deterministic scoring       OpenAI structured tasks
+     and stable ranking          and cited brief drafting
+              └────────────┬────────────┘
+                           ▼
+                VC brief and watchlist
 ```
 
-No se presupone un deploy activo. El estado reproducible de este repositorio es el prototipo local descrito arriba.
+### Main technologies
+
+- TypeScript and Node.js
+- OpenAI API with structured outputs
+- Supabase/Postgres schema
+- Public-web and GitHub enrichment
+- Vitest for data and safety invariants
+
+## Repository structure
+
+```text
+data/
+  source/       Discovery cohorts and import audit
+  enriched/     Public profiles and prototype fixtures
+  briefs/       Reviewed thesis, rankings and cited briefs
+docs/           Architecture, runbooks and frontend handoffs
+packages/
+  data-core/    Normalization, enrichment, scoring and brief engine
+supabase/
+  migrations/   Founder, company and evidence schema
+undr.pen        Product design source
+```
+
+## Run locally
+
+Requirements: Node.js 20+ and npm.
+
+```powershell
+Set-Location packages/data-core
+npm install
+npm test
+npm run typecheck
+```
+
+Inspect the current seed:
+
+```powershell
+npm run analyze:seed -- ../../data/source/vc-engine-us-uk-early-software.csv
+```
+
+Public enrichment can run without a GitHub token. `GITHUB_TOKEN` is optional and only increases public API rate limits.
+
+Generating new OpenAI briefs requires `OPENAI_API_KEY`. Secrets are read from the process environment and are never written to artifacts.
+
+## Explore the repository
+
+- [`data/briefs/`](data/briefs/) — reviewed thesis, rankings and cited investment briefs
+- [`data/enriched/`](data/enriched/) — company evidence, founder profiles and verification fixtures
+- [`docs/investment-brief-engine.md`](docs/investment-brief-engine.md) — scoring and generation runbook
+- [`docs/data-pipeline.md`](docs/data-pipeline.md) — cohort, enrichment and provenance
+- [`packages/data-core/`](packages/data-core/) — typed engine and test suite
+
+---
+
+**UNDR surfaces the companies worth understanding before everyone else already knows their name.**

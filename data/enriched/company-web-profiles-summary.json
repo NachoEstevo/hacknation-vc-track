@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-07-18T20:09:25.877Z",
+  "source": "data/source/clay-us-uk-early-software.csv",
+  "total": 50,
+  "status": {
+    "complete": 37,
+    "partial": 1,
+    "failed": 12
+  },
+  "evidence": {
+    "pages": 86,
+    "founderCandidates": 3,
+    "linkedInLinks": 61,
+    "githubProfiles": 1,
+    "githubProfilesResolved": 1
+  }
+}

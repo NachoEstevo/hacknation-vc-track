@@ -1,20 +1,39 @@
 # Data
 
-## `source/clay-companies.csv`
+## `source/clay-us-uk-early-software.csv`
 
-This is the provisional Clay export supplied for the HackNation VC track prototype.
+The exact 50-row export from the user's latest Clay search for self-employed or 2-10-person US/UK companies in software/AI-related subindustries with $0-$500K annual revenue. It is committed at the dataset owner's request and every imported value remains unverified discovery data.
 
-- Snapshot received: 2026-07-18
-- Rows: 50 companies
-- Intended coverage: small Software and IT companies in the United States and United Kingdom
-- Usable fields: name, description, primary industry, size, type, location, country, domain, and LinkedIn company URL
-- Known limitation: the supplied file contains 50 rows even though the expected source base was described as approximately 350 companies
-- Verification status: unverified discovery data
+The separate authenticated Clay table has a 400-result limit. It is not represented as a local 400-row file because Brave blocked Clay's S3 download; this repository does not fill the gap with Acelera, LATAM, or a different industry search.
 
-The application must preserve source provenance and must not treat an imported description, employee band, domain, or social URL as verified investment evidence. Importing a later complete export should be idempotent and should update or add records without duplicating normalized domains.
+## `source/vc-engine-us-uk-early-software.csv`
 
-The file contains company-level public business information and is intentionally committed to the public prototype repository at the dataset owner's request.
+The canonical 101-company seed: all 50 original Clay records plus 51 US early-stage software/AI/IT candidates accepted from the 2026-07-18 research CSV. The original 100-row research export is deliberately not committed. The generated canonical seed retains only engine fields (identity, description, industry, size, location, domain, and public company LinkedIn URL when supplied); it excludes research scores, founder profiles, customer notes, and source-URL bundles.
+
+`source/us-early-stage-startups-2026-07-18-audit.json` documents the 51 accepted and 49 rejected rows, with row-level reasons and aggregate counts. Inclusion requires an early stage, inferred team size no greater than 50, public domain, software/AI/IT relevance, and no primary physical/life-science business. It found no internal or cross-cohort duplicates. This is a discovery-quality import, not verification of source claims.
+
+## `enriched/company-web-profiles.json`
+
+A timestamped, reproducible public-web evidence snapshot for all 50 companies. It stores concise extracted facts, company-published profile links, GitHub public metadata, evidence URLs, and typed failures. It never stores downloaded HTML or scraped LinkedIn/X content.
+
+## `enriched/company-web-profiles-summary.json`
+
+Coverage counts for the corresponding enrichment run.
 
 ## `enriched/clay-founder-pilot.json`
 
-This is a public-data pilot from Clay MCP contact search across three company domains. It is committed so candidate-resolution behavior remains reproducible. Every relationship is labeled `candidate_only`; accepted candidates still require founder or admin confirmation before the application may present them as verified founders.
+An earlier three-company Clay contact-search pilot. It remains separate from the website run, and every relationship is labeled `candidate_only` until founder or admin confirmation.
+
+## `briefs/demo-investment-briefs.thesis.json`
+
+The reviewed machine-readable thesis for the live demo. The proposed thesis was accepted only after confirming its US/UK, B2B software, below-10-person team, early-stage, and visible-execution criteria and confirming that it did not invent revenue or founder requirements.
+
+## `briefs/demo-investment-briefs.json`
+
+The live analysis generated at `2026-07-19T01:20:12.171Z` from the exact 50-company source snapshot and public-web enrichment. It contains 50 deterministic evaluations and rankings plus two model-drafted, mechanically citation-valid briefs; one top-three draft failure remains explicit. Ranking uses raw Thesis Fit, Evidence Coverage, Product/Execution score, and stable company ID. The artifact also stores 53 safe provider metadata records. It contains only public website/GitHub evidence and sanitized evidence references: no Clay payloads, raw CSV rows, Rely data, founder-private evidence, payment evidence, API key, or raw prompt.
+
+## `briefs/demo-investment-briefs-summary.json`
+
+A CLI-generated summary from the same run with actual model names, trusted timestamps, counts, selected company identities, failures, provenance, response-ID completeness, and aggregate token usage. The 50 committed Clay discovery records are used internally for normalization and ranking but never published; the artifact exposes 35 website records and one GitHub record: 36 public records and 0 private records.
+
+See `docs/investment-brief-engine.md` for commands, scoring, retry behavior, and interpretation limits.

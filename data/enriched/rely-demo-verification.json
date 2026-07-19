@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.0",
+  "companyId": "demo-rely-founder-submitted",
+  "companyName": "Rely",
+  "generatedAt": "2026-07-19T02:47:00.000Z",
+  "demoOnly": true,
+  "timeline": [
+    {
+      "event": "ready_to_connect",
+      "status": "ready",
+      "label": "Founder chooses data sources"
+    },
+    {
+      "event": "oauth_connected",
+      "status": "connected",
+      "label": "Demo accounts connected"
+    },
+    {
+      "event": "signals_analyzed",
+      "status": "analyzing",
+      "label": "Safe aggregates generated"
+    },
+    {
+      "event": "brief_updated",
+      "status": "completed",
+      "label": "VC brief refreshed"
+    }
+  ],
+  "connectors": [
+    {
+      "connectionId": "demo-rely-founder-submitted:github:demo",
+      "companyId": "demo-rely-founder-submitted",
+      "provider": "github",
+      "mode": "simulation",
+      "status": "completed",
+      "badge": "Demo verified",
+      "canPromoteToVerified": false,
+      "verifiedAt": "2026-07-19T02:47:00.000Z",
+      "disclaimer": "Simulated GitHub connection; repository access is not live and does not prove legal ownership of code or IP.",
+      "metrics": {
+        "organization": "relycompany",
+        "privateRepositoryCount": 6,
+        "commitsLast90Days": 284,
+        "matchedFounderUsernames": [
+          "NachoEstevo",
+          "frxnnk"
+        ],
+        "repositoryAccess": "admin_access_simulated",
+        "legalOwnershipVerified": false
+      },
+      "claims": [
+        {
+          "metric": "matched_founders",
+          "value": 2,
+          "verificationState": "simulated",
+          "evidenceLabel": "Demo fixture"
+        },
+        {
+          "metric": "commits_last_90_days",
+          "value": 284,
+          "verificationState": "simulated",
+          "evidenceLabel": "Demo fixture"
+        }
+      ]
+    },
+    {
+      "connectionId": "demo-rely-founder-submitted:stripe:demo",
+      "companyId": "demo-rely-founder-submitted",
+      "provider": "stripe",
+      "mode": "simulation",
+      "status": "completed",
+      "badge": "Demo verified",
+      "canPromoteToVerified": false,
+      "verifiedAt": "2026-07-19T02:47:00.000Z",
+      "disclaimer": "Simulated Stripe verification for the hackathon demo; no Stripe account was connected.",
+      "metrics": {
+        "uniquePayingCustomers": 55,
+        "revenueModel": "one_time_payments",
+        "subscriptionMrr": null
+      },
+      "claims": [
+        {
+          "metric": "unique_paying_customers",
+          "value": 55,
+          "verificationState": "simulated",
+          "evidenceLabel": "Demo fixture"
+        }
+      ]
+    }
+  ]
+}

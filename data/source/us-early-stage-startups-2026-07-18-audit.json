@@ -1,0 +1,662 @@
+{
+  "source": "us_early_stage_startups_100_2026-07-18.csv",
+  "sourceRows": 100,
+  "existingRowsRetained": 50,
+  "acceptedRows": 51,
+  "rejectedRows": 49,
+  "duplicateRows": 0,
+  "quarantinedRows": 0,
+  "reasonCounts": {
+    "missing_public_domain": 30,
+    "physical_or_life_science_business": 28,
+    "outside_software_scope": 28,
+    "later_stage": 3
+  },
+  "accepted": [
+    {
+      "rowNumber": 2,
+      "name": "Matterhaul",
+      "domain": "matterhaul.com"
+    },
+    {
+      "rowNumber": 3,
+      "name": "TensorMesh",
+      "domain": "tensormesh.ai"
+    },
+    {
+      "rowNumber": 5,
+      "name": "Flux",
+      "domain": "askflux.ai"
+    },
+    {
+      "rowNumber": 6,
+      "name": "Health Universe",
+      "domain": "healthuniverse.com"
+    },
+    {
+      "rowNumber": 7,
+      "name": "TypeSafe AI",
+      "domain": "typesafe.ai"
+    },
+    {
+      "rowNumber": 8,
+      "name": "Modiqo",
+      "domain": "modiqo.ai"
+    },
+    {
+      "rowNumber": 9,
+      "name": "Altara",
+      "domain": "altara.co"
+    },
+    {
+      "rowNumber": 10,
+      "name": "Offroad",
+      "domain": "offroad.ai"
+    },
+    {
+      "rowNumber": 12,
+      "name": "Knit Health",
+      "domain": "knit.health"
+    },
+    {
+      "rowNumber": 14,
+      "name": "Imperium Technologies",
+      "domain": "imperiumzone.com"
+    },
+    {
+      "rowNumber": 15,
+      "name": "Graphon AI",
+      "domain": "graphon.ai"
+    },
+    {
+      "rowNumber": 17,
+      "name": "InfoHawk",
+      "domain": "infohawk.com"
+    },
+    {
+      "rowNumber": 22,
+      "name": "Sequential",
+      "domain": "sequential.bio"
+    },
+    {
+      "rowNumber": 24,
+      "name": "Century Health",
+      "domain": "century.health"
+    },
+    {
+      "rowNumber": 25,
+      "name": "Fearn",
+      "domain": "fearn.ai"
+    },
+    {
+      "rowNumber": 28,
+      "name": "Ladder Health",
+      "domain": "ladderhealth.co"
+    },
+    {
+      "rowNumber": 29,
+      "name": "Maia Medical Billing Corp",
+      "domain": "usemaia.com"
+    },
+    {
+      "rowNumber": 34,
+      "name": "Intellectible",
+      "domain": "intellectible.com"
+    },
+    {
+      "rowNumber": 37,
+      "name": "SpartanX",
+      "domain": "spartanx.ai"
+    },
+    {
+      "rowNumber": 40,
+      "name": "Valence AI",
+      "domain": "getvalenceai.com"
+    },
+    {
+      "rowNumber": 43,
+      "name": "Architect Labs",
+      "domain": "architectlabs.com"
+    },
+    {
+      "rowNumber": 46,
+      "name": "HeyMilo AI",
+      "domain": "heymilo.ai"
+    },
+    {
+      "rowNumber": 49,
+      "name": "Unreasonable Labs",
+      "domain": "unreasonablelabs.com"
+    },
+    {
+      "rowNumber": 50,
+      "name": "Vanguard Defense",
+      "domain": "vanguarddefense.us"
+    },
+    {
+      "rowNumber": 51,
+      "name": "Vor Systems",
+      "domain": "vorsystems.com"
+    },
+    {
+      "rowNumber": 53,
+      "name": "ARCYN Defense",
+      "domain": "arcyndefense.com"
+    },
+    {
+      "rowNumber": 54,
+      "name": "DeepCyte",
+      "domain": "deepcyte.com"
+    },
+    {
+      "rowNumber": 56,
+      "name": "Kubera Health",
+      "domain": "kuberahealth.com"
+    },
+    {
+      "rowNumber": 57,
+      "name": "Modveon",
+      "domain": "modveon.com"
+    },
+    {
+      "rowNumber": 59,
+      "name": "Tenna Systems",
+      "domain": "tennasys.com"
+    },
+    {
+      "rowNumber": 61,
+      "name": "ActionAI",
+      "domain": "actionai.co"
+    },
+    {
+      "rowNumber": 63,
+      "name": "Clario",
+      "domain": "clarioclean.com"
+    },
+    {
+      "rowNumber": 64,
+      "name": "Golden Analytics",
+      "domain": "goldenanalytics.com"
+    },
+    {
+      "rowNumber": 65,
+      "name": "Hellbender",
+      "domain": "hellbender.ai"
+    },
+    {
+      "rowNumber": 66,
+      "name": "Kin Health",
+      "domain": "meetkin.com"
+    },
+    {
+      "rowNumber": 70,
+      "name": "SENAI",
+      "domain": "senai.io"
+    },
+    {
+      "rowNumber": 71,
+      "name": "Turbo Law",
+      "domain": "turbolaw.ai"
+    },
+    {
+      "rowNumber": 72,
+      "name": "Bearing",
+      "domain": "getyourbearing.com"
+    },
+    {
+      "rowNumber": 74,
+      "name": "ChatSee.ai",
+      "domain": "chatsee.ai"
+    },
+    {
+      "rowNumber": 76,
+      "name": "IntelliGRC",
+      "domain": "intelligrc.com"
+    },
+    {
+      "rowNumber": 77,
+      "name": "KLIPY",
+      "domain": "klipy.com"
+    },
+    {
+      "rowNumber": 80,
+      "name": "Mongoose AI",
+      "domain": "mongooseplatform.com"
+    },
+    {
+      "rowNumber": 83,
+      "name": "Worldscape.ai",
+      "domain": "worldscape.ai"
+    },
+    {
+      "rowNumber": 84,
+      "name": "Airrived",
+      "domain": "airrived.ai"
+    },
+    {
+      "rowNumber": 85,
+      "name": "CVRD Health",
+      "domain": "becvrd.com"
+    },
+    {
+      "rowNumber": 87,
+      "name": "Midas",
+      "domain": "trymidas.ai"
+    },
+    {
+      "rowNumber": 88,
+      "name": "Nexxa.ai",
+      "domain": "nexxa.ai"
+    },
+    {
+      "rowNumber": 90,
+      "name": "Emobi",
+      "domain": "emobi.com"
+    },
+    {
+      "rowNumber": 93,
+      "name": "OpenBox AI",
+      "domain": "openbox.ai"
+    },
+    {
+      "rowNumber": 96,
+      "name": "AiStrike",
+      "domain": "aistrike.com"
+    },
+    {
+      "rowNumber": 97,
+      "name": "Fibr AI",
+      "domain": "fibr.ai"
+    }
+  ],
+  "rejected": [
+    {
+      "rowNumber": 4,
+      "name": "Tenet Security",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 11,
+      "name": "Lumen Labs",
+      "reasons": [
+        "physical_or_life_science_business"
+      ]
+    },
+    {
+      "rowNumber": 13,
+      "name": "Queue",
+      "reasons": [
+        "physical_or_life_science_business"
+      ]
+    },
+    {
+      "rowNumber": 16,
+      "name": "Protuoso Biosciences",
+      "reasons": [
+        "physical_or_life_science_business"
+      ]
+    },
+    {
+      "rowNumber": 18,
+      "name": "Channel Robotics",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business"
+      ]
+    },
+    {
+      "rowNumber": 19,
+      "name": "SuperPlane",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 20,
+      "name": "Itera",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 21,
+      "name": "Patina",
+      "reasons": [
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 23,
+      "name": "Westmag",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 26,
+      "name": "HYFIX Spatial Intelligence",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 27,
+      "name": "Kotoba Technologies",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 30,
+      "name": "Pacific Hybreed",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 31,
+      "name": "PteroDynamics",
+      "reasons": [
+        "later_stage",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 32,
+      "name": "The Path",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 33,
+      "name": "Fermeate",
+      "reasons": [
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 35,
+      "name": "Kimba",
+      "reasons": [
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 36,
+      "name": "SOND",
+      "reasons": [
+        "physical_or_life_science_business"
+      ]
+    },
+    {
+      "rowNumber": 38,
+      "name": "Transition Metal Solutions",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 39,
+      "name": "V-Glass",
+      "reasons": [
+        "missing_public_domain",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 41,
+      "name": "VICTUS Technologies",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 42,
+      "name": "AquaPoro Technologies",
+      "reasons": [
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 44,
+      "name": "ARTAN Bio",
+      "reasons": [
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 45,
+      "name": "Bandelier Technologies",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 47,
+      "name": "HighGround",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 48,
+      "name": "RyboDyn",
+      "reasons": [
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 52,
+      "name": "Antogen",
+      "reasons": [
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 55,
+      "name": "Goldenrod Therapeutics",
+      "reasons": [
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 58,
+      "name": "OffPlan",
+      "reasons": [
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 60,
+      "name": "Traysar",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 62,
+      "name": "Avant Genomics",
+      "reasons": [
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 67,
+      "name": "ParcelBio",
+      "reasons": [
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 68,
+      "name": "RAVEN.IO",
+      "reasons": [
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 69,
+      "name": "Runlayer",
+      "reasons": [
+        "later_stage"
+      ]
+    },
+    {
+      "rowNumber": 73,
+      "name": "Casimir",
+      "reasons": [
+        "missing_public_domain",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 75,
+      "name": "EGI Battery",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 78,
+      "name": "Kosmos",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 79,
+      "name": "Material Hybrid Manufacturing",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 81,
+      "name": "Probably",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 82,
+      "name": "TippingPoint Biosciences",
+      "reasons": [
+        "missing_public_domain",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 86,
+      "name": "Jedify",
+      "reasons": [
+        "missing_public_domain",
+        "later_stage"
+      ]
+    },
+    {
+      "rowNumber": 89,
+      "name": "Vital Signals",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 91,
+      "name": "Hybron Technologies",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 92,
+      "name": "Lux Aeterna",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 94,
+      "name": "Urologic Health",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 95,
+      "name": "Acurion",
+      "reasons": [
+        "missing_public_domain",
+        "physical_or_life_science_business"
+      ]
+    },
+    {
+      "rowNumber": 98,
+      "name": "Surf Therapeutics",
+      "reasons": [
+        "physical_or_life_science_business",
+        "outside_software_scope"
+      ]
+    },
+    {
+      "rowNumber": 99,
+      "name": "Tryll",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 100,
+      "name": "Another",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    },
+    {
+      "rowNumber": 101,
+      "name": "Breaker",
+      "reasons": [
+        "missing_public_domain"
+      ]
+    }
+  ],
+  "limitations": [
+    "The source CSV is not committed. This audit and canonical seed retain only fields required by the engine.",
+    "Acceptance is a discovery-quality decision, not verification of funding, customers, founders, or scores.",
+    "No LinkedIn or X pages were fetched during import."
+  ]
+}

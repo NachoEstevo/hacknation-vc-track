@@ -1,0 +1,885 @@
+{
+  "status": "completed",
+  "generatedAt": "2026-07-19T01:45:17.581Z",
+  "thesisGeneratedAt": "2026-07-19T01:45:00.990Z",
+  "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+  "promptVersion": "briefs-v1",
+  "models": {
+    "thesisAndClaimExtraction": "gpt-5.6-luna",
+    "briefDrafting": "gpt-5.6-sol"
+  },
+  "counts": {
+    "evaluatedCompanies": 50,
+    "rankedCompanies": 50,
+    "requestedBriefs": 3,
+    "validBriefs": 3,
+    "failedBriefs": 0,
+    "totalFailures": 0
+  },
+  "evidenceCounts": {
+    "companyWebsite": 35,
+    "githubPublic": 1,
+    "publicVisibility": 36,
+    "investorPrivateVisibility": 0
+  },
+  "generationMetadata": {
+    "count": 54,
+    "responseIdsPresent": 54,
+    "tokenUsage": {
+      "inputTokens": 60228,
+      "outputTokens": 9133,
+      "totalTokens": 69361
+    },
+    "records": [
+      {
+        "task": "parse_thesis",
+        "companyId": null,
+        "thesisId": null,
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0f1f14b575e38a94006a5c2c1a728c8196a35547b9414242a8",
+        "tokenUsage": {
+          "inputTokens": 283,
+          "outputTokens": 268,
+          "totalTokens": 551
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:00.989Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "56c9fcb30eeb2560eea94b4f",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0e5f943c7fd9e126006a5c2c2d569c8194a0831d3c8884e825",
+        "tokenUsage": {
+          "inputTokens": 943,
+          "outputTokens": 97,
+          "totalTokens": 1040
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:18.980Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "bee91b889a2a1e541342640d",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_062a298d86677ef5006a5c2c2d5618819595104dd7ecbbc0bc",
+        "tokenUsage": {
+          "inputTokens": 837,
+          "outputTokens": 97,
+          "totalTokens": 934
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:19.183Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "73c89d3320e06114f6241365",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0ae0bdb22c0417ea006a5c2c2d562881939ea70f86aa13ad7e",
+        "tokenUsage": {
+          "inputTokens": 1237,
+          "outputTokens": 137,
+          "totalTokens": 1374
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:19.441Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "0186b70d0e326a1dbbaacac5",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_00ec6f5b0039189f006a5c2c2d57b88197a388541e0ae607b1",
+        "tokenUsage": {
+          "inputTokens": 896,
+          "outputTokens": 145,
+          "totalTokens": 1041
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:19.482Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "67eff7a89eb205c7333efe31",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0672c8abd2d6fb3d006a5c2c2ea4508193b719120a301287dd",
+        "tokenUsage": {
+          "inputTokens": 646,
+          "outputTokens": 95,
+          "totalTokens": 741
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:20.393Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "f85288483c7608849341ac86",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0a3e81f8950bc2c9006a5c2c2edcec8190b413ecf5d0d909ed",
+        "tokenUsage": {
+          "inputTokens": 1092,
+          "outputTokens": 221,
+          "totalTokens": 1313
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:21.074Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "9525a62b551256f05c18e7c7",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0ec00df25d38ef9a006a5c2c2f190081968d44a9593bbd6537",
+        "tokenUsage": {
+          "inputTokens": 760,
+          "outputTokens": 177,
+          "totalTokens": 937
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:21.122Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "ec3b21e1a575c1f1dec19f98",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0156105314fa3ded006a5c2c2f26208194880c3e4a20fba17b",
+        "tokenUsage": {
+          "inputTokens": 1041,
+          "outputTokens": 138,
+          "totalTokens": 1179
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:21.242Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "1259cc5339fa8610ecf8aaaf",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_059160eb556e56e9006a5c2c3010dc81939a3262daaaaba7b3",
+        "tokenUsage": {
+          "inputTokens": 786,
+          "outputTokens": 177,
+          "totalTokens": 963
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:22.170Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "608a1fe17b48509ca0acdf81",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0e1ee22fc6b811e3006a5c2c30bd188190af8f1f5e15d4bb38",
+        "tokenUsage": {
+          "inputTokens": 4097,
+          "outputTokens": 146,
+          "totalTokens": 4243
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:22.704Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "d7062aa9bafac79fcb3ab0e1",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0c06d5381de984f4006a5c2c30e75c8197aa69e97889ef334e",
+        "tokenUsage": {
+          "inputTokens": 1431,
+          "outputTokens": 142,
+          "totalTokens": 1573
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:22.957Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "a3c90fe94c05cebcdc02f873",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_06640055ff0f65f9006a5c2c30ca74819391399f7511388add",
+        "tokenUsage": {
+          "inputTokens": 853,
+          "outputTokens": 214,
+          "totalTokens": 1067
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:23.009Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "a9f23a94ec8713789cefb255",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0c45f6fe4db04ccb006a5c2c31d5fc8193aacd8011dc85fdbe",
+        "tokenUsage": {
+          "inputTokens": 1070,
+          "outputTokens": 139,
+          "totalTokens": 1209
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:23.709Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "e6ee890738e995a0d2a1d58c",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0e2a7a7238a0a712006a5c2c3261bc8197b150a9d3db4b9e95",
+        "tokenUsage": {
+          "inputTokens": 593,
+          "outputTokens": 97,
+          "totalTokens": 690
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:24.140Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "3001263b68d8774de222c74b",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0982c8aac9af9f25006a5c2c32ac74819496340c8e4e283411",
+        "tokenUsage": {
+          "inputTokens": 586,
+          "outputTokens": 95,
+          "totalTokens": 681
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:24.458Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "4a4e49add92defbda7ebe49d",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0cf9e0b58e7d4b53006a5c2c3362748197b825e37917a4dde9",
+        "tokenUsage": {
+          "inputTokens": 998,
+          "outputTokens": 177,
+          "totalTokens": 1175
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:25.390Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "e4c7c56177145d1f44270ad2",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0ed1831fa8c7a9a8006a5c2c33cf388193ad42390794e7e12b",
+        "tokenUsage": {
+          "inputTokens": 1378,
+          "outputTokens": 213,
+          "totalTokens": 1591
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:25.972Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "44e4e3a9871201b3d08575a3",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0cdf8455e98bed02006a5c2c3420c88197866dfd476d8fbab5",
+        "tokenUsage": {
+          "inputTokens": 1147,
+          "outputTokens": 141,
+          "totalTokens": 1288
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:26.306Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "6ac80023f18d48fad97302b1",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0707c9b32b79a4eb006a5c2c350ecc8195bc376ba577b2f9ed",
+        "tokenUsage": {
+          "inputTokens": 860,
+          "outputTokens": 147,
+          "totalTokens": 1007
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:26.993Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "8f286cfba3044984fe57e524",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0e96e6dbefbe9629006a5c2c35a3cc8190aa60bff1cabe529d",
+        "tokenUsage": {
+          "inputTokens": 586,
+          "outputTokens": 97,
+          "totalTokens": 683
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:27.274Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "e07eeea747405e13388b2a61",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_058dcd105ae451ca006a5c2c36f2748194877c59452cc390d8",
+        "tokenUsage": {
+          "inputTokens": 919,
+          "outputTokens": 136,
+          "totalTokens": 1055
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:28.689Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "64c6360c5f16108843e90885",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_07ec1744a820588f006a5c2c36b5a08197a39964a4b5b87e9e",
+        "tokenUsage": {
+          "inputTokens": 958,
+          "outputTokens": 132,
+          "totalTokens": 1090
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:29.513Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "9f4aa9874161bf1c168aa89c",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0566b48f9a2d78c5006a5c2c35f7b88196819716d47b63737e",
+        "tokenUsage": {
+          "inputTokens": 1465,
+          "outputTokens": 99,
+          "totalTokens": 1564
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:29.668Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "9a11ef4fb87dff27e1f5c0b8",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0587c1230e5e969f006a5c2c385cd081968ccb38bffb452eb3",
+        "tokenUsage": {
+          "inputTokens": 701,
+          "outputTokens": 99,
+          "totalTokens": 800
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:30.267Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "dd5caa7180039cc3119d9849",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_074437a9b60ebec5006a5c2c392d948190acc6ffea97889f35",
+        "tokenUsage": {
+          "inputTokens": 1465,
+          "outputTokens": 140,
+          "totalTokens": 1605
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:31.136Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "9106d5917c21ae28062b6e72",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_07819d69d8de4d35006a5c2c3957d48196ac61cdad929e16ee",
+        "tokenUsage": {
+          "inputTokens": 1238,
+          "outputTokens": 142,
+          "totalTokens": 1380
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:31.244Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "07738bc0d64caad517eb18bb",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_020b26a846bb5492006a5c2c39eeb081948f5f44ec076bf04c",
+        "tokenUsage": {
+          "inputTokens": 890,
+          "outputTokens": 154,
+          "totalTokens": 1044
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:31.866Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "88ed060df2893a9ac7e962b3",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_045872b9dc868862006a5c2c3acd6c8197a003fb65930ed4f9",
+        "tokenUsage": {
+          "inputTokens": 1169,
+          "outputTokens": 148,
+          "totalTokens": 1317
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:32.712Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "3a28f15ed47dfb22f0b79fae",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_034e3490a820ca28006a5c2c3ae9288195a2a5fde1a770005a",
+        "tokenUsage": {
+          "inputTokens": 1691,
+          "outputTokens": 138,
+          "totalTokens": 1829
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:32.761Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "6a9bfc0f21f962d7a3b19fcb",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0d94c0de8166095f006a5c2c3b894c8195a2e1123a1890e516",
+        "tokenUsage": {
+          "inputTokens": 1093,
+          "outputTokens": 171,
+          "totalTokens": 1264
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:33.571Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "3e49508e917dd9f8d37b49e3",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_027734b43122ba2f006a5c2c3339488193a0b720fe9be067ee",
+        "tokenUsage": {
+          "inputTokens": 1714,
+          "outputTokens": 215,
+          "totalTokens": 1929
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:33.575Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "4cfa8ff034bba1070fc940a9",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0bd551ba8e10c855006a5c2c3c62e48195b0155a7546e41214",
+        "tokenUsage": {
+          "inputTokens": 909,
+          "outputTokens": 97,
+          "totalTokens": 1006
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:34.064Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "cb543ce69ec5ac2b0a13450b",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_069d3894b156b91c006a5c2c3c703c819788a180fa920e5228",
+        "tokenUsage": {
+          "inputTokens": 739,
+          "outputTokens": 145,
+          "totalTokens": 884
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:34.355Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "29e95a94236c22e3dca09456",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_04573e1e745f48d8006a5c2c3d3cb481949b921fc7932ac091",
+        "tokenUsage": {
+          "inputTokens": 1173,
+          "outputTokens": 177,
+          "totalTokens": 1350
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:35.284Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "12cd1e805e9508bd8a43af53",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_023dd41af9168b80006a5c2c3d3d708194b89bf96510b5a0e0",
+        "tokenUsage": {
+          "inputTokens": 1478,
+          "outputTokens": 231,
+          "totalTokens": 1709
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:35.431Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "80264312dec776ea092b9234",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_08686978649a5120006a5c2c3dbdcc81909a3235ef64d093b9",
+        "tokenUsage": {
+          "inputTokens": 1185,
+          "outputTokens": 96,
+          "totalTokens": 1281
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:35.578Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "103985f3d9a2524734319456",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0c0e0313074f939b006a5c2c3e04108194a0f3a4e634bd5cde",
+        "tokenUsage": {
+          "inputTokens": 785,
+          "outputTokens": 134,
+          "totalTokens": 919
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:35.994Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "fa3fb4f0fc429c0af62feeb0",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0e8487bc30423327006a5c2c3f18808195a500c268fe53568b",
+        "tokenUsage": {
+          "inputTokens": 646,
+          "outputTokens": 97,
+          "totalTokens": 743
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:36.837Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "de15bb5f896e8ceac7531ad7",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_02be483ea51db4a9006a5c2c3ef99c819593c19788c3d01afa",
+        "tokenUsage": {
+          "inputTokens": 1028,
+          "outputTokens": 144,
+          "totalTokens": 1172
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:36.958Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "9d1236a769af23c559175b9c",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_044322fc47d17770006a5c2c3f40e88195bfa38bed3facc384",
+        "tokenUsage": {
+          "inputTokens": 1457,
+          "outputTokens": 181,
+          "totalTokens": 1638
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:37.339Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "d718e09eca1eb52d20421584",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_06ffbc5b513a2fb6006a5c2c3fa7c88190b9f80c04cd876c9a",
+        "tokenUsage": {
+          "inputTokens": 1258,
+          "outputTokens": 194,
+          "totalTokens": 1452
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:37.735Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "b4bad53e2788a815b7d3b81b",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_069993a3e31a343c006a5c2c4083288193b4a263f3c5cd5905",
+        "tokenUsage": {
+          "inputTokens": 1011,
+          "outputTokens": 150,
+          "totalTokens": 1161
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:38.493Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "aa4a13ba232376416a1f8c39",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_06d51f0e97b01437006a5c2c409e70819798e82e4636709239",
+        "tokenUsage": {
+          "inputTokens": 1057,
+          "outputTokens": 148,
+          "totalTokens": 1205
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:38.650Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "80ecc83a9f655f04d59b4c92",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0c6a4207fa05a77e006a5c2c40ffb4819585ab1a2f970a438f",
+        "tokenUsage": {
+          "inputTokens": 1083,
+          "outputTokens": 133,
+          "totalTokens": 1216
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:38.861Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "432817c30ec6326a20064793",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0fa049fbb9b3f38e006a5c2c4171648194b9e77e46d5358de6",
+        "tokenUsage": {
+          "inputTokens": 905,
+          "outputTokens": 181,
+          "totalTokens": 1086
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:39.614Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "fc5fa0b6fad74686dd997ca3",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_06a16d81471e3b3e006a5c2c424fb48193a085d0b3ceea4816",
+        "tokenUsage": {
+          "inputTokens": 768,
+          "outputTokens": 95,
+          "totalTokens": 863
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:40.082Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "b1f993bb9b3c5cd3d412f8d1",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_05f4d1e029233066006a5c2c42256c81958b564a4d470ba54a",
+        "tokenUsage": {
+          "inputTokens": 1376,
+          "outputTokens": 171,
+          "totalTokens": 1547
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:40.264Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "b99c997b11b260cc71b6a885",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_00d2d302b8a763ac006a5c2c4288248195b2b77c5627f15d4d",
+        "tokenUsage": {
+          "inputTokens": 873,
+          "outputTokens": 101,
+          "totalTokens": 974
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:40.350Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "39c8c765b23dd360e317cf87",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0ec59798b6123f07006a5c2c4349488194b91e58e9cbb097ec",
+        "tokenUsage": {
+          "inputTokens": 858,
+          "outputTokens": 133,
+          "totalTokens": 991
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:41.205Z"
+      },
+      {
+        "task": "extract_claim_candidates",
+        "companyId": "82cd4beebc5d71f56c42691e",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-luna",
+        "requestedModel": "gpt-5.6-luna",
+        "responseId": "resp_0bda68fe9577a8e8006a5c2c43bf3c8194925cde3d6155fb9b",
+        "tokenUsage": {
+          "inputTokens": 949,
+          "outputTokens": 147,
+          "totalTokens": 1096
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:41.667Z"
+      },
+      {
+        "task": "draft_investment_brief",
+        "companyId": "de15bb5f896e8ceac7531ad7",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-sol",
+        "requestedModel": "gpt-5.6-sol",
+        "responseId": "resp_053c809576e8f690006a5c2c455ad08190965982e407f57456",
+        "tokenUsage": {
+          "inputTokens": 1830,
+          "outputTokens": 524,
+          "totalTokens": 2354
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:49.545Z"
+      },
+      {
+        "task": "draft_investment_brief",
+        "companyId": "12cd1e805e9508bd8a43af53",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-sol",
+        "requestedModel": "gpt-5.6-sol",
+        "responseId": "resp_0ef530fa842cf3cb006a5c2c45595c819098b04836e3bc8205",
+        "tokenUsage": {
+          "inputTokens": 1517,
+          "outputTokens": 433,
+          "totalTokens": 1950
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:49.884Z"
+      },
+      {
+        "task": "draft_investment_brief",
+        "companyId": "73c89d3320e06114f6241365",
+        "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+        "model": "gpt-5.6-sol",
+        "requestedModel": "gpt-5.6-sol",
+        "responseId": "resp_010b7a7e43544cbb006a5c2c4559c08193bc3ba0ab539905d6",
+        "tokenUsage": {
+          "inputTokens": 1920,
+          "outputTokens": 687,
+          "totalTokens": 2607
+        },
+        "promptVersion": "briefs-v1",
+        "generatedAt": "2026-07-19T01:45:54.967Z"
+      }
+    ]
+  },
+  "topCompanies": [
+    {
+      "rank": 1,
+      "companyId": "73c89d3320e06114f6241365",
+      "companyName": "Icon",
+      "recommendation": "investigate",
+      "thesisFit": 100,
+      "evidenceCoverage": 60.86956521739131,
+      "briefGenerated": true,
+      "briefGeneratedAt": "2026-07-19T01:45:54.967Z"
+    },
+    {
+      "rank": 2,
+      "companyId": "de15bb5f896e8ceac7531ad7",
+      "companyName": "Steal These Thoughts!",
+      "recommendation": "investigate",
+      "thesisFit": 100,
+      "evidenceCoverage": 60.86956521739131,
+      "briefGenerated": true,
+      "briefGeneratedAt": "2026-07-19T01:45:49.547Z"
+    },
+    {
+      "rank": 3,
+      "companyId": "12cd1e805e9508bd8a43af53",
+      "companyName": "Julian Jewel's AI Bot",
+      "recommendation": "watch",
+      "thesisFit": 100,
+      "evidenceCoverage": 43.47826086956522,
+      "briefGenerated": true,
+      "briefGeneratedAt": "2026-07-19T01:45:49.884Z"
+    }
+  ],
+  "failures": [],
+  "provenance": {
+    "rankingSeed": "clay-us-uk-early-software.csv",
+    "rankingSeedHandling": "owner_provided_internal_not_published",
+    "publishedEvidence": "company-web-profiles.json",
+    "publishedVisibility": "public_only"
+  }
+}

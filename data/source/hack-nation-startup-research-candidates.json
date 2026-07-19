@@ -1,0 +1,1067 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-19T04:03:32.146Z",
+  "source": {
+    "name": "Hack-Nation public people directory and public profile endpoint",
+    "peopleEndpoint": "https://projects.hack-nation.ai/.netlify/functions/bff-public-people-v2?limit=5000",
+    "profilesEndpoint": "https://projects.hack-nation.ai/.netlify/functions/bff-public-profiles-v2",
+    "retrievedProfileCount": 1000,
+    "access": "public"
+  },
+  "selection": {
+    "minimumProfileCompleteness": 5,
+    "requiredStartupSignals": [
+      "founder",
+      "ceo",
+      "startup",
+      "entrepreneur",
+      "business_owner"
+    ],
+    "excludedSignals": [
+      "generic building or developer language without a startup-role signal"
+    ]
+  },
+  "candidateCount": 47,
+  "candidates": [
+    {
+      "sourceUserId": "be18c5eb-61de-4758-9c42-66ca0c140ffb",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/be18c5eb-61de-4758-9c42-66ca0c140ffb",
+      "fullName": "Aarash",
+      "displayName": "Aarash",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": "parallel processing and ML",
+        "university": "Lahore University of Management Sciences",
+        "fieldOfStudy": "Computer Sciences",
+        "academicDegree": "Bachelor in CS",
+        "location": "Jeddah, Saudi Arabia",
+        "githubUrl": null,
+        "linkedinUrl": null
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "0076d3a1-80f3-4fad-95bf-dbf1ddae7dc8",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/0076d3a1-80f3-4fad-95bf-dbf1ddae7dc8",
+      "fullName": "Abdul Rehman Khan",
+      "displayName": "Abdul Rehman Khan",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": "Founder building AI-powered developer tools and autonomous software systems.",
+        "university": "Others",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": "Currently Enrolled",
+        "location": "Karachi, Pakistan",
+        "githubUrl": "https://github.com/abdulrehmanazizofficial",
+        "linkedinUrl": "https://www.linkedin.com/in/abdul-rehman-aziz-khan-b3aab9402"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "6eb186b1-f02c-4a4c-a8e9-0e5129104a43",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/6eb186b1-f02c-4a4c-a8e9-0e5129104a43",
+      "fullName": "Abdullah Hamdan",
+      "displayName": "Abdullah_Hamdan,MD",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder",
+        "ceo"
+      ],
+      "profile": {
+        "professionalSituation": "Medical Doctor & Founder/CEO of Curans.org",
+        "tagline": "Medical Doctor | Integrating AI into Medicine",
+        "university": "University of Jordan",
+        "fieldOfStudy": "GENERAL MEDICAL AND HEALTH SERVICES",
+        "academicDegree": "Professional Doctorate (MD, JD, etc.)",
+        "location": "Amman, Jordan",
+        "githubUrl": null,
+        "linkedinUrl": "https://www.linkedin.com/in/hamdanabdullah/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "a9979ab1-b74c-41fc-aa4c-442475b68868",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/a9979ab1-b74c-41fc-aa4c-442475b68868",
+      "fullName": "Abdulmumin Waziri Abubakar",
+      "displayName": "Abdulmumin Waziri Abubakar",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "entrepreneur"
+      ],
+      "profile": {
+        "professionalSituation": "Entrepreneur",
+        "tagline": null,
+        "university": "Federal University Dutse, Jigawa State",
+        "fieldOfStudy": "Mathematics",
+        "academicDegree": "Bachelor",
+        "location": "Abuja, Nigeria",
+        "githubUrl": null,
+        "linkedinUrl": "https://www.linkedin.com/in/themanforjob/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "0ef3c7c6-9aa1-46c5-9a2d-480dfbfa0161",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/0ef3c7c6-9aa1-46c5-9a2d-480dfbfa0161",
+      "fullName": "Adam T",
+      "displayName": "Adam T",
+      "profileCompleteness": 5,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": null,
+        "university": "Massachusetts Institute of Technology (MIT)",
+        "fieldOfStudy": "BUSINESS MANAGEMENT AND ADMINISTRATION",
+        "academicDegree": null,
+        "location": "Newburyport, United States",
+        "githubUrl": "Https://GitHub.com/atrainathought",
+        "linkedinUrl": "Https://linkedin.com/in/jadamtraina"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "9aa33181-270d-4cd3-bd45-0fb8a54b2aca",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/9aa33181-270d-4cd3-bd45-0fb8a54b2aca",
+      "fullName": "Aditya Methaila",
+      "displayName": "Aditya",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": null,
+        "university": "Pennsylvania State University",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": "Master's Degree",
+        "location": "Delhi, India",
+        "githubUrl": null,
+        "linkedinUrl": null
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "c1d531cc-cd50-4f5a-b007-d77fd677c57a",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/c1d531cc-cd50-4f5a-b007-d77fd677c57a",
+      "fullName": "afrozmohammad22",
+      "displayName": "afrozmohammad22",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder @ Stealth",
+        "tagline": null,
+        "university": "Carnegie Mellon University",
+        "fieldOfStudy": "COMPUTER AND INFORMATION SYSTEMS",
+        "academicDegree": "Master's Degree",
+        "location": "Fremont, United States",
+        "githubUrl": null,
+        "linkedinUrl": "https://www.linkedin.com/in/mohammadafroz/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "977e0fda-2b52-4704-b50f-4aab98de5d7d",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/977e0fda-2b52-4704-b50f-4aab98de5d7d",
+      "fullName": "Aichatou Boubacar Soumana",
+      "displayName": "Aichatou Boubacar",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": null,
+        "university": "African Development University",
+        "fieldOfStudy": "Management",
+        "academicDegree": "Master's",
+        "location": "Niamey, Niger",
+        "githubUrl": "https://github.com/Aichato",
+        "linkedinUrl": "http://www.linkedin.com/in/aichatou-boubacar"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "b29416ea-6ef0-466c-b8b9-76ddd25ff10a",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/b29416ea-6ef0-466c-b8b9-76ddd25ff10a",
+      "fullName": "Akanksha Agarwal",
+      "displayName": "Akanksha",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Freelancer + student + wannabe founder",
+        "tagline": "making sense out of complexity",
+        "university": "University of Sydney",
+        "fieldOfStudy": "Architecture & Design",
+        "academicDegree": "Master's",
+        "location": "Sydney, Australia",
+        "githubUrl": "https://github.com/akanksha-cmyk",
+        "linkedinUrl": "https://www.linkedin.com/in/akankshaux/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "e82c4408-299c-4c11-9ea3-bff46612c02d",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/e82c4408-299c-4c11-9ea3-bff46612c02d",
+      "fullName": "akhilan",
+      "displayName": "akhilan",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": null,
+        "university": "Massachusetts Institute of Technology (MIT)",
+        "fieldOfStudy": "Commputer Science",
+        "academicDegree": "PhD",
+        "location": "San Francisco, USA",
+        "githubUrl": "https://github.com/AkhilanB",
+        "linkedinUrl": "https://www.linkedin.com/in/akhilanb/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "9cacb176-3de1-4a54-bcbc-4c1dedbb2c81",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/9cacb176-3de1-4a54-bcbc-4c1dedbb2c81",
+      "fullName": "Akshobhya Gupta",
+      "displayName": "Akshobhya Gupta",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Student, Founder",
+        "tagline": "Coding and Web-Dev",
+        "university": "San Jose State University",
+        "fieldOfStudy": "Computer Science",
+        "academicDegree": "Bachelors",
+        "location": "San Jose, United States",
+        "githubUrl": "https://github.com/Akshobhya-codes",
+        "linkedinUrl": "https://www.linkedin.com/in/akshobhyagupta/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "611d3a31-f59f-4993-a708-2ada940c9246",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/611d3a31-f59f-4993-a708-2ada940c9246",
+      "fullName": "Alejandro Rey",
+      "displayName": "Alejandro",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": "axon402.com",
+        "university": "ESSEC",
+        "fieldOfStudy": "Business Administration",
+        "academicDegree": "Bachelor's Degree",
+        "location": "Zurich , Switzerland",
+        "githubUrl": "https://github.com/alex-reysa/AXON",
+        "linkedinUrl": "https://www.linkedin.com/in/alejandroreysanchez?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "128a3f4c-4486-4dfc-950c-d50f5621b212",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/128a3f4c-4486-4dfc-950c-d50f5621b212",
+      "fullName": "Alen Hovhannisyan",
+      "displayName": "Alen Hovhannisians",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "ceo"
+      ],
+      "profile": {
+        "professionalSituation": "CEO / Student",
+        "tagline": "AI",
+        "university": "National University of Architecture and Construction of Armenia / Bleenk and Robi Labs",
+        "fieldOfStudy": "Computer Science",
+        "academicDegree": "Undergraduate",
+        "location": "Ashtarak, Armenia",
+        "githubUrl": "https://www.github.com/hovhannisians",
+        "linkedinUrl": "https://www.linkedin.com/in/hovhannisians"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "dd300ad2-7d66-437b-a953-45c43bafdae7",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/dd300ad2-7d66-437b-a953-45c43bafdae7",
+      "fullName": "Alexander Bridgwater",
+      "displayName": "brovatten",
+      "profileCompleteness": 5,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Cofounder",
+        "tagline": null,
+        "university": "Chalmers University of Technology",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": null,
+        "location": "Zürich, Switzerland",
+        "githubUrl": null,
+        "linkedinUrl": null
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "dee8d36a-af82-44d0-bacb-375efc68f91c",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/dee8d36a-af82-44d0-bacb-375efc68f91c",
+      "fullName": "Alexander Pikovski",
+      "displayName": "Alexander",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": null,
+        "university": "University of Cambridge",
+        "fieldOfStudy": "PHYSICS",
+        "academicDegree": "Doctoral Degree (PhD)",
+        "location": "Berlin, Germany",
+        "githubUrl": null,
+        "linkedinUrl": "https://www.linkedin.com/in/alexanderpikovski/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "9ee41223-ddd5-4ecf-a633-6fae936e3e59",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/9ee41223-ddd5-4ecf-a633-6fae936e3e59",
+      "fullName": "Alexander W.J.Lin",
+      "displayName": "Alexander",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": "I never give up!",
+        "university": "Instituto Mauá de Tecnologia",
+        "fieldOfStudy": "Engineering (Civil, Mechanical, Electrical, Chemical, etc.)",
+        "academicDegree": "Recent Graduate",
+        "location": "São Paulo - Capital, Brazil",
+        "githubUrl": "https://github.com/Wincarf/",
+        "linkedinUrl": "https://www.linkedin.com/in/alexander-lin-b2bb9a14b/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "8331c301-74de-4733-85ba-c1ee161f60b8",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/8331c301-74de-4733-85ba-c1ee161f60b8",
+      "fullName": "Allen Ohanian",
+      "displayName": "AllenO",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Cybersecurity Executive / Founder (CISO)",
+        "tagline": "anticipating algorithmic and human vulnerabilities to engineer impenetrable AI defenses",
+        "university": "Capella University",
+        "fieldOfStudy": "Others",
+        "academicDegree": "Doctoral Degree (PhD)",
+        "location": "Los Angeles, United States",
+        "githubUrl": null,
+        "linkedinUrl": "https://www.linkedin.com/in/AllenOhanian"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "13b20758-03c6-41d4-a502-40d898849295",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/13b20758-03c6-41d4-a502-40d898849295",
+      "fullName": "Alvaro Mufarech",
+      "displayName": "Alvaro Mufarech",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "business_owner"
+      ],
+      "profile": {
+        "professionalSituation": "Business Owner",
+        "tagline": "Making delicious ceviches",
+        "university": "Massachusetts Institute of Technology (MIT)",
+        "fieldOfStudy": "BUSINESS MANAGEMENT AND ADMINISTRATION",
+        "academicDegree": "Master's Degree",
+        "location": "Mexico City, Mexico",
+        "githubUrl": "https://github.com/amufarechr",
+        "linkedinUrl": "https://www.linkedin.com/in/alvaromufarech"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "2bf1d1bb-1138-485b-ab5c-9b6dafd573ea",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/2bf1d1bb-1138-485b-ab5c-9b6dafd573ea",
+      "fullName": "Amrutha Killada",
+      "displayName": "Amrutha Killada",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "startup"
+      ],
+      "profile": {
+        "professionalSituation": "GTM Lead at Series A startup",
+        "tagline": "GTM and Product",
+        "university": "Massachusetts Institute of Technology (MIT)",
+        "fieldOfStudy": "ENGINEERING AND INDUSTRIAL MANAGEMENT",
+        "academicDegree": "Master's Degree",
+        "location": "Visakhapatnam, India",
+        "githubUrl": null,
+        "linkedinUrl": "https://www.linkedin.com/in/amruthakillada/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "75842606-1bb5-4eb1-9f15-8bbf4d4c35bb",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/75842606-1bb5-4eb1-9f15-8bbf4d4c35bb",
+      "fullName": "Anand Vashishtha",
+      "displayName": "0xanand",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Developer, freelancer, founder, devrel, marketing",
+        "tagline": "building",
+        "university": "Others",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": "Bachelor's Degree",
+        "location": "Delhi, India",
+        "githubUrl": "https://github.com/Anand-0037",
+        "linkedinUrl": "https://www.linkedin.com/in/anand-vashishtha-aba64b255/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "bfd4ef6a-247c-47fc-bb52-429f2e7800cc",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/bfd4ef6a-247c-47fc-bb52-429f2e7800cc",
+      "fullName": "Anar Shah",
+      "displayName": "Anar Shah",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder",
+        "ceo"
+      ],
+      "profile": {
+        "professionalSituation": "CEO and Founder",
+        "tagline": null,
+        "university": "Massachusetts Institute of Technology (MIT)",
+        "fieldOfStudy": "BUSINESS MANAGEMENT AND ADMINISTRATION",
+        "academicDegree": "Master's Degree",
+        "location": "Santa Clara, United States",
+        "githubUrl": "anarshahpm.github.io",
+        "linkedinUrl": "linkedin.com/in/anarshah"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "4788d6c0-3b4b-411d-a3ff-58f0f95ac297",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/4788d6c0-3b4b-411d-a3ff-58f0f95ac297",
+      "fullName": "Ani Hovhannisyan",
+      "displayName": "Ani",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "ceo"
+      ],
+      "profile": {
+        "professionalSituation": "CEO",
+        "tagline": null,
+        "university": "MSU",
+        "fieldOfStudy": "Media Studies",
+        "academicDegree": "Master's",
+        "location": "Yerevan, Armenia",
+        "githubUrl": "https://github.com/choupachoups",
+        "linkedinUrl": "https://www.linkedin.com/in/ani-hovhannisyan/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "f5b76413-0494-43a9-9a11-7e6ab4b8c821",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/f5b76413-0494-43a9-9a11-7e6ab4b8c821",
+      "fullName": "Anirudha Kulkarni",
+      "displayName": "Anirudha",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": null,
+        "university": "IIT Delhi",
+        "fieldOfStudy": "Computer Science",
+        "academicDegree": "Master's",
+        "location": "Bengaluru, India",
+        "githubUrl": "https://github.com/anirudhakulkarni",
+        "linkedinUrl": "https://www.linkedin.com/in/anirudha-kulkarni47/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "51b2c47b-0c3b-4d0f-9999-bbfdd90b74e0",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/51b2c47b-0c3b-4d0f-9999-bbfdd90b74e0",
+      "fullName": "Anna Stoilova",
+      "displayName": "Anna Stoilova",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "business_owner"
+      ],
+      "profile": {
+        "professionalSituation": "Business Owner",
+        "tagline": "Getting your brand out there",
+        "university": "University of the Arts",
+        "fieldOfStudy": "COMMERCIAL ART AND GRAPHIC DESIGN",
+        "academicDegree": "Master's Degree",
+        "location": "London, United Kingdom",
+        "githubUrl": "https://github.com/annastoilova",
+        "linkedinUrl": "https://www.linkedin.com/in/annastoilova/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "e7aba354-d256-44ba-aca4-c2e6f49162aa",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/e7aba354-d256-44ba-aca4-c2e6f49162aa",
+      "fullName": "Ansh Saraswat",
+      "displayName": "Ansh Saraswat",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Student & Founder",
+        "tagline": "Qwen Modelling and Interference",
+        "university": "Others",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": "Bachelor's Degree",
+        "location": "Delhi, India",
+        "githubUrl": "https://github.com/Ansh-Saraswat-PC",
+        "linkedinUrl": "https://www.linkedin.com/in/ansh-dev-saraswat/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "f6486922-1839-415b-8d5d-1f428fc0bb31",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/f6486922-1839-415b-8d5d-1f428fc0bb31",
+      "fullName": "antonioskondis",
+      "displayName": "antonioskondis",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder",
+        "startup"
+      ],
+      "profile": {
+        "professionalSituation": "Startup founder",
+        "tagline": "Dinghy sailing, electric guitar playing...and building elite =digital minds",
+        "university": "Others",
+        "fieldOfStudy": "Engineering",
+        "academicDegree": "Msc, MBA",
+        "location": "Athens, Greece",
+        "githubUrl": null,
+        "linkedinUrl": "https://www.linkedin.com/in/antonioskondis/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "31d8fc2a-d965-4624-8f39-86c24f795fae",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/31d8fc2a-d965-4624-8f39-86c24f795fae",
+      "fullName": "Aria Chen",
+      "displayName": "Aria Chen",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Independent Researcher / Founder / Developer",
+        "tagline": "Independent AI researcher building persistent agents and cognitive interfaces.",
+        "university": "Sichuan University",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": "Bachelor's Degree",
+        "location": "Calgary, Canada",
+        "githubUrl": null,
+        "linkedinUrl": "https://www.linkedin.com/in/aria-chen-86408737b/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "b07dec5a-f4a6-4ef4-b6bc-54218a3be3d9",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/b07dec5a-f4a6-4ef4-b6bc-54218a3be3d9",
+      "fullName": "Ariel Flasterstein Salazar",
+      "displayName": "Ariel Flasterstein",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Co-Founder at Explain AI",
+        "tagline": null,
+        "university": "Massachusetts Institute of Technology (MIT)",
+        "fieldOfStudy": "BUSINESS MANAGEMENT AND ADMINISTRATION",
+        "academicDegree": "Master's Degree",
+        "location": "San Francisco, United States",
+        "githubUrl": null,
+        "linkedinUrl": null
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "d66df8af-76bc-44d5-8aa7-0e266ded8978",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/d66df8af-76bc-44d5-8aa7-0e266ded8978",
+      "fullName": "Arne Strickmann",
+      "displayName": "Arne Strickmann",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Co-founder",
+        "tagline": "Drinking coffee",
+        "university": "Others",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": null,
+        "location": "San Francisco, United States",
+        "githubUrl": "https://github.com/arnestrickmann",
+        "linkedinUrl": "https://www.linkedin.com/in/arnestrickmann/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "e3e50d2c-14e2-437b-8603-caed5d7a325b",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/e3e50d2c-14e2-437b-8603-caed5d7a325b",
+      "fullName": "Arpitha Ramegowda",
+      "displayName": "Arpitha",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Co-founder & CTO",
+        "tagline": null,
+        "university": "University of Southern California",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": "Master's Degree",
+        "location": "Brussels, Belgium",
+        "githubUrl": null,
+        "linkedinUrl": "https://www.linkedin.com/in/arpithadr/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "cbdda508-609d-452c-9b6a-f3d6261ce872",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/cbdda508-609d-452c-9b6a-f3d6261ce872",
+      "fullName": "Aryan J.",
+      "displayName": "Aryan",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Design Engineer • Open Source Builder • Founder @ AROICE",
+        "tagline": "Building products, crafting experiences, and turning ideas into reality.",
+        "university": "Indian Institute of Technology, Madras",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": "Bachelor's Degree",
+        "location": "Charkhi Dādri, India",
+        "githubUrl": "https://github.com/aryan-techie",
+        "linkedinUrl": "https://www.linkedin.com/in/aryantechie"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "c6584479-8773-42ce-b736-908e4e459397",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/c6584479-8773-42ce-b736-908e4e459397",
+      "fullName": "Asianna Haughton",
+      "displayName": "Asianna Haughton",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder",
+        "startup"
+      ],
+      "profile": {
+        "professionalSituation": "Student +Aspiring Startup Founder",
+        "tagline": "Lean Mean Ideating Machine",
+        "university": "Boston University",
+        "fieldOfStudy": "Data Science",
+        "academicDegree": "Masters",
+        "location": "Boston, United States",
+        "githubUrl": null,
+        "linkedinUrl": "https://www.linkedin.com/in/asianna-haughton/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "71a903d3-35bb-40eb-9b2d-a0dd9c8027ca",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/71a903d3-35bb-40eb-9b2d-a0dd9c8027ca",
+      "fullName": "AVINASH MEHROTRA",
+      "displayName": "Avinash",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": "Strategic thinking",
+        "university": "Massachusetts Institute of Technology (MIT)",
+        "fieldOfStudy": "Others",
+        "academicDegree": "Master's Degree",
+        "location": "Cambridge, United States",
+        "githubUrl": null,
+        "linkedinUrl": null
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "760436a9-f434-4d5f-a977-5f314f3790d6",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/760436a9-f434-4d5f-a977-5f314f3790d6",
+      "fullName": "Ayesha Dawodi",
+      "displayName": "Ayesha Dawodi",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Engineer, Builder",
+        "tagline": "Founder & AI Engineer building impactful, scalable products",
+        "university": "University of the People",
+        "fieldOfStudy": "Computer Science",
+        "academicDegree": "Bachelor",
+        "location": "Balkh, Afghanistan",
+        "githubUrl": "https://github.com/dlawiz83",
+        "linkedinUrl": null
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "0cd62c40-1c61-48f5-955d-a5bd4a2cf74c",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/0cd62c40-1c61-48f5-955d-a5bd4a2cf74c",
+      "fullName": "Ayoola Oluwanusin",
+      "displayName": "Ayo",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": null,
+        "university": "King's College London",
+        "fieldOfStudy": "Engineering (Civil, Mechanical, Electrical, Chemical, etc.)",
+        "academicDegree": "Bachelor's Degree",
+        "location": "London, United Kingdom",
+        "githubUrl": "https://github.com/ayotestsinprod",
+        "linkedinUrl": "https://www.linkedin.com/in/ayooluwanusin97/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "70d323bb-6e19-42bd-a770-f444c1ce1e00",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/70d323bb-6e19-42bd-a770-f444c1ce1e00",
+      "fullName": "ayu",
+      "displayName": "ayu",
+      "profileCompleteness": 5,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": null,
+        "university": null,
+        "fieldOfStudy": "Computer Engineering",
+        "academicDegree": "Bachelors",
+        "location": "Navi Mumbai, India ",
+        "githubUrl": "https://github.com/ayushb03",
+        "linkedinUrl": "https://linkedin.com/in/ayushbodade"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "dc97f77d-1d66-40a3-8551-d58cf1783b2f",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/dc97f77d-1d66-40a3-8551-d58cf1783b2f",
+      "fullName": "baiwenz",
+      "displayName": "baiwenz",
+      "profileCompleteness": 5,
+      "startupSignals": [
+        "founder",
+        "ceo"
+      ],
+      "profile": {
+        "professionalSituation": "Founder, VC, CEO, Classical Singer",
+        "tagline": null,
+        "university": "Boston University",
+        "fieldOfStudy": "CS + Finance",
+        "academicDegree": null,
+        "location": "New York, United States",
+        "githubUrl": null,
+        "linkedinUrl": "http://linkedin.com/in/baiwenzheng"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "023a72bf-5b6f-497c-9b17-6133040c0798",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/023a72bf-5b6f-497c-9b17-6133040c0798",
+      "fullName": "Bedo Hamza",
+      "displayName": "Bedo - bionic-os.com",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": "the world as will and idea",
+        "university": "Swiss Federal Institute of Technology, Zurich (ETH)",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": "Certificate Program",
+        "location": "Zürich, Switzerland",
+        "githubUrl": null,
+        "linkedinUrl": null
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "34fc2144-3941-4c88-b27b-304bad1f150b",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/34fc2144-3941-4c88-b27b-304bad1f150b",
+      "fullName": "Bendjedid Rachad Sanoussi",
+      "displayName": "Bendjedid Rachad Sanoussi",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "entrepreneur"
+      ],
+      "profile": {
+        "professionalSituation": "Student, Entrepreneur",
+        "tagline": "Aspiring Policy Analyst| ICT Specialist| Climate change advocate| PMP® |CCNA® |  AgriTech| Tourism | Digital Marketing | MarCom®| Advocacy| Youth Engagement| SDGs",
+        "university": "Others",
+        "fieldOfStudy": "MANAGEMENT INFORMATION SYSTEMS AND STATISTICS",
+        "academicDegree": "Doctoral Degree (PhD)",
+        "location": "Arrifes, Morocco",
+        "githubUrl": null,
+        "linkedinUrl": "https://www.linkedin.com/in/rachadsanoussi/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "be02f3b1-37bd-4106-832d-b5f61cf37a12",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/be02f3b1-37bd-4106-832d-b5f61cf37a12",
+      "fullName": "Bhavdeep Singh",
+      "displayName": "BhavdeepSingh",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": null,
+        "university": "Arizona State University",
+        "fieldOfStudy": "Computer Science",
+        "academicDegree": "Master's",
+        "location": "New York City, India",
+        "githubUrl": "https://github.com/bhavdeep98/",
+        "linkedinUrl": "https://www.linkedin.com/in/bssachde"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "363138b8-d565-429f-9f06-f18e8bd1f848",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/363138b8-d565-429f-9f06-f18e8bd1f848",
+      "fullName": "Binhui Shao",
+      "displayName": "BS",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Founder",
+        "tagline": null,
+        "university": "Cambridge university",
+        "fieldOfStudy": "Education",
+        "academicDegree": "PhD",
+        "location": "Cambridge , United Kingdom",
+        "githubUrl": "Www.github.com/smiles9",
+        "linkedinUrl": "LinkedIn.com/in/binhuishao"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "4d461c8d-4200-4a68-b466-cc3f614be8a2",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/4d461c8d-4200-4a68-b466-cc3f614be8a2",
+      "fullName": "Briac",
+      "displayName": "Briac",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "entrepreneur"
+      ],
+      "profile": {
+        "professionalSituation": "Entrepreneur & part time research, Ex tech management consultant",
+        "tagline": null,
+        "university": "Others",
+        "fieldOfStudy": "Economics - Political Economy of Tech",
+        "academicDegree": "BA & BA",
+        "location": "Paris, France",
+        "githubUrl": "https://github.com/briacSck",
+        "linkedinUrl": "https://www.linkedin.com/in/briac-sockalingum-student-sciences-politiques-blockchain-technology-economics-/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "dd579842-b07a-46b1-b6a6-70f27cfabfd7",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/dd579842-b07a-46b1-b6a6-70f27cfabfd7",
+      "fullName": "Bruno Galdos",
+      "displayName": "Bruno",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder"
+      ],
+      "profile": {
+        "professionalSituation": "Co-founder",
+        "tagline": null,
+        "university": "RWTH Aachen",
+        "fieldOfStudy": "Computer Science",
+        "academicDegree": "Master's",
+        "location": "Munich, Germany",
+        "githubUrl": "https://github.com/brunogaldos",
+        "linkedinUrl": "https://www.linkedin.com/in/bruno-galdos-a25353a9/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "a5b1263b-7e12-4a24-8616-6877413e5051",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/a5b1263b-7e12-4a24-8616-6877413e5051",
+      "fullName": "Moad Larabi",
+      "displayName": null,
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "founder",
+        "ceo"
+      ],
+      "profile": {
+        "professionalSituation": "CEO & Founder",
+        "tagline": null,
+        "university": "INSEAD",
+        "fieldOfStudy": "Business Administration",
+        "academicDegree": "Master's",
+        "location": "Paris, France",
+        "githubUrl": "https://github.com/Modix-larbix",
+        "linkedinUrl": "https://www.linkedin.com/in/moad-larabi/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "734cae03-fc8f-4da1-b488-61b3d62b3c4a",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/734cae03-fc8f-4da1-b488-61b3d62b3c4a",
+      "fullName": "Muhammad Abdullah Goher",
+      "displayName": "Abdullah Goher",
+      "profileCompleteness": 6,
+      "startupSignals": [
+        "startup"
+      ],
+      "profile": {
+        "professionalSituation": "Founding Engineer @ AI Start up",
+        "tagline": null,
+        "university": "University of Pennsylvania",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": "Bachelor's Degree",
+        "location": "Philadelphia, United States",
+        "githubUrl": "https://github.com/Abdullah3245",
+        "linkedinUrl": "https://www.linkedin.com/in/abdullah-goher/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "7b592d6e-2613-4c0b-9400-f3962c03e621",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/7b592d6e-2613-4c0b-9400-f3962c03e621",
+      "fullName": "Nico Suter",
+      "displayName": null,
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "entrepreneur"
+      ],
+      "profile": {
+        "professionalSituation": "Student",
+        "tagline": "CS & ETH Zurich, Entrepreneur and Software Engineer",
+        "university": "Swiss Federal Institute of Technology, Zurich (ETH)",
+        "fieldOfStudy": "COMPUTER SCIENCE",
+        "academicDegree": "Bachelor's Degree",
+        "location": "Zürich, Switzerland",
+        "githubUrl": "https://github.com/nicosuter",
+        "linkedinUrl": "https://www.linkedin.com/in/nico-s/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    },
+    {
+      "sourceUserId": "ae5fa127-42ed-4120-95ce-1a8b3457512d",
+      "publicProfileUrl": "https://projects.hack-nation.ai/#/profile/ae5fa127-42ed-4120-95ce-1a8b3457512d",
+      "fullName": "Tianasoa Avotriniaina Liane ANDRIAMBELOZAKA",
+      "displayName": "Avotriniaina",
+      "profileCompleteness": 7,
+      "startupSignals": [
+        "entrepreneur"
+      ],
+      "profile": {
+        "professionalSituation": "Entrepreneur",
+        "tagline": "I rock at front-end development",
+        "university": "Others",
+        "fieldOfStudy": "HUMANITIES",
+        "academicDegree": "Bachelor's Degree",
+        "location": "Antananarivo, Madagascar",
+        "githubUrl": "https://github.com/Vahy777",
+        "linkedinUrl": "https://www.linkedin.com/in/avotriniaina-liane-andriambelozaka-276725190/"
+      },
+      "researchStatus": "queued",
+      "researchInstructions": "Identify a current startup or company explicitly associated with this person. Use only public sources, cite URLs, and leave the company unresolved when identity or affiliation is ambiguous. Prefer the linked GitHub and LinkedIn profiles when available. Do not infer a company from a job title alone."
+    }
+  ]
+}
