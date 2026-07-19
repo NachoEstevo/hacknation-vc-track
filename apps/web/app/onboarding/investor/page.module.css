@@ -81,7 +81,7 @@
 .builder {
   display: flex;
   justify-content: center;
-  padding: 24px 64px 96px;
+  padding: 44px 64px 96px;
 }
 
 .main {
@@ -353,6 +353,6 @@
   }
 
   .builder {
-    padding: 20px 24px 64px;
+    padding: 34px 24px 64px;
   }
 }
