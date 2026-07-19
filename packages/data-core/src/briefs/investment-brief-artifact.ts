@@ -103,7 +103,10 @@ export function toInvestmentBriefArtifact(run: InvestmentBriefRun): InvestmentBr
       evidence: bundle.evidence.filter(({ visibility }) => visibility === "public").map(artifactEvidence),
     })),
     evaluations: run.evaluations.map((evaluation) => publicEvaluation(evaluation, publicIds)),
-    ranking: run.ranking.map(({ rank, evaluation }) => ({ rank, evaluation: publicEvaluation(evaluation, publicIds) })),
+    ranking: run.ranking.map((result) => ({
+      ...result,
+      evaluation: publicEvaluation(result.evaluation, publicIds),
+    })),
     briefs: run.briefs.map((brief) => publicBrief(brief, publicIds)),
     failures: run.failures.map((failure) => ({
       companyId: failure.companyId,

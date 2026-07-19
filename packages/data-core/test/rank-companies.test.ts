@@ -25,7 +25,7 @@ function evaluation(
 }
 
 describe("rankCompanies", () => {
-  it("uses the exact approved raw-fit, coverage, Product/Execution, stable-ID comparator", () => {
+  it("uses confidence-adjusted fit, coverage, Product/Execution, and stable ID", () => {
     const result = rankCompanies([
       evaluation("missing-fit", null, 100, 100),
       evaluation("lower-fit", 80, 100, 100),
@@ -36,24 +36,24 @@ describe("rankCompanies", () => {
     ]);
 
     expect(result.map(({ rank, evaluation: item }) => [rank, item.companyId])).toEqual([
-      [1, "company-a"],
-      [2, "company-b"],
-      [3, "lower-product"],
-      [4, "low-coverage"],
-      [5, "lower-fit"],
-      [6, "missing-fit"],
+      [1, "lower-fit"],
+      [2, "company-a"],
+      [3, "company-b"],
+      [4, "lower-product"],
+      [5, "missing-fit"],
+      [6, "low-coverage"],
     ]);
   });
 
-  it("ranks higher raw thesis fit first even when its coverage is lower", () => {
+  it("lets stronger evidence outrank a sparse perfect fit", () => {
     const result = rankCompanies([
       evaluation("perfect-low-coverage", 100, 43.47826086956522, 100),
       evaluation("supported", 84.375, 69.56521739130434, 80),
     ]);
 
     expect(result.map(({ evaluation: item }) => item.companyId)).toEqual([
-      "perfect-low-coverage",
       "supported",
+      "perfect-low-coverage",
     ]);
   });
 

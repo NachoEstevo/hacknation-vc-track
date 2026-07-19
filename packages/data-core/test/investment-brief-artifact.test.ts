@@ -88,6 +88,7 @@ describe("toInvestmentBriefArtifact", () => {
     });
     expect(artifact.evaluations[0]!.criteria[0]!.evidenceIds).toEqual([]);
     expect(artifact.ranking[0]!.evaluation.criteria[0]!.evidenceIds).toEqual([]);
+    expect(artifact.ranking[0]!.score).toBe(run.ranking[0]!.score);
     expect(artifact.failures).toEqual([{
       companyId: "company-00",
       stage: "extract_claim_candidates",

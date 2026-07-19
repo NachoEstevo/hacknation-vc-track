@@ -64,9 +64,18 @@ if (@($artifact.briefs | Where-Object { $_.generatedAt -lt $artifact.generatedAt
 - Application code retains only proposed citations whose company-local excerpts or payloads deterministically ground the claim field and value. A predicate made entirely of generic words never matches by default. The only generic assessment predicate with a domain rule is `market=true`, which requires customer/market demand or demand-specific objects: signed contracts, agreements, deals, orders, or pilots; requested demos, trials, quotes, proposals, pilots, or product access; or paid pilots, purchases, or customers. Sign-ins, password-reset requests, and cryptographically signed requests are unrelated even when repeated across independent sources. Merely having Clay and website records is insufficient. Duplicate records and multiple pages controlled by the same authority cannot self-corroborate; uncertain independence earns zero. Grounded contrary values force `conflicted`. Model-authored directness, independence lists, and conflict booleans are absent from the request schema and ignored if a legacy fake supplies them.
 - Canonical country codes are authoritative when present. The composite B2B-software criterion preserves one criterion and its original weight. Explicit evidence must support both the business model and an owned SaaS, software product, API, app, or ERP for a match; one supported side is partial; clear negative evidence is conflict; taxonomy or a model claim alone cannot establish it.
 - Visible execution requires a concrete product, pricing, changelog, or public GitHub signal; a bare homepage or model claim is insufficient.
-- Ranking uses exactly four deterministic keys: descending raw Thesis Fit, descending Evidence Coverage, descending Product/Execution axis score, then ascending stable company ID. No other evaluation field participates in the comparator.
+- Ranking first places blocking required/excluded conflicts in the `excluded` tier. For viable companies it shrinks Thesis Fit toward a neutral 50 according to Evidence Coverage, then combines 65% confidence-adjusted fit, 15% coverage, 10% Product/Execution, and 10% Founder signal. Missing founder or product evidence stays neutral rather than becoming a zero. Results expose the composite score, adjusted fit, tier, and matched/partial/missing/conflicting criterion IDs; stable company ID remains the final tie-breaker.
 - Public website/GitHub enrichment is excluded when both its resolved domain and profile-name identity disagree with the seed company. Internal Clay evidence remains available, but mismatched public evidence cannot influence claims, axes, ranking, or briefs.
 - A blocking required/excluded conflict yields `pass_for_thesis`; under 30% coverage or unknown fit yields `needs_evidence`; at least 70% fit and 60% coverage yields `investigate`; other cases yield `watch`.
+
+## AI request boundaries
+
+- Investor queries are trimmed, capped at 2,000 characters, and sent as untrusted `input`; trusted parsing rules stay in `instructions`.
+- The application owns thesis IDs, the original normalized query, generation time, and prompt version.
+- Structured schemas cap criteria and response-list sizes, and each request has a bounded output budget.
+- OpenAI request storage is disabled with `store: false`.
+- Evidence is explicitly treated as untrusted data, so instructions embedded in websites or documents must not override system behavior.
+- Luna remains the high-volume extraction model and Sol the quality-first brief model, following their workload roles rather than applying one model everywhere.
 
 ## Citation rejection and retries
 
@@ -76,7 +85,7 @@ Requests retry HTTP 429, 500, 502, 503, and 504 at most twice, after 500 ms and 
 
 ## Live demo result and known gaps
 
-The final accepted run generated at `2026-07-19T01:45:17.581Z` is `completed`: 50 evaluations, 50 ranked companies, three requested briefs, three citation-valid briefs, and no failures. The exact approved comparator selects Icon, Steal These Thoughts!, and Julian Jewel's AI Bot. Icon and Steal These Thoughts! each have 100% known fit and 60.870% coverage and are `investigate`; Julian has 100% known fit and 43.478% coverage and is `watch`. Valid briefs were published for all three. The artifact contains 35 website records and one GitHub record, all public. No company receives direct-market-evidence points from generic evidence.
+The committed artifact predates the confidence-aware ranking described above. Its final accepted run generated at `2026-07-19T01:45:17.581Z` is `completed`: 50 evaluations, 50 ranked companies, three requested briefs, three citation-valid briefs, and no failures. The exact approved comparator selects Icon, Steal These Thoughts!, and Julian Jewel's AI Bot. Icon and Steal These Thoughts! each have 100% known fit and 60.870% coverage and are `investigate`; Julian has 100% known fit and 43.478% coverage and is `watch`. Valid briefs were published for all three. The artifact contains 35 website records and one GitHub record, all public. No company receives direct-market-evidence points from generic evidence.
 
 The five executable criterion distributions are: geography 50 match; composite B2B software 2 conflict, 7 partial, and 41 missing; team size 5 match and 45 partial; stage 50 missing; visible execution 22 match and 28 missing. RunRex and Tech On Toast contain explicit negative evidence for the composite; no company has enough cited evidence for both sides to reach a composite match. The fit distribution remains non-degenerate: five companies scored 100%, 15 scored 82.143%, 21 scored 75%, four scored 73.684%, three scored 66.667%, one scored 60.526%, and one scored 50%.
 
