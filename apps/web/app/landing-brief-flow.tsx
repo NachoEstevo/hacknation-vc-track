@@ -70,7 +70,7 @@ export function LandingBriefFlow() {
         <div className={styles.searchBoxBar}>
           <button type="button" className={styles.scopeChip}>
             <Layers size={13} aria-hidden="true" />
-            <span>All sources</span>
+            <span>undr engine</span>
             <ChevronDown size={12} aria-hidden="true" />
           </button>
           <span className={styles.barSpacer} aria-hidden="true" />
