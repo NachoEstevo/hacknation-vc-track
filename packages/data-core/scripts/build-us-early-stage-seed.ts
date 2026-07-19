@@ -17,7 +17,7 @@ if (!inputPath || !existingPath || !outputPath || !auditPath) {
   const accepted = rows.filter((_, index) => assessments[index]?.decision === "accepted");
   const current = parseClayCsv(existing);
   const header = ["Small Companies, Software & IT, US & UK", "Name", "Description", "Primary Industry", "Size", "Type", "Location", "Country", "Domain", "LinkedIn URL"];
-  const csvValue = (value: string | null | undefined): string => `"${(value ?? "").replaceAll('"', '""')}"`;
+  const csvValue = (value: string | null | undefined): string => `"${(value ?? "").replace(/[ \t]+(?=\r?\n|$)/gu, "").replaceAll('"', '""')}"`;
   const converted = accepted.map((row) => [
     "", row.Nombre, row["Descripción concreta del producto"], row.Sector,
     row["Cantidad estimada de empleados"], "Privately Held", row["Ciudad y estado"], "United States",
