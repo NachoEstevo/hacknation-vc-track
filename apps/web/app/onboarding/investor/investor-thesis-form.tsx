@@ -30,7 +30,7 @@ const THESIS_PRESETS: readonly { label: string; text: string }[] = [
     text: "AI-native products with real users and early traction at seed stage, built by technical founders who ship fast and publish their work.",
   },
   {
-    label: "Fintech · emerging markets",
+    label: "Emerging-market fintech",
     text: "Fintech infrastructure for Latin America at pre-seed, founded by technical operators who understand regulated markets, with a working product.",
   },
   {
