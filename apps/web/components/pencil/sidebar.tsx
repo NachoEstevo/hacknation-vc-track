@@ -19,6 +19,7 @@ import {
 import clsx from "clsx";
 import styles from "./sidebar.module.css";
 import { Avatar } from "./avatar";
+import { UsageMeter } from "../usage-meter";
 
 export interface SidebarNavItem {
   label: string;
@@ -123,6 +124,8 @@ export function Sidebar({ collapsed, onToggleCollapsed, onNewSearch, recentSearc
       ) : null}
 
       <div className={styles.footSpacer} aria-hidden="true" />
+
+      {!collapsed ? <UsageMeter /> : null}
 
       <Link
         href={"/investor/settings" as Route}
