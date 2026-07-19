@@ -29,6 +29,7 @@ import { searchRegisteredFounders } from "@/lib/search/registered-founders.serve
 import { listClayCatalogCompanies } from "@/lib/catalog/index.server";
 import { searchClayCatalogRows } from "@/lib/catalog/search-catalog";
 import { searchGitHubRepositories } from "@/lib/connectors/github/github-search.server";
+import { searchProspects } from "@/lib/catalog/hack-nation-prospects.server";
 import { isTavilyEnabled, tavilyExtract, tavilySearch } from "@/lib/connectors/tavily/tavily.server";
 import { requireUserInProduction } from "@/lib/supabase/api-auth";
 
@@ -64,10 +65,18 @@ This search is restricted to ${geography.label}${geography.kind === "region" ? "
 - If the written request names a different geography, tell the investor about the conflict in one line and follow the composer constraint.`
     : "";
 
+  const undrEngine = !controls?.dataSource || controls.dataSource === "undr_engine";
   const dataSourceBlock = controls?.dataSource === "web_search"
     ? `## Data source (set by the investor in the composer)
 This search runs on web search only — undr's internal bases are not enabled for it. Do not mention unavailable sources; just research the open web well.`
-    : "";
+    : undrEngine
+      ? `## Data source: undr engine (the default)
+Your PRIMARY source is undr's curated prospect base: researched founders with priority tiers, outreach scores, evidence status and public profiles, assembled by undr's own research.
+- FIRST move of every research run: call search_prospect_base with 2-3 keyword variants of the request (sector, product, technology, geography). Build the bench from matching records before anything else.
+- Report each matching base person via report_candidate with sourceKind "prospect_base", links taken from the record (LinkedIn, GitHub, company site, Hack-Nation profile — never invented), and a score informed by the record's outreach score, tier, and fit to the request. Reflect weak evidence status as lower confidence.
+- Base records have gaps ("No encontrado" fields). Use the web tools to VERIFY and COMPLETE gaps on base candidates — the base stays the backbone, the web fills holes.
+- Only when the base cannot fill the target (too few matching records) do you source the remaining slots from the open web as usual, reporting those with their true sourceKind.`
+      : "";
 
   return `You are undr's sourcing agent: an evidence-first venture scout that finds real people (founders, technical builders, operators) matching what an investor is looking for. You never invent a person, company, fact, or URL. Every claim you make traces back to a tool result.
 
@@ -89,8 +98,9 @@ The investor asked for ${target} candidate card${target === 1 ? "" : "s"}. That 
 ## Research procedure
 When you research:
 1. Open with one line: **Plan:** followed by the angles you will take.
-2. Use your tools iteratively, most-promising first:
-   - ${tavilyEnabled ? "tavily_search and web_search — two independent engines that index the web differently; together they are your main instrument. OPEN every research angle with tavily_search, then run web_search on the same angle (same query or a locally-adapted one — translate to the local language where useful). Never run an angle on one engine only." : "web_search — your main instrument."} Compose focused, people-centric queries (e.g. "fintech infrastructure founders Mexico pre-seed 2025", "site:linkedin.com/in CTO payments São Paulo", accelerator/demo-day batch lists, funding announcements). Run several distinct angles, not one broad query.${tavilyEnabled ? `
+2. Use your tools iteratively, most-promising first:${undrEngine ? `
+   - search_prospect_base — the FIRST call of every research run (see the Data source section above).` : ""}
+   - ${tavilyEnabled ? `tavily_search and web_search — two independent engines that index the web differently; together they are your main ${undrEngine ? "gap-filling and verification instrument" : "instrument"}. OPEN every research angle with tavily_search, then run web_search on the same angle (same query or a locally-adapted one — translate to the local language where useful). Never run an angle on one engine only.` : "web_search — your main instrument."} Compose focused, people-centric queries (e.g. "fintech infrastructure founders Mexico pre-seed 2025", "site:linkedin.com/in CTO payments São Paulo", accelerator/demo-day batch lists, funding announcements). Run several distinct angles, not one broad query.${tavilyEnabled ? `
    - read_page — fetches the full content of up to 3 specific URLs from earlier results. Use it before reporting a candidate whose evidence is thin (verify identity, role, and company on the primary source) and to pull details a snippet cut off. Do not read pages unrelated to a candidate at hand.` : ""}${controls?.dataSource === "web_search" ? "" : `
    - search_registered_founders and search_internal_catalog — undr's own bases; call each once with the best keyword.
    - search_github — when the profile sought is technical; active repos often name real builders.`}
@@ -221,6 +231,26 @@ export async function POST(request: NextRequest) {
       },
     }),
   };
+
+  // undr engine mode (the default): the curated prospect base is the primary
+  // source; the tool only exists when the prompt advertises it.
+  const undrEngineMode = !controls?.dataSource || controls.dataSource === "undr_engine";
+  if (undrEngineMode) {
+    tools.search_prospect_base = defineTool({
+      description:
+        "Search undr's curated prospect base: researched founders with priority tiers, outreach scores, evidence status and public profiles. PRIMARY source — call it with 2-3 keyword variants before any web search.",
+      inputSchema: z.object({
+        query: z.string().describe("Keywords: sector, product, technology, geography — one angle per call"),
+      }),
+      execute: async ({ query }: { query: string }) => {
+        const results = await searchProspects(query, 10);
+        return {
+          count: results.length,
+          prospects: results.map(({ record, matchScore }) => ({ ...record, matchScore })),
+        };
+      },
+    });
+  }
 
   // The system prompt only advertises these when the composer has not
   // restricted the search to web-only, so registration must match it.

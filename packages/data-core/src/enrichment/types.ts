@@ -1,4 +1,4 @@
-import type { CapturedPage, PageFailure } from "../web/types.js";
+import type { CapturedPage, PageFailure } from "../web/types";
 
 export interface FounderWebCandidate {
   name: string;

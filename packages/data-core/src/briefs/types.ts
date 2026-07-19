@@ -1,4 +1,4 @@
-import type { StableCompanySeed } from "../types.js";
+import type { StableCompanySeed } from "../types";
 
 export interface EvidenceRecord {
   evidenceId: string;

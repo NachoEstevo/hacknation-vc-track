@@ -72,6 +72,7 @@ function dossierTextOf(messages: UIMessage[]): string {
 }
 
 const PROFILE_TOOL_LABELS: Record<string, string> = {
+  "tool-lookup_prospect": "undr base",
   "tool-web_search": "Web",
   "tool-tavily_search": "Deep search",
   "tool-read_page": "Reading",

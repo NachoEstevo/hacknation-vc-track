@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { validateDemoFounderProfiles, type DemoFounderProfileArtifact } from "../src/founder-profile-contract.js";
+import { validateDemoFounderProfiles, type DemoFounderProfileArtifact } from "../src/founder-profile-contract";
 
 const artifactPath = fileURLToPath(new URL("../../../data/enriched/demo-founder-profiles.json", import.meta.url));
 

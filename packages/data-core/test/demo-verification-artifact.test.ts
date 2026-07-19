@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { buildRelyDemoVerification } from "../src/demo-verification.js";
+import { buildRelyDemoVerification } from "../src/demo-verification";
 
 const artifactPath = fileURLToPath(new URL("../../../data/enriched/rely-demo-verification.json", import.meta.url));
 

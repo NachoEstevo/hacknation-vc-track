@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import type { ClaimTrustBreakdown, EvidenceRecord } from "./types.js";
+import type { ClaimTrustBreakdown, EvidenceRecord } from "./types";
 
 const SOURCE_POINTS: Record<EvidenceRecord["sourceType"], number> = {
   stripe_private: 40,

@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import {
   selectHackNationStartupCandidates,
   type HackNationPublicPerson,
-} from "../src/hack-nation/startup-candidates.js";
+} from "../src/hack-nation/startup-candidates";
 
 const peopleEndpoint = "https://projects.hack-nation.ai/.netlify/functions/bff-public-people-v2?limit=5000";
 const profilesEndpoint = "https://projects.hack-nation.ai/.netlify/functions/bff-public-profiles-v2";

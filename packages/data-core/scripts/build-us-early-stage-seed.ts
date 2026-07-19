@@ -1,9 +1,9 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { parseClayCsv } from "../src/parse-clay-csv.js";
-import { buildImportBatch } from "../src/build-import-batch.js";
-import { normalizeLinkedInCompanyUrl } from "../src/normalize-company.js";
-import { assessUsEarlyStageRow, parseUsEarlyStageCsv } from "../src/select-us-early-stage.js";
+import { parseClayCsv } from "../src/parse-clay-csv";
+import { buildImportBatch } from "../src/build-import-batch";
+import { normalizeLinkedInCompanyUrl } from "../src/normalize-company";
+import { assessUsEarlyStageRow, parseUsEarlyStageCsv } from "../src/select-us-early-stage";
 
 const [inputPath, existingPath, outputPath, auditPath] = process.argv.slice(2);
 

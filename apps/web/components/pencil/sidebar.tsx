@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   Bookmark,
   History,
+  Info,
   Kanban,
   PanelLeftClose,
   PanelLeftOpen,
@@ -132,6 +133,17 @@ export function Sidebar({ collapsed, onToggleCollapsed, onNewSearch, recentSearc
       >
         <Settings aria-hidden="true" />
         {!collapsed ? <span>Settings</span> : null}
+      </Link>
+
+      <Link
+        href={"/investor/about" as Route}
+        className={clsx(styles.item, styles.settingsItem, collapsed && styles.itemCollapsed)}
+        aria-current={pathname.startsWith("/investor/about") ? "page" : undefined}
+        aria-label={collapsed ? "About" : undefined}
+        title={collapsed ? "About" : undefined}
+      >
+        <Info aria-hidden="true" />
+        {!collapsed ? <span>About</span> : null}
       </Link>
 
       <div className={clsx(styles.user, collapsed && styles.userCollapsed)}>

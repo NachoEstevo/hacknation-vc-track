@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extractCompanyProfile } from "../src/enrichment/extract-company-profile.js";
+import { extractCompanyProfile } from "../src/enrichment/extract-company-profile";
 
 describe("extractCompanyProfile", () => {
   it("extracts company facts, social links, and explicit founder candidates", () => {

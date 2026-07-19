@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { rankCompanies } from "../src/briefs/rank-companies.js";
-import type { AssessmentAxis, CompanyEvaluation } from "../src/briefs/types.js";
+import { rankCompanies } from "../src/briefs/rank-companies";
+import type { AssessmentAxis, CompanyEvaluation } from "../src/briefs/types";
 
 function axis(
   name: AssessmentAxis["axis"],

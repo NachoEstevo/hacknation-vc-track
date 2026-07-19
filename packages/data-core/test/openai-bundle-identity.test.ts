@@ -1,8 +1,8 @@
 import { expect, it } from "vitest";
-import { loadOpenAIConfig } from "../src/briefs/openai-config.js";
-import { extractClaimCandidates, type OpenAIStructuredTaskDependencies } from "../src/briefs/openai-structured-tasks.js";
-import type { CompanyEvidenceBundle } from "../src/briefs/types.js";
-import type { StableCompanySeed } from "../src/types.js";
+import { loadOpenAIConfig } from "../src/briefs/openai-config";
+import { extractClaimCandidates, type OpenAIStructuredTaskDependencies } from "../src/briefs/openai-structured-tasks";
+import type { CompanyEvidenceBundle } from "../src/briefs/types";
+import type { StableCompanySeed } from "../src/types";
 
 const company: StableCompanySeed = {
   stableId: "acme", name: "Acme", description: "Workflow software", primaryIndustry: "Software", sizeBand: "1-10",

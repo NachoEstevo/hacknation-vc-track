@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { buildEvidenceIndex } from "../src/briefs/build-evidence-index.js";
-import type { CompanyEnrichmentResult } from "../src/enrichment/types.js";
-import type { StableCompanySeed } from "../src/types.js";
+import { buildEvidenceIndex } from "../src/briefs/build-evidence-index";
+import type { CompanyEnrichmentResult } from "../src/enrichment/types";
+import type { StableCompanySeed } from "../src/types";
 
 const company: StableCompanySeed = {
   stableId: "acme-stable-id",

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { discoverCompanyPages } from "../src/web/discover-company-pages.js";
+import { discoverCompanyPages } from "../src/web/discover-company-pages";
 
 describe("discoverCompanyPages", () => {
   it("keeps three prioritized same-origin company pages", () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { evaluateCompany } from "../src/briefs/evaluate-company.js";
-import type { ClaimCandidate, CompanyEvidenceBundle, FundThesis } from "../src/briefs/types.js";
+import { evaluateCompany } from "../src/briefs/evaluate-company";
+import type { ClaimCandidate, CompanyEvidenceBundle, FundThesis } from "../src/briefs/types";
 
 const bundle: CompanyEvidenceBundle = {
   companyId: "acme",

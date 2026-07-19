@@ -1,5 +1,5 @@
-import type { FundThesis, ThesisCriterion } from "./types.js";
-import { validateFundThesis } from "./validate-thesis.js";
+import type { FundThesis, ThesisCriterion } from "./types";
+import { validateFundThesis } from "./validate-thesis";
 
 const COUNTRY_CODES: Record<string, string> = {
   "united states": "US",

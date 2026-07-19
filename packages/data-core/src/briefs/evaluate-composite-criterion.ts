@@ -1,5 +1,5 @@
-import { softwareProductSignals } from "./software-product-evidence.js";
-import type { CompanyEvidenceBundle, CriterionEvaluation, ThesisCriterion } from "./types.js";
+import { softwareProductSignals } from "./software-product-evidence";
+import type { CompanyEvidenceBundle, CriterionEvaluation, ThesisCriterion } from "./types";
 
 const B2B_POSITIVE = [
   /\bb2b\b/iu,

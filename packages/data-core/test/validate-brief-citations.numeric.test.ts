@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { validateBriefCitations } from "../src/briefs/validate-brief-citations.js";
-import type { EvidenceRecord, InvestmentBrief } from "../src/briefs/types.js";
+import { validateBriefCitations } from "../src/briefs/validate-brief-citations";
+import type { EvidenceRecord, InvestmentBrief } from "../src/briefs/types";
 
 function evidenceWithValue(value: string): EvidenceRecord[] {
   return [{

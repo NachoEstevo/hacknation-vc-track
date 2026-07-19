@@ -17,6 +17,7 @@ const DATA_SOURCE_OPTIONS: readonly {
   label: string;
   enabled: boolean;
 }[] = [
+  { value: "undr_engine", label: "undr engine", enabled: true },
   { value: "web_search", label: "Web search", enabled: true },
   { value: "internal_catalog", label: "Internal catalog", enabled: false },
   { value: "registered_founders", label: "Registered founders", enabled: false },
@@ -158,13 +159,13 @@ export function HomeSearchComposer(_props: { fallbackQuery?: string }) {
   const { startSearchSession, searchSessionError } = useWorkspace();
   const [error, setError] = useState("");
   const [openMenu, setOpenMenu] = useState<"source" | "geography" | "count" | null>(null);
-  const [dataSource, setDataSource] = useState<SearchDataSource>("web_search");
+  const [dataSource, setDataSource] = useState<SearchDataSource>("undr_engine");
   const [geography, setGeography] = useState<SearchGeography>(ALL_LOCATIONS);
   const [targetCandidates, setTargetCandidates] = useState<number>(DEFAULT_TARGET_CANDIDATES);
   const [geoQuery, setGeoQuery] = useState("");
 
   const sourceLabel =
-    DATA_SOURCE_OPTIONS.find((option) => option.value === dataSource)?.label ?? "Web search";
+    DATA_SOURCE_OPTIONS.find((option) => option.value === dataSource)?.label ?? "undr engine";
 
   const hasGeoQuery = geoQuery.trim().length > 0;
   const filteredRegions = hasGeoQuery

@@ -1,4 +1,4 @@
-import type { EvidenceRecord } from "./types.js";
+import type { EvidenceRecord } from "./types";
 
 export interface GroundClaimEvidenceInput {
   predicate: string;

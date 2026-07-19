@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { recommendCompany } from "../src/briefs/recommend-company.js";
-import type { CompanyEvaluation } from "../src/briefs/types.js";
+import { recommendCompany } from "../src/briefs/recommend-company";
+import type { CompanyEvaluation } from "../src/briefs/types";
 
 function evaluation(overrides: Partial<CompanyEvaluation> = {}): CompanyEvaluation {
   return {

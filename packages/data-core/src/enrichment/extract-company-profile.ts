@@ -1,6 +1,6 @@
 import { load } from "cheerio";
-import type { CapturedPage } from "../web/types.js";
-import type { ExtractedCompanyProfile, FounderWebCandidate } from "./types.js";
+import type { CapturedPage } from "../web/types";
+import type { ExtractedCompanyProfile, FounderWebCandidate } from "./types";
 
 function strings(value: unknown): string[] {
   if (typeof value === "string") return [value];

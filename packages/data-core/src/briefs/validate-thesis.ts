@@ -1,4 +1,4 @@
-import type { FundThesis, ThesisCriterion } from "./types.js";
+import type { FundThesis, ThesisCriterion } from "./types";
 
 const CATEGORIES = new Set<ThesisCriterion["category"]>([
   "geography", "industry", "company_size", "stage", "founder", "market", "product", "traction", "exclusion", "custom",

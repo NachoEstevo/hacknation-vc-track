@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { OpenAIConfigError, loadOpenAIConfig } from "../src/briefs/openai-config.js";
+import { OpenAIConfigError, loadOpenAIConfig } from "../src/briefs/openai-config";
 import {
   OpenAIStructuredTaskError,
   createOpenAIResponse,
@@ -7,9 +7,9 @@ import {
   extractClaimCandidates,
   parseThesis,
   type OpenAIStructuredTaskDependencies,
-} from "../src/briefs/openai-structured-tasks.js";
-import type { CompanyEvaluation, CompanyEvidenceBundle, FundThesis } from "../src/briefs/types.js";
-import type { StableCompanySeed } from "../src/types.js";
+} from "../src/briefs/openai-structured-tasks";
+import type { CompanyEvaluation, CompanyEvidenceBundle, FundThesis } from "../src/briefs/types";
+import type { StableCompanySeed } from "../src/types";
 describe("loadOpenAIConfig", () => {
   it("requires an API key without exposing its value", () => {
     expect(() => loadOpenAIConfig({})).toThrow(OpenAIConfigError);

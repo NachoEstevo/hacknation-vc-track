@@ -1,5 +1,5 @@
 import { parse } from "csv-parse/sync";
-import { normalizeDomain } from "./normalize-company.js";
+import { normalizeDomain } from "./normalize-company";
 
 export interface UsEarlyStageRow {
   Rank?: string;

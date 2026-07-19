@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
-import type { CompanyEnrichmentResult, GitHubEvidence } from "../enrichment/types.js";
-import type { StableCompanySeed } from "../types.js";
-import type { CompanyEvidenceBundle, EvidenceRecord } from "./types.js";
+import type { CompanyEnrichmentResult, GitHubEvidence } from "../enrichment/types";
+import type { StableCompanySeed } from "../types";
+import type { CompanyEvidenceBundle, EvidenceRecord } from "./types";
 
 const UNKNOWN_CAPTURE_TIME = "1970-01-01T00:00:00.000Z";
 

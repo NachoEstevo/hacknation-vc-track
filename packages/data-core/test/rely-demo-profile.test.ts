@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildRelyDemoProfile } from "../src/rely-demo-profile.js";
+import { buildRelyDemoProfile } from "../src/rely-demo-profile";
 
 describe("buildRelyDemoProfile", () => {
   it("captures the founder-provided company facts without inventing subscription revenue", () => {

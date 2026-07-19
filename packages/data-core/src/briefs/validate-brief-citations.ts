@@ -1,4 +1,4 @@
-import type { CitedStatement, EvidenceRecord, InvestmentBrief } from "./types.js";
+import type { CitedStatement, EvidenceRecord, InvestmentBrief } from "./types";
 
 export type BriefValidationResult =
   | { valid: true; errors: [] }

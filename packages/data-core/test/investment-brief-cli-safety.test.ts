@@ -6,8 +6,8 @@ import {
   parseBriefCliArgs,
   runBriefCli,
   type BriefCliRuntime,
-} from "../scripts/build-investment-briefs.js";
-import type { FundThesis } from "../src/briefs/types.js";
+} from "../scripts/build-investment-briefs";
+import type { FundThesis } from "../src/briefs/types";
 
 const generatedAt = "2026-07-18T22:00:00.000Z";
 const validCsv = [

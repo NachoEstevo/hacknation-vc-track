@@ -1,4 +1,4 @@
-import type { CompanyEvidenceBundle } from "./types.js";
+import type { CompanyEvidenceBundle } from "./types";
 
 export interface EvidenceSignals {
   positiveEvidenceIds: string[];

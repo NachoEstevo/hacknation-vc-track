@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { ThesisValidationError, validateFundThesis } from "../src/briefs/validate-thesis.js";
-import type { FundThesis } from "../src/briefs/types.js";
+import { ThesisValidationError, validateFundThesis } from "../src/briefs/validate-thesis";
+import type { FundThesis } from "../src/briefs/types";
 
 const thesis: FundThesis = {
   thesisId: "seed-thesis",

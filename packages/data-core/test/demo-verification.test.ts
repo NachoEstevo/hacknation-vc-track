@@ -3,7 +3,7 @@ import {
   buildRelyDemoVerification,
   simulateGitHubVerification,
   simulateStripeVerification,
-} from "../src/demo-verification.js";
+} from "../src/demo-verification";
 
 const verifiedAt = "2026-07-19T03:00:00.000Z";
 

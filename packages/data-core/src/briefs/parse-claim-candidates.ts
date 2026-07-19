@@ -1,6 +1,6 @@
-import { calculateClaimTrust } from "./calculate-claim-trust.js";
-import { groundClaimEvidence } from "./ground-claim-evidence.js";
-import type { ClaimCandidate, CompanyEvidenceBundle, FundThesis } from "./types.js";
+import { calculateClaimTrust } from "./calculate-claim-trust";
+import { groundClaimEvidence } from "./ground-claim-evidence";
+import type { ClaimCandidate, CompanyEvidenceBundle, FundThesis } from "./types";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);

@@ -1,6 +1,6 @@
-import type { GenerationMetadataRecord, GenerationTokenUsage } from "./generation-metadata.js";
-import type { FundThesis } from "./types.js";
-import { validateFundThesis } from "./validate-thesis.js";
+import type { GenerationMetadataRecord, GenerationTokenUsage } from "./generation-metadata";
+import type { FundThesis } from "./types";
+import { validateFundThesis } from "./validate-thesis";
 
 export const THESIS_PROPOSAL_FORMAT = "investment_brief_thesis_proposal_v1" as const;
 

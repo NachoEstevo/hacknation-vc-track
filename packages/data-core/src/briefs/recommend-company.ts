@@ -1,4 +1,4 @@
-import type { AssessmentAxis, CompanyEvaluation, InvestmentBrief } from "./types.js";
+import type { AssessmentAxis, CompanyEvaluation, InvestmentBrief } from "./types";
 
 export function recommendCompany(
   evaluation: CompanyEvaluation,

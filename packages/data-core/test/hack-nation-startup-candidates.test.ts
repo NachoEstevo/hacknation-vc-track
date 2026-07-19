@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { selectHackNationStartupCandidates } from "../src/hack-nation/startup-candidates.js";
+import { selectHackNationStartupCandidates } from "../src/hack-nation/startup-candidates";
 
 describe("selectHackNationStartupCandidates", () => {
   it("keeps complete profiles with an explicit startup-role signal and social links", () => {

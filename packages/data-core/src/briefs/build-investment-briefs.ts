@@ -1,19 +1,19 @@
-import type { CompanyEnrichmentResult } from "../enrichment/types.js";
-import type { StableCompanySeed } from "../types.js";
-import { buildEvidenceIndex } from "./build-evidence-index.js";
-import { canonicalizeFundThesis } from "./canonicalize-thesis.js";
-import { evaluateCompany } from "./evaluate-company.js";
-import type { GenerationMetadataRecord } from "./generation-metadata.js";
-import { rankCompanies, type RankedCompany } from "./rank-companies.js";
+import type { CompanyEnrichmentResult } from "../enrichment/types";
+import type { StableCompanySeed } from "../types";
+import { buildEvidenceIndex } from "./build-evidence-index";
+import { canonicalizeFundThesis } from "./canonicalize-thesis";
+import { evaluateCompany } from "./evaluate-company";
+import type { GenerationMetadataRecord } from "./generation-metadata";
+import { rankCompanies, type RankedCompany } from "./rank-companies";
 import type {
   ClaimCandidate,
   CompanyEvaluation,
   CompanyEvidenceBundle,
   FundThesis,
   InvestmentBrief,
-} from "./types.js";
-import { validateBriefCitations } from "./validate-brief-citations.js";
-import { validateFundThesis } from "./validate-thesis.js";
+} from "./types";
+import { validateBriefCitations } from "./validate-brief-citations";
+import { validateFundThesis } from "./validate-thesis";
 
 const MAX_COMPANY_CONCURRENCY = 4;
 const DEFAULT_TOP = 3;

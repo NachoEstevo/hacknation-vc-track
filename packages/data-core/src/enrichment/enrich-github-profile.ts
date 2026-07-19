@@ -1,4 +1,4 @@
-import type { GitHubEvidence } from "./types.js";
+import type { GitHubEvidence } from "./types";
 
 type Fetcher = (url: string, init?: RequestInit) => Promise<Response>;
 

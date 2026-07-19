@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/investor": ["../../data/source/clay-companies.csv"],
     "/investor/search": ["../../data/source/clay-companies.csv"],
+    "/api/agent/chat": [
+      "../../data/source/clay-companies.csv",
+      "../../data/source/hack-nation-founder-research.json",
+    ],
+    "/api/agent/profile": ["../../data/source/hack-nation-founder-research.json"],
   },
   transpilePackages: ["@hacknation/data-core"],
   typedRoutes: true,

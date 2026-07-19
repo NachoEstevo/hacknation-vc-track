@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { loadOpenAIConfig } from "../src/briefs/openai-config.js";
+import { loadOpenAIConfig } from "../src/briefs/openai-config";
 import {
   createOpenAIResponse,
   OpenAIStructuredTaskError,
   parseThesis,
   type OpenAIStructuredTaskDependencies,
-} from "../src/briefs/openai-structured-tasks.js";
+} from "../src/briefs/openai-structured-tasks";
 
 function dependencies(output: unknown) {
   const requests: Array<Record<string, unknown>> = [];

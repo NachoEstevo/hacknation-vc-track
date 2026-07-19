@@ -1,13 +1,13 @@
-import type { InvestmentBriefRun, InvestmentBriefFailure } from "./build-investment-briefs.js";
+import type { InvestmentBriefRun, InvestmentBriefFailure } from "./build-investment-briefs";
 import type {
   AssessmentAxis,
   CompanyEvaluation,
   EvidenceRecord,
   FundThesis,
   InvestmentBrief,
-} from "./types.js";
-import type { RankedCompany } from "./rank-companies.js";
-import type { GenerationMetadataRecord } from "./generation-metadata.js";
+} from "./types";
+import type { RankedCompany } from "./rank-companies";
+import type { GenerationMetadataRecord } from "./generation-metadata";
 
 export interface ArtifactEvidenceBundle {
   companyId: string;

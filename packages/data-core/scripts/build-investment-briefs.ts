@@ -21,7 +21,7 @@ import {
   type CompanyEnrichmentResult,
   type InvestmentBriefRun,
   type OpenAIStructuredTaskDependencies,
-} from "../src/index.js";
+} from "../src/index";
 
 export const BRIEF_CLI_USAGE = [
   "Usage: npm run briefs:build --",

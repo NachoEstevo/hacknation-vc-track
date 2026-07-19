@@ -1,4 +1,4 @@
-import type { InvestmentBriefArtifact } from "./investment-brief-artifact.js";
+import type { InvestmentBriefArtifact } from "./investment-brief-artifact";
 
 export interface InvestmentBriefSummaryInput {
   modelNames: { extraction: string; brief: string };

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { assessCompany } from "../src/briefs/assess-company.js";
-import type { ClaimCandidate, CompanyEvidenceBundle, EvidenceRecord } from "../src/briefs/types.js";
+import { assessCompany } from "../src/briefs/assess-company";
+import type { ClaimCandidate, CompanyEvidenceBundle, EvidenceRecord } from "../src/briefs/types";
 
 function evidence(
   evidenceId: string,

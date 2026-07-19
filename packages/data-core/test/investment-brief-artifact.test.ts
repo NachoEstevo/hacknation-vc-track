@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { toInvestmentBriefArtifact } from "../src/briefs/investment-brief-artifact.js";
-import { createInvestmentBriefSummary } from "../src/briefs/investment-brief-summary.js";
-import { buildInvestmentBriefs } from "../src/briefs/build-investment-briefs.js";
-import type { FundThesis } from "../src/briefs/types.js";
-import type { StableCompanySeed } from "../src/types.js";
+import { toInvestmentBriefArtifact } from "../src/briefs/investment-brief-artifact";
+import { createInvestmentBriefSummary } from "../src/briefs/investment-brief-summary";
+import { buildInvestmentBriefs } from "../src/briefs/build-investment-briefs";
+import type { FundThesis } from "../src/briefs/types";
+import type { StableCompanySeed } from "../src/types";
 
 const rawSecret = "RAW_PRIVATE_SENTINEL";
 const providerSecret = "sk-PERSISTED_FAILURE_SENTINEL";

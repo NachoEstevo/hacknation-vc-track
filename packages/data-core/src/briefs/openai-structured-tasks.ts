@@ -1,15 +1,15 @@
 import { createHash } from "node:crypto";
 import OpenAI from "openai";
 import type { ResponseCreateParamsNonStreaming } from "openai/resources/responses/responses.js";
-import { containsEvaluationMetadata } from "./brief-prose-policy.js";
-import { canonicalizeFundThesis } from "./canonicalize-thesis.js";
-import type { GenerationMetadataSink } from "./generation-metadata.js";
-import type { OpenAIConfig } from "./openai-config.js";
-import { claimCandidatesSchema, investmentBriefSchema, parsedFundThesisSchema } from "./openai-schemas.js";
-import { recordGenerationMetadata } from "./record-generation-metadata.js";
-import { parseClaimCandidates } from "./parse-claim-candidates.js";
-import { validateBriefCitations } from "./validate-brief-citations.js";
-import { validateFundThesis } from "./validate-thesis.js";
+import { containsEvaluationMetadata } from "./brief-prose-policy";
+import { canonicalizeFundThesis } from "./canonicalize-thesis";
+import type { GenerationMetadataSink } from "./generation-metadata";
+import type { OpenAIConfig } from "./openai-config";
+import { claimCandidatesSchema, investmentBriefSchema, parsedFundThesisSchema } from "./openai-schemas";
+import { recordGenerationMetadata } from "./record-generation-metadata";
+import { parseClaimCandidates } from "./parse-claim-candidates";
+import { validateBriefCitations } from "./validate-brief-citations";
+import { validateFundThesis } from "./validate-thesis";
 import type {
   ClaimCandidate,
   CitedStatement,
@@ -17,7 +17,7 @@ import type {
   CompanyEvidenceBundle,
   FundThesis,
   InvestmentBrief,
-} from "./types.js";
+} from "./types";
 
 const PROMPT_VERSION = "briefs-v2";
 const MAX_QUERY_LENGTH = 2_000;

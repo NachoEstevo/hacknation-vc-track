@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assessUsEarlyStageRow, buildImportBatch, parseClayCsv, parseUsEarlyStageCsv } from "../src/index.js";
+import { assessUsEarlyStageRow, buildImportBatch, parseClayCsv, parseUsEarlyStageCsv } from "../src/index";
 
 const csv = `Rank,Nombre,Website,Ciudad y estado,Sector,Descripción concreta del producto,Etapa estimada,Cantidad estimada de empleados
 1,Alpha,https://www.alpha.ai/,"Austin, Texas",AI infrastructure / developer tools,A hosted developer platform,Seed,2–20 (inferencia)

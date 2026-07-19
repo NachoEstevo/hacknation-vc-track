@@ -1,4 +1,4 @@
-import type { CompanyEvaluation } from "./types.js";
+import type { CompanyEvaluation } from "./types";
 
 export type SearchTier = "strong_match" | "promising" | "needs_evidence" | "excluded";
 

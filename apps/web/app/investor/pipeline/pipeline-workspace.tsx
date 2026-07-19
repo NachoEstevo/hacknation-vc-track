@@ -10,13 +10,11 @@ import {
   FolderKanban,
   Globe,
   MoreHorizontal,
-  Search,
   SlidersHorizontal,
   Trash2,
   X,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { ButtonLink } from "@/components/ui/button";
 import { Chip } from "@/components/ui/chip";
 import {
   PIPELINE_STAGES,
@@ -270,17 +268,7 @@ export function PipelineWorkspace() {
     <AppShell
       eyebrow="Private workspace"
       title="Pipeline"
-      headerAside={<Chip tone="accent" size="sm">synthetic_demo</Chip>}
-      actions={(
-        <ButtonLink
-          href={"/investor/search" as Route}
-          variant="secondary"
-          size="sm"
-          leadingIcon={<Search size={15} aria-hidden="true" />}
-        >
-          Add from search
-        </ButtonLink>
-      )}
+      headerAside={<Chip tone="accent" size="sm">Coming soon</Chip>}
     >
       <div className={styles.page} ref={boardRegionRef} tabIndex={-1}>
         <p className="sr-only" role="status" aria-live="polite">
@@ -292,10 +280,11 @@ export function PipelineWorkspace() {
         ) : pipelineItems.length === 0 ? (
           <section className={styles.empty}>
             <span className={styles.emptyIcon}><FolderKanban aria-hidden="true" /></span>
-            <h2>Your pipeline is deliberately empty.</h2>
+            <span className={styles.comingSoonTag}>Coming soon</span>
+            <h2>Pipeline is on its way.</h2>
             <p>
-              Add a synthetic opportunity from search to try stage moves and private notes.
-              Nothing leaves this device.
+              Move researched candidates through stages with private notes, kept on
+              this device. We&rsquo;re wiring it to the sourcing agent — it will land here soon.
             </p>
           </section>
         ) : (

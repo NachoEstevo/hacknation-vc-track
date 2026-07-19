@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { enrichGitHubProfile } from "../src/enrichment/enrich-github-profile.js";
+import { enrichGitHubProfile } from "../src/enrichment/enrich-github-profile";
 
 describe("enrichGitHubProfile", () => {
   it("returns public organization and repository activity", async () => {

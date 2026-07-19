@@ -21,8 +21,9 @@ export const SEARCH_SESSION_SOURCES = [
   "refinement",
 ] as const;
 
-/** Data sources the investor can point a search at. Only `web_search` is live today; the rest stay visible but disabled in the composer. */
+/** Data sources the investor can point a search at. `undr_engine` (the curated prospect base, web to fill gaps) is the default; `web_search` is web-only; the rest stay visible but disabled in the composer. */
 export const SEARCH_DATA_SOURCES = [
+  "undr_engine",
   "web_search",
   "internal_catalog",
   "registered_founders",

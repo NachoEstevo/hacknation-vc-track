@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, relative, resolve } from "node:path";
-import { buildImportBatch, enrichCompany, parseClayCsv } from "../src/index.js";
-import type { CompanyEnrichmentResult } from "../src/index.js";
+import { buildImportBatch, enrichCompany, parseClayCsv } from "../src/index";
+import type { CompanyEnrichmentResult } from "../src/index";
 
 const positionals = process.argv.slice(2).filter((value, index, values) => !value.startsWith("--") && !values[index - 1]?.startsWith("--"));
 

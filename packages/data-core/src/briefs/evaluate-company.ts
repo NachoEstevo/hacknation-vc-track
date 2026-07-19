@@ -1,8 +1,8 @@
-import { assessCompany } from "./assess-company.js";
-import { evaluateCompositeB2BSoftware, isCompositeB2BSoftwareCriterion } from "./evaluate-composite-criterion.js";
-import { recommendCompany } from "./recommend-company.js";
-import { softwareProductSignals } from "./software-product-evidence.js";
-import type { ClaimCandidate, CompanyEvaluation, CompanyEvidenceBundle, CriterionEvaluation, FundThesis, ThesisCriterion } from "./types.js";
+import { assessCompany } from "./assess-company";
+import { evaluateCompositeB2BSoftware, isCompositeB2BSoftwareCriterion } from "./evaluate-composite-criterion";
+import { recommendCompany } from "./recommend-company";
+import { softwareProductSignals } from "./software-product-evidence";
+import type { ClaimCandidate, CompanyEvaluation, CompanyEvidenceBundle, CriterionEvaluation, FundThesis, ThesisCriterion } from "./types";
 
 interface CandidateValue {
   value: string | number | boolean;

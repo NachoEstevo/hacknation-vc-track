@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { GenerationMetadataRecord } from "../src/briefs/generation-metadata.js";
+import type { GenerationMetadataRecord } from "../src/briefs/generation-metadata";
 import {
   createThesisProposal,
   parseThesisProposal,
-} from "../src/briefs/thesis-proposal.js";
-import type { FundThesis } from "../src/briefs/types.js";
+} from "../src/briefs/thesis-proposal";
+import type { FundThesis } from "../src/briefs/types";
 
 const generatedAt = "2026-07-18T22:00:00.000Z";
 const thesis: FundThesis = {

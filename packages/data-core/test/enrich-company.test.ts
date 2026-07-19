@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { enrichCompany } from "../src/enrichment/enrich-company.js";
-import type { StableCompanySeed } from "../src/types.js";
+import { enrichCompany } from "../src/enrichment/enrich-company";
+import type { StableCompanySeed } from "../src/types";
 
 const company = { stableId: "abc", name: "Acme", domain: "acme.test" } as StableCompanySeed;
 

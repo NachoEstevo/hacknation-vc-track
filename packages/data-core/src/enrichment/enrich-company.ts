@@ -1,10 +1,10 @@
-import type { StableCompanySeed } from "../types.js";
-import { discoverCompanyPages } from "../web/discover-company-pages.js";
-import { fetchPublicPage } from "../web/fetch-public-page.js";
-import type { FetchPageResult } from "../web/types.js";
-import { enrichGitHubProfile } from "./enrich-github-profile.js";
-import { extractCompanyProfile } from "./extract-company-profile.js";
-import type { CompanyEnrichmentResult, GitHubEvidence } from "./types.js";
+import type { StableCompanySeed } from "../types";
+import { discoverCompanyPages } from "../web/discover-company-pages";
+import { fetchPublicPage } from "../web/fetch-public-page";
+import type { FetchPageResult } from "../web/types";
+import { enrichGitHubProfile } from "./enrich-github-profile";
+import { extractCompanyProfile } from "./extract-company-profile";
+import type { CompanyEnrichmentResult, GitHubEvidence } from "./types";
 
 interface Dependencies {
   fetchPage?: (url: URL) => Promise<FetchPageResult>;

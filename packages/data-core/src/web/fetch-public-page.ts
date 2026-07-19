@@ -1,6 +1,6 @@
 import robotsParserModule from "robots-parser";
-import { assertSafePublicUrl } from "./safe-url.js";
-import type { FetchPageResult } from "./types.js";
+import { assertSafePublicUrl } from "./safe-url";
+import type { FetchPageResult } from "./types";
 
 const USER_AGENT = "HackNationVCResearch/0.1 (+https://github.com/NachoEstevo/hacknation-vc-track)";
 const MAX_BYTES = 2 * 1024 * 1024;

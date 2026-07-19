@@ -16,6 +16,7 @@ const SOURCE_BADGE: Record<
   github: { icon: <Github aria-hidden="true" />, color: "#3C5C88", background: "#E8EDF5", label: "GitHub · Researched" },
   registered: { icon: <UserCheck aria-hidden="true" />, color: "#25764F", background: "#E2F1E7", label: "Registered" },
   internal_base: { icon: <Database aria-hidden="true" />, color: "#77746B", background: "#EFEEE8", label: "Internal base" },
+  prospect_base: { icon: <Database aria-hidden="true" />, color: "#25764F", background: "#E2F1E7", label: "undr base" },
 };
 
 function hostnameOf(url: string): string {
@@ -46,7 +47,10 @@ export function PersonCard({ candidate }: { candidate: CandidateReport }) {
       aria-label={`Open the researched profile of ${candidate.name}`}
     >
       <div className={styles.header}>
-        <Avatar name={candidate.name} tone={candidate.sourceKind === "registered" ? "accent" : "external"} />
+        <Avatar
+          name={candidate.name}
+          tone={candidate.sourceKind === "registered" || candidate.sourceKind === "prospect_base" ? "accent" : "external"}
+        />
         <div className={styles.titleCol}>
           <div className={styles.titleRow}>
             <span className={styles.personName}>{candidate.name}</span>
@@ -59,7 +63,10 @@ export function PersonCard({ candidate }: { candidate: CandidateReport }) {
             {[subline, candidate.company].filter(Boolean).join(" — ") || "Details pending"}
           </span>
         </div>
-        <FounderScore value={candidate.score} prefix={candidate.sourceKind === "registered" ? undefined : "~"} />
+        <FounderScore
+          value={candidate.score}
+          prefix={candidate.sourceKind === "registered" || candidate.sourceKind === "prospect_base" ? undefined : "~"}
+        />
         <span className={styles.openHint} aria-hidden="true">
           <ArrowUpRight />
         </span>

@@ -72,6 +72,23 @@ function readStoredChat(): StoredChat | null {
   }
 }
 
+/**
+ * useChat's per-id store survives unmounts, so a restored thread can briefly
+ * merge with messages already in memory and hold the same id twice. Render
+ * and persist a last-occurrence-wins view so React keys stay unique.
+ */
+function dedupeMessagesById(messages: UIMessage[]): UIMessage[] {
+  const seen = new Set<string>();
+  const unique: UIMessage[] = [];
+  for (let index = messages.length - 1; index >= 0; index -= 1) {
+    const message = messages[index];
+    if (!message || seen.has(message.id)) continue;
+    seen.add(message.id);
+    unique.unshift(message);
+  }
+  return unique.length === messages.length ? messages : unique;
+}
+
 function chatFingerprint(query: string): string {
   return query.trim().replace(/\s+/g, " ").toLowerCase();
 }
@@ -101,7 +118,10 @@ function archiveChat(query: string, messages: UIMessage[]) {
   if (messages.length === 0 || !query.trim()) return;
   try {
     const archive = readChatArchive();
-    archive[chatFingerprint(query)] = { messages, updatedAt: new Date().toISOString() };
+    archive[chatFingerprint(query)] = {
+      messages: dedupeMessagesById(messages),
+      updatedAt: new Date().toISOString(),
+    };
     const byRecency = Object.keys(archive).sort(
       (a, b) => Date.parse(archive[b]?.updatedAt ?? "") - Date.parse(archive[a]?.updatedAt ?? ""),
     );
@@ -137,6 +157,7 @@ function candidatesFromMessages(messages: UIMessage[]): CandidateReport[] {
 }
 
 const TOOL_ACTIVITY: Record<string, { icon: ReactNode; label: string; inputKey: string }> = {
+  "tool-search_prospect_base": { icon: <Database aria-hidden="true" />, label: "undr base", inputKey: "query" },
   "tool-web_search": { icon: <Globe aria-hidden="true" />, label: "Web search", inputKey: "query" },
   "tool-tavily_search": { icon: <Radar aria-hidden="true" />, label: "Deep search", inputKey: "query" },
   "tool-read_page": { icon: <BookOpen aria-hidden="true" />, label: "Reading page", inputKey: "urls" },
@@ -321,7 +342,9 @@ function HydratedSearchWorkspace() {
   const [initialChat] = useState<StoredChat | null>(() => readStoredChat());
   const sessionKeyAtLoad = searchSession?.updatedAt ?? null;
   const restoredMessages =
-    initialChat && initialChat.sessionKey === sessionKeyAtLoad ? initialChat.messages : [];
+    initialChat && initialChat.sessionKey === sessionKeyAtLoad
+      ? dedupeMessagesById(initialChat.messages)
+      : [];
 
   const [transport] = useState(() => new DefaultChatTransport({ api: "/api/agent/chat" }));
   const { messages, sendMessage, setMessages, stop, status, error, regenerate } = useChat({
@@ -423,7 +446,7 @@ function HydratedSearchWorkspace() {
     if (searchSession.source === "saved_search" || searchSession.source === "recent") {
       const archived = archivedChatFor(searchSession.query);
       if (archived) {
-        setMessages(archived.messages);
+        setMessages(dedupeMessagesById(archived.messages));
         return;
       }
     }
@@ -435,6 +458,7 @@ function HydratedSearchWorkspace() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchSession?.updatedAt]);
 
+  const renderMessages = useMemo(() => dedupeMessagesById(messages), [messages]);
   const candidates = useMemo(() => candidatesFromMessages(messages), [messages]);
   const brief = useMemo(() => {
     for (let index = messages.length - 1; index >= 0; index -= 1) {
@@ -482,7 +506,10 @@ function HydratedSearchWorkspace() {
     if (!settled && now - lastPersistRef.current < 1500) return;
     lastPersistRef.current = now;
     try {
-      const stored: StoredChat = { sessionKey: chatSessionKeyRef.current, messages };
+      const stored: StoredChat = {
+        sessionKey: chatSessionKeyRef.current,
+        messages: dedupeMessagesById(messages),
+      };
       sessionStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(stored));
     } catch {
       // Private-mode storage failures only cost thread restoration.
@@ -576,6 +603,7 @@ function HydratedSearchWorkspace() {
       : "Browser storage could not save this exploration. Nothing was recorded as saved.");
   }
 
+  const prospectCount = candidates.filter((candidate) => candidate.sourceKind === "prospect_base").length;
   const webCount = candidates.filter((candidate) => candidate.sourceKind === "web" || candidate.sourceKind === "github").length;
   const internalCount = candidates.filter((candidate) => candidate.sourceKind === "internal_base").length;
   const registeredCount = candidates.filter((candidate) => candidate.sourceKind === "registered").length;
@@ -634,7 +662,7 @@ function HydratedSearchWorkspace() {
             </div>
           ) : null}
 
-          {messages.map((message, index) => {
+          {renderMessages.map((message, index) => {
             if (message.role === "user") {
               const text = textOfMessage(message);
               if (text.startsWith("[auto]")) {
@@ -650,7 +678,7 @@ function HydratedSearchWorkspace() {
               <AssistantTurn
                 key={message.id}
                 message={message}
-                streaming={status === "streaming" && index === messages.length - 1}
+                streaming={status === "streaming" && index === renderMessages.length - 1}
               />
             );
           })}
@@ -733,6 +761,9 @@ function HydratedSearchWorkspace() {
         </div>
 
         <div className={styles.sourceSummary}>
+          <span className={styles.summaryPill} data-tone="registered">
+            <Database aria-hidden="true" /> undr base {prospectCount}
+          </span>
           <span className={styles.summaryPill} data-tone="external_unconfirmed">
             <Globe aria-hidden="true" /> Web {webCount}
           </span>

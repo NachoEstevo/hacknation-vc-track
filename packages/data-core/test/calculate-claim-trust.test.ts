@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { calculateClaimTrust } from "../src/briefs/calculate-claim-trust.js";
-import type { EvidenceRecord } from "../src/briefs/types.js";
+import { calculateClaimTrust } from "../src/briefs/calculate-claim-trust";
+import type { EvidenceRecord } from "../src/briefs/types";
 
 const EVALUATED_AT = "2026-07-18T00:00:00.000Z";
 

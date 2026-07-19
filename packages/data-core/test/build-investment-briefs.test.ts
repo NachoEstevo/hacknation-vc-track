@@ -3,20 +3,20 @@ import {
   buildInvestmentBriefs,
   type BuildInvestmentBriefsDependencies,
   type BuildInvestmentBriefsInput,
-} from "../src/briefs/build-investment-briefs.js";
+} from "../src/briefs/build-investment-briefs";
 import type {
   CompanyEvaluation,
   CompanyEvidenceBundle,
   FundThesis,
   InvestmentBrief,
-} from "../src/briefs/types.js";
-import type { StableCompanySeed } from "../src/types.js";
-import type { GenerationMetadataRecord } from "../src/briefs/generation-metadata.js";
+} from "../src/briefs/types";
+import type { StableCompanySeed } from "../src/types";
+import type { GenerationMetadataRecord } from "../src/briefs/generation-metadata";
 import {
   BriefCliUsageError,
   parseBriefCliArgs,
   runBriefCli,
-} from "../scripts/build-investment-briefs.js";
+} from "../scripts/build-investment-briefs";
 
 const generatedAt = "2026-07-18T22:00:00.000Z";
 const parseMetadata: GenerationMetadataRecord = {

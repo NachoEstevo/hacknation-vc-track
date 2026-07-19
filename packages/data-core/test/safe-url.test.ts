@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { assertSafePublicUrl } from "../src/web/safe-url.js";
+import { assertSafePublicUrl } from "../src/web/safe-url";
 
 describe("assertSafePublicUrl", () => {
   it("accepts a public host", async () => {

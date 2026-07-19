@@ -1,4 +1,4 @@
-import type { AssessmentAxis, AssessmentDimension, ClaimCandidate, CompanyEvidenceBundle, EvidenceRecord } from "./types.js";
+import type { AssessmentAxis, AssessmentDimension, ClaimCandidate, CompanyEvidenceBundle, EvidenceRecord } from "./types";
 
 function payload(record: EvidenceRecord): Record<string, unknown> {
   return record.payload ?? {};

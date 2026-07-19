@@ -4,7 +4,7 @@ import type {
   GenerationMetadataSink,
   GenerationTask,
   GenerationTokenUsage,
-} from "./generation-metadata.js";
+} from "./generation-metadata";
 
 interface ProviderResponseMetadata {
   id?: string;

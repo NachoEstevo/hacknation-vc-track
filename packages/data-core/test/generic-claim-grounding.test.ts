@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { assessCompany } from "../src/briefs/assess-company.js";
-import { loadOpenAIConfig } from "../src/briefs/openai-config.js";
-import { extractClaimCandidates } from "../src/briefs/openai-structured-tasks.js";
-import type { CompanyEvidenceBundle, EvidenceRecord } from "../src/briefs/types.js";
+import { assessCompany } from "../src/briefs/assess-company";
+import { loadOpenAIConfig } from "../src/briefs/openai-config";
+import { extractClaimCandidates } from "../src/briefs/openai-structured-tasks";
+import type { CompanyEvidenceBundle, EvidenceRecord } from "../src/briefs/types";
 
 const NOW = "2026-07-18T00:00:00.000Z";
 
