@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button, ButtonLink } from "@/components/pencil";
 import { useWorkspace } from "@/components/workspace-provider";
 import { createActiveThesis, type ActiveThesis } from "@/lib/domain";
@@ -62,32 +62,27 @@ function DetectedProfile({ query }: { query: string }) {
     { label: "Excludes", values: draft.exclusions, exclude: true },
   ].filter((group) => group.values.length > 0);
 
+  if (groups.length === 0) return null;
+
   return (
     <div className={styles.detected} aria-live="polite">
-      <p className={styles.detectedTitle}>What undr understood — updates as you type</p>
-      {groups.length === 0 ? (
-        <p className={styles.detectedEmpty}>
-          Nothing yet — as you write, the sectors, stage and places you mention
-          will show up here so you can check undr got you right.
-        </p>
-      ) : (
-        <div className={styles.detectedGroups}>
-          {groups.map((group) => (
-            <div key={group.label} className={styles.detectedGroup}>
-              <span className={styles.detectedLabel}>{group.label}</span>
-              {group.values.map((value) => (
-                <span
-                  key={value}
-                  className={styles.detectedChip}
-                  data-exclude={group.exclude ? "true" : undefined}
-                >
-                  {value}
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-      )}
+      <p className={styles.detectedTitle}>What undr understood</p>
+      <div className={styles.detectedGroups}>
+        {groups.map((group) => (
+          <div key={group.label} className={styles.detectedGroup}>
+            <span className={styles.detectedLabel}>{group.label}</span>
+            {group.values.map((value) => (
+              <span
+                key={value}
+                className={styles.detectedChip}
+                data-exclude={group.exclude ? "true" : undefined}
+              >
+                {value}
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -195,21 +190,9 @@ function HydratedInvestorThesisForm({
             placeholder={`e.g. “${fallbackQuery}”`}
             autoFocus
           />
-          <div className={styles.helper}>
-            <Sparkles size={12} aria-hidden="true" />
-            <span>
-              Tip: write “must” for anything non-negotiable — e.g. “must have a
-              working product”.
-            </span>
-          </div>
         </div>
 
         <DetectedProfile query={query} />
-
-        <p className={styles.matchNote}>
-          That&rsquo;s the whole setup. From now on, every search result is scored
-          against this profile — and you&rsquo;ll always see why someone matches.
-        </p>
 
         <div className={styles.footer}>
           <ButtonLink href="/onboarding/role" variant="secondary">
@@ -233,9 +216,7 @@ function HydratedInvestorThesisForm({
           >
             Skip for now
           </Button>
-          <p className={styles.autosaveNote}>
-            {query.trim() ? "Saved automatically" : "Optional — you can add it later from My thesis"}
-          </p>
+          {query.trim() ? <p className={styles.autosaveNote}>Saved automatically</p> : null}
         </div>
         {completionError || persistenceError ? (
           <p className={styles.completionError} role="alert" aria-live="assertive">
