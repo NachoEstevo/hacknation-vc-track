@@ -89,7 +89,6 @@ GitHub activity can support an execution signal, but it does not prove code qual
 - **Public-web enrichment:** company pages, founder candidates, product links, pricing, changelogs and company-published social links.
 - **Investment brief engine:** deterministic thesis evaluation, evidence coverage, four assessment axes, stable ranking and citation validation.
 - **Founder-first profiles:** a fully reviewed public example, a founder-submitted Rely profile and a review-queue example.
-- **Simulated verification:** typed GitHub and Stripe snapshots with reproducible frontend fixtures.
 - **Persistence schema:** companies, founders, identities, evidence, source snapshots and enrichment runs in Supabase/Postgres.
 
 ## Architecture
