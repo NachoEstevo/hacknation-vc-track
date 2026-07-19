@@ -3,7 +3,7 @@
  * route reserves quota here BEFORE calling the model; the sidebar meter
  * reads the same numbers. Three independent pools per identity:
  *
- *   prospect_search     — sourcing runs (first message of each chat), max 5
+ *   prospect_search     — candidate CARDS delivered on the board, max 5
  *   profile_completion  — dossier generations/refreshes, max 5
  *   chat_message        — messages inside one chat, max 10 per chat
  *

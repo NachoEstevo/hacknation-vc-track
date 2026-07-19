@@ -60,7 +60,7 @@ export function UsageMeter() {
   if (!status) return null;
 
   const rows = [
-    { label: "Searches", used: status.searchesUsed, limit: status.limits.prospect_search },
+    { label: "Candidates", used: status.searchesUsed, limit: status.limits.prospect_search },
     { label: "Profiles", used: status.profilesUsed, limit: status.limits.profile_completion },
     { label: "Messages", used: status.chatMessagesUsed, limit: status.limits.chat_message },
   ];

@@ -541,6 +541,30 @@ function HydratedSearchWorkspace() {
     if (status === "streaming" || status === "ready" || status === "error") announceUsageChange();
   }, [status]);
 
+  // Each candidate card consumes one "search" from the free tier. Charge it
+  // the moment it lands on the board (idempotent server-side keys — a reload
+  // or the next turn replaying the same slugs never double-charges), so the
+  // sidebar meter ticks card by card while the agent works.
+  const chargedCardsRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (candidates.length === 0) return;
+    const chatId = chatUsageId();
+    const fresh = candidates
+      .map((candidate) => candidate.slug)
+      .filter((slug) => !chargedCardsRef.current.has(`${chatId}:${slug}`));
+    if (fresh.length === 0) return;
+    for (const slug of fresh) chargedCardsRef.current.add(`${chatId}:${slug}`);
+    void fetch("/api/usage/reconcile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chatId, slugs: fresh }),
+    })
+      .then(() => announceUsageChange())
+      .catch(() => {
+        // The chat route replays these charges on the next turn.
+      });
+  }, [candidates]);
+
   // Persist the thread continuously (throttled while streaming) so a reload
   // or a card->profile->back trip mid-research restores the conversation and
   // its cards instead of silently re-running the whole search.
@@ -577,14 +601,17 @@ function HydratedSearchWorkspace() {
     }
   }, [candidates, brief]);
 
-  // Keep the archived copy of a saved exploration fresh (settled turns only)
-  // so reopening it later restores follow-ups too, not just the first answer.
+  // Archive every settled conversation under its opening brief (recent chats
+  // reopen with their transcript), and refresh a saved search's copy when the
+  // visible brief drifted from the opening query.
   useEffect(() => {
     if (messages.length === 0) return;
     if (status !== "ready" && status !== "error") return;
-    if (!savedSearches.some((search) => chatFingerprint(search.query) === chatFingerprint(brief))) return;
-    archiveChat(brief, messages);
-  }, [messages, status, savedSearches, brief]);
+    if (searchSession?.query) archiveChat(searchSession.query, messages);
+    if (savedSearches.some((search) => chatFingerprint(search.query) === chatFingerprint(brief))) {
+      archiveChat(brief, messages);
+    }
+  }, [messages, status, savedSearches, brief, searchSession?.query]);
 
   // Keep the newest narration in view while the agent streams.
   useEffect(() => {

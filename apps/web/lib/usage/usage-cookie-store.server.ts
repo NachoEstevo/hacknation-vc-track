@@ -26,7 +26,9 @@ import {
  * correct either way.
  */
 
-const STATE_COOKIE = "undr_usage_state";
+// .v2: the "search" unit changed from runs to candidate cards — a fresh
+// cookie name starts everyone on a clean ledger under the new semantics.
+const STATE_COOKIE = "undr_usage_state.v2";
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 3; // outlives the 48h window
 
 /** Long idempotency keys and chat ids are hashed to keep the cookie small. */
