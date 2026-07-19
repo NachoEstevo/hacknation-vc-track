@@ -29,3 +29,4 @@ export * from "./briefs/investment-brief-artifact.js";
 export * from "./briefs/investment-brief-summary.js";
 export * from "./briefs/generation-metadata.js";
 export * from "./briefs/ground-claim-evidence.js";
+export * from "./briefs/thesis-proposal.js";

@@ -225,7 +225,7 @@ npx tsx scripts/build-investment-briefs.ts `
   --output ../../data/briefs/demo-investment-briefs.json
 ```
 
-For the backend-only demo, `--accept-parsed-thesis` is an explicit substitute for the future UI confirmation step. Without that flag, the command writes the proposed thesis JSON and exits before company evaluation. A reviewed thesis may instead be supplied through `--thesis-file`.
+For the backend-only demo, `--accept-parsed-thesis` is an explicit substitute for the future UI confirmation step. Without that flag, the command writes a versioned proposal envelope containing the validated thesis and safe parse-response metadata, then exits before company evaluation. Supplying that envelope through `--thesis-file` preserves parse provenance in the accepted artifact and summary. Legacy bare-thesis JSON remains accepted and validated, but carries no fabricated parse metadata.
 
 The output contains the confirmed thesis, normalized evidence index, all 50 criterion evaluations and assessments, the ranked shortlist, valid top-three briefs, generation metadata, and typed per-company failures. Raw prompts, secrets, private file contents, and full scraped pages are excluded.
 

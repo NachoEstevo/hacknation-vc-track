@@ -1,56 +1,76 @@
 {
-  "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
-  "originalQuery": "Early US or UK B2B software companies with teams below 10 people and visible execution signals",
-  "criteria": [
+  "format": "investment_brief_thesis_proposal_v1",
+  "thesis": {
+    "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
+    "originalQuery": "Early US or UK B2B software companies with teams below 10 people and visible execution signals",
+    "criteria": [
+      {
+        "criterionId": "geography-1",
+        "category": "geography",
+        "label": "Company location",
+        "requirement": "required",
+        "weight": 5,
+        "operator": "one_of",
+        "expectedValue": [
+          "US",
+          "GB"
+        ]
+      },
+      {
+        "criterionId": "industry-1",
+        "category": "industry",
+        "label": "B2B software",
+        "requirement": "required",
+        "weight": 5,
+        "operator": "equals",
+        "expectedValue": true
+      },
+      {
+        "criterionId": "company-size-1",
+        "category": "company_size",
+        "label": "Team size",
+        "requirement": "required",
+        "weight": 5,
+        "operator": "lte",
+        "expectedValue": 9
+      },
+      {
+        "criterionId": "stage-1",
+        "category": "stage",
+        "label": "Early stage",
+        "requirement": "required",
+        "weight": 4,
+        "operator": "contains",
+        "expectedValue": "early"
+      },
+      {
+        "criterionId": "traction-1",
+        "category": "traction",
+        "label": "Visible execution signals",
+        "requirement": "required",
+        "weight": 4,
+        "operator": "exists",
+        "expectedValue": true
+      }
+    ],
+    "generatedAt": "2026-07-19T01:45:00.990Z",
+    "promptVersion": "briefs-v1"
+  },
+  "generationMetadata": [
     {
-      "criterionId": "geography-1",
-      "category": "geography",
-      "label": "Company geography",
-      "requirement": "required",
-      "weight": 5,
-      "operator": "one_of",
-      "expectedValue": [
-        "US",
-        "GB"
-      ]
-    },
-    {
-      "criterionId": "industry-1",
-      "category": "industry",
-      "label": "B2B software",
-      "requirement": "required",
-      "weight": 5,
-      "operator": "equals",
-      "expectedValue": true
-    },
-    {
-      "criterionId": "company-size-1",
-      "category": "company_size",
-      "label": "Team size",
-      "requirement": "required",
-      "weight": 5,
-      "operator": "lte",
-      "expectedValue": 9
-    },
-    {
-      "criterionId": "stage-1",
-      "category": "stage",
-      "label": "Early stage",
-      "requirement": "required",
-      "weight": 4,
-      "operator": "equals",
-      "expectedValue": "early"
-    },
-    {
-      "criterionId": "traction-1",
-      "category": "traction",
-      "label": "Visible execution signals",
-      "requirement": "required",
-      "weight": 4,
-      "operator": "exists",
-      "expectedValue": true
+      "task": "parse_thesis",
+      "companyId": null,
+      "thesisId": null,
+      "model": "gpt-5.6-luna",
+      "requestedModel": "gpt-5.6-luna",
+      "responseId": "resp_0f1f14b575e38a94006a5c2c1a728c8196a35547b9414242a8",
+      "tokenUsage": {
+        "inputTokens": 283,
+        "outputTokens": 268,
+        "totalTokens": 551
+      },
+      "promptVersion": "briefs-v1",
+      "generatedAt": "2026-07-19T01:45:00.989Z"
     }
-  ],
-  "generatedAt": "2026-07-19T01:19:51.176Z",
-  "promptVersion": "briefs-v1"
+  ]
 }

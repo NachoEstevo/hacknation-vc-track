@@ -33,7 +33,7 @@ function fieldWords(predicate: string): string[] {
 
 function mentionsField(text: string, predicate: string): boolean {
   const relevant = fieldWords(predicate);
-  return relevant.length === 0 || relevant.every((word) => text.includes(word));
+  return relevant.length > 0 && relevant.every((word) => text.includes(word));
 }
 
 function isNegated(text: string, predicate: string, value?: string): boolean {
@@ -64,8 +64,32 @@ function unitMatches(text: string, unit: string | null): boolean {
 
 type Relation = "support" | "contradict" | "unrelated";
 
+const MARKET_DEMAND_PATTERNS = [
+  /\bcustomer demand\b/iu,
+  /\bmarket demand\b/iu,
+  /\b(?:customers?|buyers?)\b.{0,50}\b(?:signed|paid|requested|purchased|contracted|pilots?)\b/iu,
+  /\b(?:signed|paid|requested|purchased|contracts?|pilots?)\b.{0,50}\b(?:customers?|buyers?)\b/iu,
+];
+
+const NEGATED_MARKET_DEMAND_PATTERNS = [
+  /\b(?:no|without)\b.{0,40}\b(?:customers?|buyers?|demand|paid pilots?|contracts?)\b/iu,
+  /\b(?:customers?|buyers?|demand)\b.{0,30}\b(?:none|zero|not validated)\b/iu,
+];
+
+function explicitDomainRelation(
+  text: string,
+  predicate: string,
+  value: string | number | boolean,
+): Relation | null {
+  if (predicate.trim().toLocaleLowerCase("en-US") !== "market" || value !== true) return null;
+  if (NEGATED_MARKET_DEMAND_PATTERNS.some((pattern) => pattern.test(text))) return "contradict";
+  return MARKET_DEMAND_PATTERNS.some((pattern) => pattern.test(text)) ? "support" : "unrelated";
+}
+
 function relation(record: EvidenceRecord, predicate: string, value: string | number | boolean, unit: string | null): Relation {
   const text = evidenceText(record);
+  const explicitRelation = explicitDomainRelation(text, predicate, value);
+  if (explicitRelation !== null) return explicitRelation;
   if (!text.trim() || !mentionsField(text, predicate)) return "unrelated";
   if (typeof value === "boolean") {
     const negative = isNegated(text, predicate);

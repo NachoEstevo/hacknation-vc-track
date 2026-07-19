@@ -29,6 +29,17 @@ const thesis: FundThesis = {
     expectedValue: "US",
   }],
 };
+const proposalParseMetadata = {
+  task: "parse_thesis" as const,
+  companyId: null,
+  thesisId: null,
+  model: "actual-parse-model",
+  requestedModel: "requested-parse-model",
+  responseId: "resp-parse-setup",
+  tokenUsage: { inputTokens: 5, outputTokens: 2, totalTokens: 7 },
+  promptVersion: "briefs-v1",
+  generatedAt,
+};
 
 const baseArgs = [
   "--companies", "companies.csv",
@@ -72,6 +83,7 @@ function setupRuntime(csv = validCsv): {
         parseThesis: async () => { calls.parsed += 1; return thesis; },
         extractClaimCandidates: async () => [],
         draftInvestmentBrief: async () => { throw new Error("not reached"); },
+        getGenerationMetadata: () => [proposalParseMetadata],
       },
     },
   };
@@ -166,6 +178,17 @@ describe("investment brief CLI confirmed run", () => {
   it("uses real config-backed tasks, isolates a draft failure, and persists only the safe artifact", async () => {
     const apiKeySentinel = "sk-CONFIG_SENTINEL_DO_NOT_PERSIST";
     const rawCsvSentinel = "RAW_CSV_SENTINEL_DO_NOT_PERSIST";
+    const parseMetadata = {
+      task: "parse_thesis" as const,
+      companyId: null,
+      thesisId: null,
+      model: "actual-parse-live",
+      requestedModel: "extract-live",
+      responseId: "resp-parse",
+      tokenUsage: { inputTokens: 7, outputTokens: 3, totalTokens: 10 },
+      promptVersion: "briefs-v1",
+      generatedAt,
+    };
     const csv = [
       "Name,Description,Primary Industry,Size,Type,Location,Country,Domain,Investor Secret",
       `Acme,Workflow software,Software,1-10,Private,New York,US,acme.test,${rawCsvSentinel}`,
@@ -207,7 +230,11 @@ describe("investment brief CLI confirmed run", () => {
       cwd: "/demo",
       readFile: async (path) => {
         if (path.endsWith("companies.csv")) return csv;
-        if (path.endsWith("thesis.json")) return JSON.stringify(thesis);
+        if (path.endsWith("thesis.json")) return JSON.stringify({
+          format: "investment_brief_thesis_proposal_v1",
+          thesis,
+          generationMetadata: [parseMetadata],
+        });
         return JSON.stringify({ results: [] });
       },
       writeFile: async (path, contents) => { writes.push({ path, contents }); },
@@ -248,6 +275,7 @@ describe("investment brief CLI confirmed run", () => {
     expect(persisted).toMatchObject({
       status: "partial",
       generationMetadata: [
+        { task: "parse_thesis", requestedModel: "extract-live", model: "actual-parse-live" },
         { task: "extract_claim_candidates", requestedModel: "extract-live", model: "actual-extract-live" },
         { task: "extract_claim_candidates", requestedModel: "extract-live", model: "actual-extract-live" },
         { task: "draft_investment_brief", requestedModel: "brief-live", model: "actual-brief-live" },
@@ -265,11 +293,14 @@ describe("investment brief CLI confirmed run", () => {
       failures: [{ stage: "draft_investment_brief" }],
       provenance: { rankingSeed: "companies.csv", publishedEvidence: "enrichment.json" },
       generationMetadata: {
-        count: 3,
-        responseIdsPresent: 3,
-        tokenUsage: { inputTokens: 40, outputTokens: 9, totalTokens: 49 },
+        count: 4,
+        responseIdsPresent: 4,
+        tokenUsage: { inputTokens: 47, outputTokens: 12, totalTokens: 59 },
       },
     });
+    expect((persisted.generationMetadata as Array<{ task: string }>)
+      .filter(({ task }) => task === "parse_thesis")).toHaveLength(1);
+    expect(serialized).not.toMatch(/OPENAI_API_KEY|PROMPT_VERSION:/u);
     expect(summary.generatedAt).toBe(persisted.generatedAt);
     expect(summary.topCompanies).toHaveLength(2);
   });

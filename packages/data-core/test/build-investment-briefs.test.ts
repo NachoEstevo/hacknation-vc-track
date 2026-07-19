@@ -11,6 +11,7 @@ import type {
   InvestmentBrief,
 } from "../src/briefs/types.js";
 import type { StableCompanySeed } from "../src/types.js";
+import type { GenerationMetadataRecord } from "../src/briefs/generation-metadata.js";
 import {
   BriefCliUsageError,
   parseBriefCliArgs,
@@ -18,6 +19,17 @@ import {
 } from "../scripts/build-investment-briefs.js";
 
 const generatedAt = "2026-07-18T22:00:00.000Z";
+const parseMetadata: GenerationMetadataRecord = {
+  task: "parse_thesis",
+  companyId: null,
+  thesisId: null,
+  model: "actual-parse-model",
+  requestedModel: "configured-parse-model",
+  responseId: "resp-parse-1",
+  tokenUsage: { inputTokens: 12, outputTokens: 4, totalTokens: 16 },
+  promptVersion: "briefs-v1",
+  generatedAt,
+};
 const thesis: FundThesis = {
   thesisId: "thesis-1",
   originalQuery: "US software companies",
@@ -252,7 +264,7 @@ describe("buildInvestmentBriefs", () => {
 
   it("mechanically carries collected generation metadata into the run", async () => {
     const { input, dependencies } = setup(1);
-    dependencies.getGenerationMetadata = () => [{
+    const extractionMetadata: GenerationMetadataRecord = {
       task: "extract_claim_candidates",
       companyId: "company-00",
       thesisId: thesis.thesisId,
@@ -262,11 +274,15 @@ describe("buildInvestmentBriefs", () => {
       tokenUsage: { inputTokens: 10, outputTokens: 2, totalTokens: 12 },
       promptVersion: "briefs-v1",
       generatedAt,
-    }];
+    };
+    dependencies.getGenerationMetadata = () => [extractionMetadata];
 
-    const result = await buildInvestmentBriefs(input, dependencies);
+    const result = await buildInvestmentBriefs({
+      ...input,
+      initialGenerationMetadata: [parseMetadata],
+    }, dependencies);
 
-    expect(result.generationMetadata).toEqual(dependencies.getGenerationMetadata());
+    expect(result.generationMetadata).toEqual([parseMetadata, extractionMetadata]);
   });
 });
 
@@ -320,6 +336,7 @@ describe("investment brief CLI", () => {
         parseThesis: async () => thesis,
         extractClaimCandidates: async () => { extractionCalls += 1; return []; },
         draftInvestmentBrief: async ({ bundle, evaluation }) => brief(bundle, evaluation),
+        getGenerationMetadata: () => [parseMetadata],
       },
     });
 
@@ -327,7 +344,12 @@ describe("investment brief CLI", () => {
     expect(extractionCalls).toBe(0);
     expect(writes).toHaveLength(1);
     expect(writes[0]!.path).toMatch(/\.tmp$/);
-    expect(writes[0]!.contents).toBe(`${JSON.stringify(thesis, null, 2)}\n`);
+    expect(JSON.parse(writes[0]!.contents)).toEqual({
+      format: "investment_brief_thesis_proposal_v1",
+      thesis,
+      generationMetadata: [parseMetadata],
+    });
+    expect(writes[0]!.contents).not.toMatch(/OPENAI_API_KEY|sk-[A-Za-z0-9_-]{10,}|PROMPT_VERSION:/u);
     expect(renames).toEqual([{
       source: writes[0]!.path,
       destination: "C:\\demo\\briefs.thesis.json",

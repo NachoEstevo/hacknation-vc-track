@@ -8,16 +8,17 @@ import {
   createInvestmentBriefSummary,
   createGenerationMetadataCollector,
   createOpenAIResponse,
+  createThesisProposal,
   draftInvestmentBrief,
   extractClaimCandidates,
   loadOpenAIConfig,
   openAIModelNames,
+  parseThesisProposal,
   parseClayCsv,
   parseThesis,
   toInvestmentBriefArtifact,
   type BuildInvestmentBriefsDependencies,
   type CompanyEnrichmentResult,
-  type FundThesis,
   type InvestmentBriefRun,
   type OpenAIStructuredTaskDependencies,
 } from "../src/index.js";
@@ -213,23 +214,26 @@ export async function runBriefCli(
 ): Promise<InvestmentBriefRun> {
   const args = parseBriefCliArgs(argv);
   const paths = await canonicalizeCliPaths(args, runtime);
-  const [companiesCsv, enrichmentJson, thesis] = await Promise.all([
+  const [companiesCsv, enrichmentJson, thesisSource] = await Promise.all([
     runtime.readFile(paths.companies),
     runtime.readFile(paths.enrichment),
     paths.thesisFile
-      ? runtime.readFile(paths.thesisFile).then((value) => JSON.parse(value) as FundThesis)
-      : Promise.resolve(args.thesis!),
+      ? runtime.readFile(paths.thesisFile).then((value) => parseThesisProposal(JSON.parse(value)))
+      : Promise.resolve({ thesis: args.thesis!, generationMetadata: [] }),
   ]);
   const companies = buildImportBatch(parseClayCsv(companiesCsv)).companies;
   const run = await buildInvestmentBriefs({
     companies,
     enrichments: parseEnrichments(enrichmentJson),
-    thesis,
+    thesis: thesisSource.thesis,
     thesisConfirmed: args.acceptParsedThesis,
     top: args.top,
+    initialGenerationMetadata: thesisSource.generationMetadata,
   }, runtime.structuredTasks);
   if (run.status === "awaiting_thesis_confirmation") {
-    await atomicWrite(paths.thesisOutput, `${JSON.stringify(run.thesis, null, 2)}\n`, runtime);
+    const parseMetadata = run.generationMetadata.filter(({ task }) => task === "parse_thesis");
+    const proposal = createThesisProposal(run.thesis, parseMetadata);
+    await atomicWrite(paths.thesisOutput, `${JSON.stringify(proposal, null, 2)}\n`, runtime);
     return run;
   }
   const artifact = toInvestmentBriefArtifact(run);

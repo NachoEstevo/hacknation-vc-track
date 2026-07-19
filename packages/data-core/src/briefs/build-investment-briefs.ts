@@ -25,6 +25,7 @@ export interface BuildInvestmentBriefsInput {
   thesisConfirmed: boolean;
   top?: number;
   requestedCompanyIds?: string[];
+  initialGenerationMetadata?: GenerationMetadataRecord[];
 }
 
 export interface BuildInvestmentBriefsDependencies {
@@ -106,6 +107,23 @@ function selectedEvaluations(
   };
 }
 
+function generationMetadata(
+  input: BuildInvestmentBriefsInput,
+  dependencies: BuildInvestmentBriefsDependencies,
+): GenerationMetadataRecord[] {
+  const records = [
+    ...(input.initialGenerationMetadata ?? []),
+    ...(dependencies.getGenerationMetadata?.() ?? []),
+  ];
+  const seen = new Set<string>();
+  return records.filter((record) => {
+    const key = JSON.stringify(record);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).map((record) => structuredClone(record));
+}
+
 export async function buildInvestmentBriefs(
   input: BuildInvestmentBriefsInput,
   dependencies: BuildInvestmentBriefsDependencies,
@@ -132,7 +150,7 @@ export async function buildInvestmentBriefs(
       ranking: [],
       briefs: [],
       failures: [],
-      generationMetadata: dependencies.getGenerationMetadata?.() ?? [],
+      generationMetadata: generationMetadata(input, dependencies),
     };
   }
 
@@ -208,6 +226,6 @@ export async function buildInvestmentBriefs(
     ranking,
     briefs: briefs.filter((brief): brief is InvestmentBrief => brief !== undefined),
     failures,
-    generationMetadata: dependencies.getGenerationMetadata?.() ?? [],
+    generationMetadata: generationMetadata(input, dependencies),
   };
 }
