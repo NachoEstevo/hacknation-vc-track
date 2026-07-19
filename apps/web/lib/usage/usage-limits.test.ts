@@ -102,4 +102,34 @@ describe("InMemoryUsageStore", () => {
     const other = await usage.statusFor("b", undefined, T0);
     expect(other.searchesUsed).toBe(0);
   });
+
+  it("round-trips state through export/import (the stateless cookie backend)", async () => {
+    const first = store();
+    await first.reserve({ ownerId: "a", kind: "prospect_search", idempotencyKey: "s0", now: T0 });
+    await first.reserve({ ownerId: "a", kind: "chat_message", chatId: "c1", idempotencyKey: "m0", now: T0 });
+    const snapshot = first.exportOwnerState("a", T0);
+    expect(snapshot).not.toBeNull();
+
+    // A brand-new store (another lambda, another request) resumes the ledger.
+    const second = store();
+    second.importOwnerState("a", snapshot!);
+    const status = await second.statusFor("a", "c1", T0 + 1_000);
+    expect(status).toMatchObject({ searchesUsed: 1, chatMessagesUsed: 1 });
+
+    // Idempotency survives the round-trip too.
+    const replay = await second.reserve({ ownerId: "a", kind: "prospect_search", idempotencyKey: "s0", now: T0 + 2_000 });
+    expect(replay.allowed).toBe(true);
+    expect(replay.status.searchesUsed).toBe(1);
+  });
+
+  it("caps exported events and chats to the newest entries", async () => {
+    const usage = store();
+    for (let index = 0; index < 40; index += 1) {
+      await usage.reserve({ ownerId: "a", kind: "chat_message", chatId: `c${index % 8}`, idempotencyKey: `m${index}`, now: T0 });
+    }
+    const snapshot = usage.exportOwnerState("a", T0)!;
+    expect(Object.keys(snapshot.events).length).toBeLessThanOrEqual(30);
+    expect(Object.keys(snapshot.chatMessages).length).toBeLessThanOrEqual(6);
+    expect(snapshot.events.m39).toBeDefined();
+  });
 });

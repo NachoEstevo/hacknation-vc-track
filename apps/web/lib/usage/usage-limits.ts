@@ -83,6 +83,24 @@ interface OwnerUsage {
   events: Map<string, UsageEvent>;
 }
 
+/**
+ * Serializable per-owner state, so a stateless backend (the signed-cookie
+ * store used on serverless deployments) can round-trip the ledger through
+ * `importOwnerState`/`exportOwnerState`. Bounded on export: only the newest
+ * events and chats survive, keeping the cookie payload small.
+ */
+export interface OwnerUsageSnapshot {
+  windowStart: number;
+  windowEnd: number;
+  searchesUsed: number;
+  profilesUsed: number;
+  chatMessages: Record<string, number>;
+  events: Record<string, { kind: UsageKind; chatId?: string; refunded: boolean }>;
+}
+
+const SNAPSHOT_MAX_EVENTS = 30;
+const SNAPSHOT_MAX_CHATS = 6;
+
 function emptyStatus(): UsageStatus {
   return {
     searchesUsed: 0,
@@ -177,5 +195,30 @@ export class InMemoryUsageStore implements UsageStore {
 
   async statusFor(ownerId: string, chatId?: string, now = Date.now()): Promise<UsageStatus> {
     return this.statusOf(this.ownerFor(ownerId, now), chatId);
+  }
+
+  importOwnerState(ownerId: string, snapshot: OwnerUsageSnapshot): void {
+    this.owners.set(ownerId, {
+      windowStart: snapshot.windowStart,
+      windowEnd: snapshot.windowEnd,
+      searchesUsed: Math.max(0, snapshot.searchesUsed),
+      profilesUsed: Math.max(0, snapshot.profilesUsed),
+      chatMessages: new Map(Object.entries(snapshot.chatMessages ?? {})),
+      events: new Map(Object.entries(snapshot.events ?? {})),
+    });
+  }
+
+  exportOwnerState(ownerId: string, now = Date.now()): OwnerUsageSnapshot | null {
+    const owner = this.ownerFor(ownerId, now);
+    if (!owner) return null;
+    return {
+      windowStart: owner.windowStart,
+      windowEnd: owner.windowEnd,
+      searchesUsed: owner.searchesUsed,
+      profilesUsed: owner.profilesUsed,
+      // Map preserves insertion order — the slices keep the newest entries.
+      chatMessages: Object.fromEntries([...owner.chatMessages.entries()].slice(-SNAPSHOT_MAX_CHATS)),
+      events: Object.fromEntries([...owner.events.entries()].slice(-SNAPSHOT_MAX_EVENTS)),
+    };
   }
 }
