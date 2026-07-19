@@ -30,7 +30,7 @@ import { listClayCatalogCompanies } from "@/lib/catalog/index.server";
 import { searchClayCatalogRows } from "@/lib/catalog/search-catalog";
 import { searchGitHubRepositories } from "@/lib/connectors/github/github-search.server";
 import { searchProspects } from "@/lib/catalog/hack-nation-prospects.server";
-import { searchHackNationPeople } from "@/lib/catalog/hack-nation-people.server";
+import { findHackNationPersonByName, searchHackNationPeople } from "@/lib/catalog/hack-nation-people.server";
 import { isTavilyEnabled, tavilyExtract, tavilySearch } from "@/lib/connectors/tavily/tavily.server";
 import { requireUserInProduction } from "@/lib/supabase/api-auth";
 
@@ -221,6 +221,19 @@ export async function POST(request: NextRequest) {
             reason: "duplicate_slug",
             progress: `${reportedSlugs.size} of ${target} reported — this person is already on the board, find someone new`,
           };
+        }
+        // HackNation mode is base-exclusive BY CONSTRUCTION, not by trust:
+        // anyone absent from the base bounces here regardless of the prompt.
+        if (controls?.dataSource === "hack_nation") {
+          const inBase = await findHackNationPersonByName(input.name);
+          if (!inBase) {
+            return {
+              recorded: false,
+              reason: "not_in_hack_nation_base",
+              instruction:
+                "This person is not in the HackNation base and this search is restricted to it. Do not report web-sourced people. If the base has no more matches, tell the investor plainly and suggest switching the composer data source to 'undr engine' or 'Web search'.",
+            };
+          }
         }
         if (reportedSlugs.size >= target) {
           return {
