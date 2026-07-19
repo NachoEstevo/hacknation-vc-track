@@ -46,6 +46,8 @@ export interface SidebarProps {
   onNewSearch: () => void;
   recentSearches: SidebarRecentSearch[];
   onOpenRecent: (searchId: string) => void;
+  /** With no active search session, the Search item points at the composer home instead of an empty workspace. */
+  hasActiveSearch: boolean;
   userName: string;
   userRole: string;
 }
@@ -55,7 +57,7 @@ function isActive(pathname: string, item: SidebarNavItem) {
 }
 
 /** Port of Pencil `Nav / Sidebar` + `Nav / Sidebar Collapsed`, unified behind one `collapsed` prop. */
-export function Sidebar({ collapsed, onToggleCollapsed, onNewSearch, recentSearches, onOpenRecent, userName, userRole }: SidebarProps) {
+export function Sidebar({ collapsed, onToggleCollapsed, onNewSearch, recentSearches, onOpenRecent, hasActiveSearch, userName, userRole }: SidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -89,10 +91,15 @@ export function Sidebar({ collapsed, onToggleCollapsed, onNewSearch, recentSearc
         {SIDEBAR_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const active = isActive(pathname, item);
+          // Without a live session /investor/search is an empty thread; the
+          // composer home is the real entry point for a search.
+          const target = item.href === "/investor/search" && !hasActiveSearch
+            ? "/investor"
+            : item.href;
           return (
             <Link
               key={item.href}
-              href={item.href as Route}
+              href={target as Route}
               className={clsx(styles.item, collapsed && styles.itemCollapsed, active && styles.itemActive)}
               aria-current={active ? "page" : undefined}
               aria-label={collapsed ? item.label : undefined}

@@ -40,9 +40,10 @@ export function AppShell({
   const {
     sidebarCollapsed,
     toggleSidebarCollapsed,
-    savedSearches,
+    recentChats,
     clearSearchSession,
     startSearchSession,
+    searchSession,
     hasHydrated,
     storageAvailable,
     persistenceError,
@@ -54,9 +55,9 @@ export function AppShell({
   const persistenceWarning = hasHydrated && (storageAvailable === false || persistenceError)
     ? persistenceError ?? "Browser storage is unavailable. Changes will last only for this session."
     : null;
-  // "Recent" only ever reflects searches this workspace actually saved—never a placeholder.
+  // "Recent" reflects the chats this workspace actually opened — saved or not.
   const recentSearches = hasHydrated
-    ? savedSearches.slice(0, 3).map((search) => ({ id: search.id, label: search.label }))
+    ? recentChats.slice(0, 3).map((chat) => ({ id: chat.id, label: chat.query }))
     : [];
   // The name edited in Settings wins over the per-page server default once hydrated.
   const displayName = (hasHydrated && profileName) || userName;
@@ -70,14 +71,9 @@ export function AppShell({
   // Reopening from "Recent" restores the archived conversation in the search
   // workspace when one exists (source: "recent"), instead of re-running it.
   function openRecentSearch(searchId: string) {
-    const saved = savedSearches.find((search) => search.id === searchId);
-    if (!saved) return;
-    if (!startSearchSession({
-      query: saved.query,
-      criteria: saved.criteria ?? [],
-      source: "recent",
-      sourceId: saved.id,
-    })) {
+    const recent = recentChats.find((chat) => chat.id === searchId);
+    if (!recent) return;
+    if (!startSearchSession({ query: recent.query, source: "recent", sourceId: recent.id })) {
       return;
     }
     setMobileOpen(false);
@@ -164,6 +160,7 @@ export function AppShell({
           onNewSearch={startNewSearch}
           recentSearches={recentSearches}
           onOpenRecent={openRecentSearch}
+          hasActiveSearch={Boolean(searchSession)}
           userName={displayName}
           userRole={userRole}
         />
@@ -220,6 +217,7 @@ export function AppShell({
               onNewSearch={startNewSearch}
               recentSearches={recentSearches}
               onOpenRecent={openRecentSearch}
+              hasActiveSearch={Boolean(searchSession)}
               userName={displayName}
               userRole={userRole}
             />
