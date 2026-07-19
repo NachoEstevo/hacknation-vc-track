@@ -4,16 +4,15 @@ import Link from "next/link";
 import type { Route } from "next";
 import { usePathname } from "next/navigation";
 import {
-  Bell,
   Bookmark,
-  ChevronUp,
+  History,
   Kanban,
   PanelLeftClose,
   PanelLeftOpen,
   Plus,
+  Radar,
   Search,
   Settings,
-  SlidersHorizontal,
   type LucideIcon,
 } from "lucide-react";
 import clsx from "clsx";
@@ -30,16 +29,21 @@ export interface SidebarNavItem {
 export const SIDEBAR_NAV_ITEMS: SidebarNavItem[] = [
   { label: "Search", href: "/investor/search", icon: Search },
   { label: "Pipeline", href: "/investor/pipeline", icon: Kanban },
+  { label: "Radar", href: "/investor/radar", icon: Radar },
   { label: "Saved searches", href: "/investor/saved-searches", icon: Bookmark },
-  { label: "My thesis", href: "/investor/thesis", icon: SlidersHorizontal },
-  { label: "Notifications", href: "/investor/notifications", icon: Bell },
 ];
+
+export interface SidebarRecentSearch {
+  id: string;
+  label: string;
+}
 
 export interface SidebarProps {
   collapsed: boolean;
   onToggleCollapsed: () => void;
   onNewSearch: () => void;
-  recentSearches: string[];
+  recentSearches: SidebarRecentSearch[];
+  onOpenRecent: (searchId: string) => void;
   userName: string;
   userRole: string;
 }
@@ -49,13 +53,12 @@ function isActive(pathname: string, item: SidebarNavItem) {
 }
 
 /** Port of Pencil `Nav / Sidebar` + `Nav / Sidebar Collapsed`, unified behind one `collapsed` prop. */
-export function Sidebar({ collapsed, onToggleCollapsed, onNewSearch, recentSearches, userName, userRole }: SidebarProps) {
+export function Sidebar({ collapsed, onToggleCollapsed, onNewSearch, recentSearches, onOpenRecent, userName, userRole }: SidebarProps) {
   const pathname = usePathname();
 
   return (
     <aside className={clsx(styles.sidebar, collapsed && styles.collapsed)} aria-label="Workspace sidebar">
       <div className={styles.brandRow}>
-        <span className={styles.mark} aria-hidden="true" />
         {!collapsed ? <span className={styles.wordmark}>undr</span> : null}
         {!collapsed ? <span className={styles.spacer} /> : null}
         <button
@@ -104,8 +107,15 @@ export function Sidebar({ collapsed, onToggleCollapsed, onNewSearch, recentSearc
         <div className={styles.recent}>
           <span className={styles.recentLabel}>Recent</span>
           {recentSearches.map((search) => (
-            <button key={search} type="button" className={styles.recentItem}>
-              {search}
+            <button
+              key={search.id}
+              type="button"
+              className={styles.recentItem}
+              onClick={() => onOpenRecent(search.id)}
+              title={search.label}
+            >
+              <History aria-hidden="true" />
+              <span>{search.label}</span>
             </button>
           ))}
         </div>
@@ -116,6 +126,7 @@ export function Sidebar({ collapsed, onToggleCollapsed, onNewSearch, recentSearc
       <Link
         href={"/investor/settings" as Route}
         className={clsx(styles.item, styles.settingsItem, collapsed && styles.itemCollapsed)}
+        aria-current={pathname.startsWith("/investor/settings") ? "page" : undefined}
         aria-label={collapsed ? "Settings" : undefined}
         title={collapsed ? "Settings" : undefined}
       >
@@ -126,13 +137,10 @@ export function Sidebar({ collapsed, onToggleCollapsed, onNewSearch, recentSearc
       <div className={clsx(styles.user, collapsed && styles.userCollapsed)}>
         <Avatar name={userName} />
         {!collapsed ? (
-          <>
-            <div className={styles.userCol}>
-              <span className={styles.userName}>{userName}</span>
-              <span className={styles.userRole}>{userRole}</span>
-            </div>
-            <ChevronUp className={styles.userMore} aria-hidden="true" />
-          </>
+          <div className={styles.userCol}>
+            <span className={styles.userName}>{userName}</span>
+            <span className={styles.userRole}>{userRole}</span>
+          </div>
         ) : null}
       </div>
     </aside>

@@ -13,7 +13,7 @@ export default function RolePage() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <Brand hideMark />
+        <Brand />
         <p className={styles.stepNote}>Setup 1 of 2 · Choose workspace</p>
       </header>
 

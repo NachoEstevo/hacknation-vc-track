@@ -11,7 +11,7 @@ export type ModelTier = "fast" | "research";
 
 const ANTHROPIC_MODEL_BY_TIER: Record<ModelTier, string> = {
   fast: "claude-haiku-4-5",
-  research: "claude-sonnet-5",
+  research: "claude-haiku-4-5",
 };
 
 /** Anthropic provider instance when a key is configured — needed for provider-executed tools (web search). */

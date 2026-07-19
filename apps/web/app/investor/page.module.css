@@ -17,7 +17,9 @@
   width: 100%;
   max-width: 760px;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
+  text-align: center;
 }
 
 .dateLine {
@@ -40,7 +42,6 @@
 
 .greetingSub {
   margin: 0;
-  max-width: 520px;
   color: var(--text-secondary);
   font-size: 14.5px;
   line-height: 1.6;
@@ -64,14 +65,12 @@
 }
 
 .inputArea {
-  padding: 20px 20px 14px;
+  padding: 18px 20px 4px;
 }
 
-.inputArea textarea {
+.inputArea input {
   display: block;
   width: 100%;
-  min-height: 88px;
-  resize: vertical;
   color: var(--ink);
   background: transparent;
   border: 0;
@@ -81,7 +80,7 @@
   line-height: 1.5;
 }
 
-.inputArea textarea::placeholder {
+.inputArea input::placeholder {
   color: var(--text-tertiary);
 }
 
@@ -90,12 +89,10 @@
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
-  padding: 10px 14px 14px;
-  border-top: 1px solid var(--border);
+  padding: 12px 14px 14px;
 }
 
-.scopeChip,
-.thesisChip {
+.scopeChip {
   display: inline-flex;
   gap: 6px;
   align-items: center;
@@ -135,11 +132,12 @@
 
 .scopeMenu {
   position: absolute;
-  bottom: calc(100% + 8px);
+  top: calc(100% + 8px);
   left: 0;
   z-index: 10;
   display: flex;
-  min-width: 200px;
+  min-width: 210px;
+  max-height: 320px;
   flex-direction: column;
   padding: 6px;
   border: 1px solid var(--border);
@@ -147,6 +145,63 @@
   background: var(--surface);
   box-shadow: var(--shadow-md);
   list-style: none;
+  overflow-y: auto;
+}
+
+.menuSearch {
+  position: sticky;
+  top: -6px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: -6px -6px 4px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.menuSearch svg {
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+.menuSearch input {
+  width: 100%;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+}
+
+.menuSearch input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.menuEmpty {
+  padding: 10px;
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+.menuHeading {
+  padding: 8px 10px 4px;
+  color: var(--text-tertiary);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.menuSoon {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--surface-subtle);
+  color: var(--text-tertiary);
+  font-size: 10.5px;
+  font-weight: 600;
 }
 
 .scopeMenuOption {
@@ -162,29 +217,18 @@
   text-align: left;
 }
 
-.scopeMenuOption:hover {
+.scopeMenuOption:hover:not(:disabled) {
   background: var(--surface-subtle);
+}
+
+.scopeMenuOption:disabled {
+  color: var(--text-tertiary);
+  cursor: default;
 }
 
 .scopeMenuOption svg {
   color: var(--accent);
   flex: none;
-}
-
-.thesisChip {
-  background: var(--accent-soft);
-  color: var(--accent-ink);
-}
-
-.reviewLink {
-  color: var(--accent);
-  font-size: 12.5px;
-  font-weight: 600;
-}
-
-.reviewLink:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 .barSpacer {

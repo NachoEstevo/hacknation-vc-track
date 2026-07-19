@@ -77,7 +77,7 @@ function HydratedInvestorThesisForm({
             Describe it in plain language. This becomes your active sourcing lens —
             undr combines it with every search you run afterward to rank and explain
             matches, so be specific. It extracts the sectors, stage, geography, and
-            signals automatically, and you can refine it anytime from My thesis.
+            signals automatically.
           </p>
         </div>
 

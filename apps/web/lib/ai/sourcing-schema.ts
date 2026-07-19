@@ -59,3 +59,40 @@ export const ThesisContextSchema = z.object({
 });
 
 export type ThesisContext = z.infer<typeof ThesisContextSchema>;
+
+/** Composer-selected search controls: which data source the agent may use and where it may look. */
+export const SearchControlsSchema = z.object({
+  dataSource: z
+    .enum(["web_search", "internal_catalog", "registered_founders", "github"])
+    .optional(),
+  geography: z
+    .object({
+      kind: z.enum(["all", "region", "country"]),
+      label: z.string().max(80),
+    })
+    .optional(),
+  /** How many candidate cards the agent must deliver before concluding. */
+  targetCandidates: z.number().int().min(1).max(10).optional(),
+});
+
+export type SearchControls = z.infer<typeof SearchControlsSchema>;
+
+/** Builds the thesis payload the client sends along with agent requests. */
+export function thesisContextFor(thesis: {
+  brief: string;
+  summary?: string;
+  criteria: { label: string; priority: string }[];
+  riskPosture?: string;
+  checkRange?: { currency: string; min: number; max: number };
+} | null): ThesisContext | null {
+  if (!thesis) return null;
+  return {
+    brief: thesis.brief.slice(0, 1200),
+    summary: thesis.summary?.slice(0, 600),
+    criteria: thesis.criteria.slice(0, 24).map((criterion) => `${criterion.label} (${criterion.priority})`),
+    riskPosture: thesis.riskPosture,
+    checkRange: thesis.checkRange
+      ? `${thesis.checkRange.currency} ${thesis.checkRange.min.toLocaleString("en-US")}–${thesis.checkRange.max.toLocaleString("en-US")}`
+      : undefined,
+  };
+}

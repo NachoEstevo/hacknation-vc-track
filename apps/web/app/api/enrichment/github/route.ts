@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import {
   GitHubHttpError,
@@ -6,9 +6,17 @@ import {
   isGitHubConnectorError,
 } from "@/lib/connectors/github";
 import { enrichGitHubPublicAccount } from "@/lib/connectors/github/github-public.server";
+import {
+  checkRateLimit,
+  rateLimitKeyFor,
+  type RateLimitConfig,
+} from "@/lib/ai/agent-guardrails";
+import { requireUserInProduction } from "@/lib/supabase/api-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+const ENRICHMENT_RATE_LIMIT: RateLimitConfig = { limit: 30, windowMs: 10 * 60_000 };
 
 const requestSchema = z.object({
   login: z.string().trim().min(1).max(39),
@@ -22,7 +30,24 @@ function noStoreJson(body: unknown, status = 200) {
   });
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const unauthorized = await requireUserInProduction();
+  if (unauthorized) return unauthorized;
+
+  const rate = checkRateLimit(rateLimitKeyFor(request, "enrichment-github"), ENRICHMENT_RATE_LIMIT);
+  if (!rate.allowed) {
+    return noStoreJson(
+      {
+        error: {
+          code: "rate_limited",
+          message: `Rate limit reached: enrichment checks are limited to ${ENRICHMENT_RATE_LIMIT.limit} per 10 minutes.`,
+          retryAfterSeconds: rate.retryAfterSeconds,
+        },
+      },
+      429,
+    );
+  }
+
   let payload: unknown;
 
   try {

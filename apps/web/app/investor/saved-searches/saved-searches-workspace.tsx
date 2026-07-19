@@ -104,8 +104,13 @@ export function SavedSearchesWorkspace() {
                 const resavedLabel = search.updatedAt !== search.createdAt
                   ? formatSavedDate(search.updatedAt)
                   : null;
+                // The whole card is a mouse convenience for the Re-open button, which stays the accessible control.
                 return (
-                  <article className={styles.card} key={search.id}>
+                  <article
+                    className={styles.card}
+                    key={search.id}
+                    onClick={() => reopen(search)}
+                  >
                     <div className={styles.cardLeft}>
                       <p className={styles.query}>“{search.query}”</p>
                       <div className={styles.metaRow}>
@@ -129,17 +134,24 @@ export function SavedSearchesWorkspace() {
                       <button
                         type="button"
                         className={styles.removeButton}
-                        onClick={() => handleRemove(search.id, search.label)}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          void handleRemove(search.id, search.label);
+                        }}
                         aria-label={`Remove saved search ${search.label}`}
                       >
                         <Trash2 aria-hidden="true" />
                       </button>
                       <button
                         type="button"
-                        onClick={() => reopen(search)}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          reopen(search);
+                        }}
                         className={styles.reopenButton}
+                        aria-label={`Re-open saved search ${search.label}`}
                       >
-                        Re-open <ArrowUpRight aria-hidden="true" />
+                        <ArrowUpRight aria-hidden="true" />
                       </button>
                     </div>
                   </article>

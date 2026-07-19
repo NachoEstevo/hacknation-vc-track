@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { ArrowUp, ChevronDown, Layers } from "lucide-react";
 import { SectorTag } from "@/components/pencil";
 import { useWorkspace } from "@/components/workspace-provider";
-import { createClient } from "@/lib/supabase/client";
-import { isSupabaseEnabled } from "@/lib/env";
 import styles from "./page.module.css";
 
 const EXAMPLE_BRIEFS = [
@@ -17,11 +15,25 @@ const EXAMPLE_BRIEFS = [
 
 export function LandingBriefFlow() {
   const router = useRouter();
-  const { savePendingBrief } = useWorkspace();
+  const { activeThesis, hasHydrated, savePendingBrief, startSearchSession, searchSessionError } =
+    useWorkspace();
   const [error, setError] = useState("");
 
   function continueWithBrief(brief: string) {
     setError("");
+
+    // A workspace with an active thesis means the profile is already set up
+    // (demo or account-backed): run the brief in the search screen directly.
+    if (hasHydrated && activeThesis) {
+      if (!startSearchSession({ query: brief, source: "home" })) {
+        setError(searchSessionError ?? "Private session storage could not open this exploration.");
+        return;
+      }
+      router.push("/investor/search");
+      return;
+    }
+
+    // No profile yet: carry the brief into onboarding so setup completes first.
     if (!savePendingBrief(brief)) {
       setError(
         "This browser blocked private session storage. The brief was not placed in the URL; enable site storage to continue with it.",
@@ -31,21 +43,10 @@ export function LandingBriefFlow() {
     router.push("/onboarding/role");
   }
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const brief = String(form.get("brief") ?? "");
-
-    if (isSupabaseEnabled()) {
-      const supabase = createClient();
-      const { data } = (await supabase?.auth.getUser()) ?? { data: { user: null } };
-      if (data.user) {
-        router.push("/investor");
-        return;
-      }
-    }
-
-    continueWithBrief(brief);
+    continueWithBrief(String(form.get("brief") ?? ""));
   }
 
   return (

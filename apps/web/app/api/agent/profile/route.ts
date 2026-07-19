@@ -1,9 +1,19 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { streamText, stepCountIs, tool, type ModelMessage } from "ai";
+import { smoothStream, streamText, stepCountIs, tool, type ModelMessage } from "ai";
 import { z } from "zod";
 import { resolveAnthropic, resolveModel } from "@/lib/ai/model";
+import {
+  AGENT_SECURITY_PROMPT,
+  PROFILE_RATE_LIMIT,
+  acquireStreamSlot,
+  agentAbortSignal,
+  checkRateLimit,
+  rateLimitKeyFor,
+} from "@/lib/ai/agent-guardrails";
 import { CandidateReportSchema, ThesisContextSchema } from "@/lib/ai/sourcing-schema";
 import { searchGitHubRepositories } from "@/lib/connectors/github/github-search.server";
+import { isTavilyEnabled, tavilyExtract, tavilySearch } from "@/lib/connectors/tavily/tavily.server";
+import { requireUserInProduction } from "@/lib/supabase/api-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -41,12 +51,23 @@ interface ProfileRequestBody {
  * a profile is first opened (or explicitly refreshed).
  */
 export async function POST(request: NextRequest) {
+  const unauthorized = await requireUserInProduction();
+  if (unauthorized) return unauthorized;
+
   const body = (await request.json().catch(() => null)) as ProfileRequestBody | null;
   const candidateParse = CandidateReportSchema.safeParse(body?.candidate);
   if (!candidateParse.success) {
     return NextResponse.json({ message: "A valid candidate seed is required." }, { status: 400 });
   }
   const candidate = candidateParse.data;
+
+  const rate = checkRateLimit(rateLimitKeyFor(request, "profile"), PROFILE_RATE_LIMIT);
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { message: `Rate limit reached: dossiers are limited to ${PROFILE_RATE_LIMIT.limit} per 10 minutes. Try again in ${rate.retryAfterSeconds}s.` },
+      { status: 429, headers: { "Retry-After": String(rate.retryAfterSeconds) } },
+    );
+  }
 
   const model = resolveModel("research");
   if (!model) {
@@ -56,14 +77,23 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const slot = acquireStreamSlot();
+  if (!slot.acquired) {
+    return NextResponse.json(
+      { message: "Too many concurrent agent runs right now. Wait for one to finish and retry." },
+      { status: 429, headers: { "Retry-After": "20" } },
+    );
+  }
+
   const thesisParse = ThesisContextSchema.safeParse(body?.thesis);
   const thesis = thesisParse.success ? thesisParse.data : null;
   const query = typeof body?.query === "string" ? body.query.trim().slice(0, 1000) : "";
 
   const anthropic = resolveAnthropic();
 
+  const defineTool = tool as unknown as (definition: unknown) => unknown;
   const tools: Record<string, unknown> = {
-    search_github: tool({
+    search_github: defineTool({
       description: "Search GitHub repositories to verify a technical person's public work.",
       inputSchema: z.object({ query: z.string().describe("GitHub repository search query") }),
       execute: async ({ query: githubQuery }: { query: string }) => {
@@ -88,6 +118,44 @@ export async function POST(request: NextRequest) {
     tools.web_search = anthropic.tools.webSearch_20250305({ maxUses: 8 });
   }
 
+  const tavilyEnabled = isTavilyEnabled();
+  if (tavilyEnabled) {
+    // Metered per run — see lib/connectors/tavily/tavily.server.ts. Matches
+    // web_search's budget so every angle can run on both engines.
+    let tavilySearchesLeft = 8;
+    let pageReadsLeft = 4;
+
+    tools.tavily_search = defineTool({
+      description:
+        "Co-primary web search engine (Tavily, advanced depth), independent from web_search. Run it on EVERY search angle alongside web_search — same query or a locally-adapted one.",
+      inputSchema: z.object({ query: z.string().describe("Focused search query about this person or their company") }),
+      execute: async ({ query: tavilyQuery }: { query: string }) => {
+        if (tavilySearchesLeft <= 0) return { error: "tavily_search budget for this run is exhausted" };
+        tavilySearchesLeft -= 1;
+        const output = await tavilySearch(tavilyQuery, { maxResults: 6 });
+        return { error: output.error, results: output.results };
+      },
+    });
+
+    tools.read_page = defineTool({
+      description:
+        "Fetch the full readable content of up to 3 specific URLs (the candidate's evidence links or pages found while searching). Prefer reading primary sources over trusting snippets.",
+      inputSchema: z.object({
+        urls: z.array(z.string().url()).min(1).max(3).describe("http(s) URLs to read in full"),
+      }),
+      execute: async ({ urls }: { urls: string[] }) => {
+        if (pageReadsLeft <= 0) return { error: "read_page budget for this run is exhausted" };
+        pageReadsLeft -= 1;
+        const output = await tavilyExtract(urls);
+        return { error: output.error, pages: output.pages, failedUrls: output.failedUrls };
+      },
+    });
+  }
+
+  const tavilyNote = tavilyEnabled
+    ? "\n\nAdditional tools available: tavily_search (a co-primary web engine, independent from web_search — run EVERY search angle through BOTH engines, translating the query to the person's local language where useful) and read_page (fetches the full content of up to 3 URLs — read the person's strongest sources, starting with the evidence links in the seed, before writing the dossier)."
+    : "";
+
   const prompt = `Candidate seed (from the sourcing conversation):
 ${JSON.stringify(candidate, null, 2)}
 
@@ -107,17 +175,22 @@ Research this person now and write the dossier.`;
 
   const result = stream({
     model,
-    system: PROFILE_SYSTEM,
+    system: `${PROFILE_SYSTEM}${tavilyNote}\n\n${AGENT_SECURITY_PROMPT}`,
     messages,
     tools,
     stopWhen: stepCountIs(8),
     maxOutputTokens: 6000,
-    abortSignal: request.signal,
+    abortSignal: agentAbortSignal(request),
+    experimental_transform: smoothStream(),
+    onEnd: () => slot.release(),
+    onAbort: () => slot.release(),
+    onError: () => slot.release(),
   });
 
   return result.toUIMessageStreamResponse({
     sendSources: true,
     onError: (error: unknown) => {
+      slot.release();
       console.error("[agent/profile]", error);
       return "The dossier writer hit an upstream error. Refresh to retry.";
     },

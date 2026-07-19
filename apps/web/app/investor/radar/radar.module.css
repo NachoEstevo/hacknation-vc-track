@@ -1,0 +1,127 @@
+.page {
+  width: min(100%, 860px);
+  margin: 0 auto;
+  padding: clamp(32px, 5vw, 68px) clamp(20px, 4vw, 52px) 90px;
+}
+
+.subtitle {
+  margin: -6px 0 28px;
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+.loading,
+.empty {
+  display: grid;
+  min-height: 350px;
+  place-items: center;
+  padding: 50px 24px;
+  border: 1px dashed var(--border-strong);
+  background: color-mix(in srgb, var(--surface) 68%, transparent);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.loading {
+  font-size: 10px;
+}
+
+.empty {
+  align-content: center;
+  gap: 4px;
+}
+
+.emptyIcon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 15px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.emptyIcon svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.5;
+}
+
+.empty h2 {
+  margin: 14px 0 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 480;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  font-size: 31px;
+}
+
+.empty p {
+  max-width: 510px;
+  margin: 12px 0 22px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.entry {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.entryMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px;
+}
+
+.entrySaved {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.entryQuery {
+  overflow: hidden;
+  max-width: 60%;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  font-style: italic;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.entrySpacer {
+  flex: 1;
+}
+
+.removeButton {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--text-tertiary);
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.removeButton:hover {
+  background: var(--surface-subtle);
+  color: var(--risk);
+}
+
+.removeButton svg {
+  width: 14px;
+  height: 14px;
+}

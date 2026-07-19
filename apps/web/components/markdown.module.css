@@ -70,6 +70,70 @@
   text-decoration-color: var(--accent-ink);
 }
 
+/* Inline citation chip (adapted from aicss.dev "Inline Citations") */
+
+.markdown a.citation {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  padding: 1px 8px;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  background: var(--surface-subtle);
+  color: var(--accent-ink);
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.5;
+  text-decoration: none;
+  vertical-align: -3px;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.markdown a.citation:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border-strong));
+  background: var(--accent-soft);
+}
+
+.citationLabel {
+  overflow: hidden;
+  max-width: 32ch;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.citationHost {
+  flex: none;
+  color: var(--text-tertiary);
+  font-size: 10.5px;
+  font-weight: 500;
+}
+
+/* Streaming caret (adapted from aicss.dev "Streaming Text") */
+
+.caret {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  margin-left: 3px;
+  background: var(--accent);
+  border-radius: 1.5px;
+  vertical-align: -2px;
+  animation: markdown-caret-blink 1s steps(2, start) infinite;
+}
+
+@keyframes markdown-caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret {
+    animation: none;
+  }
+}
+
 .markdown strong {
   font-weight: 650;
 }

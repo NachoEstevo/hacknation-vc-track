@@ -80,6 +80,13 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
+  cursor: pointer;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.card:hover {
+  border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
+  box-shadow: var(--shadow-sm);
 }
 
 .cardLeft {
@@ -160,29 +167,25 @@
 }
 
 .reopenButton {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 34px;
-  padding: 0 12px;
-  border: 1px solid var(--border-strong);
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  place-items: center;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--ink);
-  font-size: 12.5px;
-  font-weight: 500;
-  white-space: nowrap;
+  color: var(--text-tertiary);
   cursor: pointer;
 }
 
 .reopenButton:hover {
-  border-color: var(--accent);
+  background: var(--accent-soft);
   color: var(--accent-ink);
 }
 
 .reopenButton svg {
-  width: 13px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
 }
 
 .footnote {

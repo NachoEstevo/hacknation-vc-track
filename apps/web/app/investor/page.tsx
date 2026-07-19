@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { AppShell } from "@/components/app-shell";
 import { DEFAULT_SEARCH_QUERY } from "@/lib/search";
 import { loadInvestorIdentityAction } from "@/lib/supabase/workspace-identity.actions";
-import { HomeSearchComposer, HomeSearchExamples } from "./home-thesis";
+import { HomeGreetingName, HomeSearchComposer, HomeSearchExamples } from "./home-thesis";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -45,7 +45,7 @@ export default async function InvestorHomePage() {
         <section className={styles.greeting} aria-labelledby="workspace-title">
           <p className={styles.dateLine}>Today · Investor workspace</p>
           <h1 id="workspace-title" className={styles.greetingTitle}>
-            What are you looking for, {investorName.split(" ")[0]}?
+            What are you looking for, <HomeGreetingName fallback={investorName} />?
           </h1>
           <p className={styles.greetingSub}>
             Describe a search in plain language. Every result will retain its evidence,

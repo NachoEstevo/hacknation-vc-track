@@ -18,7 +18,7 @@ export default async function InvestorOnboardingPage() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <Brand hideMark />
+        <Brand />
         <nav className={styles.stepper} aria-label="Onboarding progress">
           <div className={styles.step}>
             <span className={styles.stepDot}>

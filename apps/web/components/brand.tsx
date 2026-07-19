@@ -8,13 +8,11 @@ export interface BrandProps extends Omit<HTMLAttributes<HTMLSpanElement>, "child
   href?: string;
   compact?: boolean;
   tone?: "default" | "inverse";
-  hideMark?: boolean;
 }
 
 function BrandLockup({
   compact = false,
   tone = "default",
-  hideMark = false,
   className,
   ...props
 }: Omit<BrandProps, "href">) {
@@ -23,16 +21,9 @@ function BrandLockup({
       className={clsx(styles.brand, styles[tone], compact && styles.compact, className)}
       {...props}
     >
-      {!hideMark && (
-        <span className={styles.mark} aria-hidden="true">
-          <span className={styles.markCore}>u</span>
-        </span>
-      )}
-      {!compact && (
-        <span className={styles.wordmark} aria-hidden="true">
-          undr<span className={styles.period}>.</span>
-        </span>
-      )}
+      <span className={styles.wordmark} aria-hidden="true">
+        undr<span className={styles.period}>.</span>
+      </span>
       <span className="sr-only">undr</span>
     </span>
   );

@@ -7,6 +7,7 @@ export * from "./evidence-row";
 export * from "./external-search-banner";
 export * from "./founder-nav";
 export * from "./founder-score";
+export * from "./person-card";
 export * from "./project-result-card";
 export * from "./sidebar";
 export * from "./timeline-item";

@@ -25,17 +25,10 @@
   padding: 0 8px;
 }
 
-.mark {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
-  background: var(--accent);
-  flex: none;
-}
-
-.collapsed .mark {
-  width: 12px;
-  height: 12px;
+.collapsed .brandRow {
+  width: auto;
+  padding: 0;
+  justify-content: center;
 }
 
 .wordmark {
@@ -57,6 +50,19 @@
 .iconButton svg {
   width: 16px;
   height: 16px;
+}
+
+/* Collapsed rail: give the toggle the same 44px hit target as every other item so the column reads as one aligned stack. */
+.collapsed .iconButton {
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+}
+
+.collapsed .iconButton:hover {
+  background: var(--surface-subtle);
 }
 
 .newSearch {
@@ -121,6 +127,10 @@
   flex: none;
 }
 
+.settingsItem {
+  width: 100%;
+}
+
 .itemCollapsed {
   width: 44px;
   height: 44px;
@@ -137,12 +147,13 @@
 .recent {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
   width: 100%;
-  padding: 6px 10px 0;
+  padding: 10px 2px 0;
 }
 
 .recentLabel {
+  padding: 0 8px 4px;
   font-family: var(--font-body);
   font-size: 10.5px;
   font-weight: 600;
@@ -152,11 +163,37 @@
 }
 
 .recentItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 8px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: 12.5px;
   color: var(--text-secondary);
   text-align: left;
-  white-space: normal;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.recentItem:hover {
+  background: var(--surface-subtle);
+  color: var(--ink);
+}
+
+.recentItem svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+.recentItem span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .footSpacer {
@@ -164,22 +201,25 @@
   width: 1px;
 }
 
-.settingsItem {
-  width: 100%;
-}
-
 .user {
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 100%;
-  padding: 10px 8px;
+  /* Full-bleed footer, 83px tall so its top border sits at the exact same
+     height as the chat composer's top border in the adjacent panel. */
+  height: 83px;
+  margin: 0 -14px -18px;
+  padding: 0 22px;
   border-top: 1px solid var(--border);
 }
 
 .userCollapsed {
+  width: auto;
+  height: auto;
+  margin: 0;
   border-top: none;
   padding: 0;
+  justify-content: center;
 }
 
 .userCol {

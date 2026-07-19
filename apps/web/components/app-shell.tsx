@@ -42,9 +42,11 @@ export function AppShell({
     toggleSidebarCollapsed,
     savedSearches,
     clearSearchSession,
+    startSearchSession,
     hasHydrated,
     storageAvailable,
     persistenceError,
+    profileName,
   } = useWorkspace();
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileTriggerRef = useRef<HTMLButtonElement>(null);
@@ -53,12 +55,33 @@ export function AppShell({
     ? persistenceError ?? "Browser storage is unavailable. Changes will last only for this session."
     : null;
   // "Recent" only ever reflects searches this workspace actually saved—never a placeholder.
-  const recentSearches = hasHydrated ? savedSearches.slice(0, 3).map((search) => search.label) : [];
+  const recentSearches = hasHydrated
+    ? savedSearches.slice(0, 3).map((search) => ({ id: search.id, label: search.label }))
+    : [];
+  // The name edited in Settings wins over the per-page server default once hydrated.
+  const displayName = (hasHydrated && profileName) || userName;
 
   function startNewSearch() {
     clearSearchSession();
     setMobileOpen(false);
     router.push("/investor");
+  }
+
+  // Reopening from "Recent" restores the archived conversation in the search
+  // workspace when one exists (source: "recent"), instead of re-running it.
+  function openRecentSearch(searchId: string) {
+    const saved = savedSearches.find((search) => search.id === searchId);
+    if (!saved) return;
+    if (!startSearchSession({
+      query: saved.query,
+      criteria: saved.criteria ?? [],
+      source: "recent",
+      sourceId: saved.id,
+    })) {
+      return;
+    }
+    setMobileOpen(false);
+    router.push("/investor/search");
   }
 
   useEffect(() => {
@@ -140,7 +163,8 @@ export function AppShell({
           onToggleCollapsed={toggleSidebarCollapsed}
           onNewSearch={startNewSearch}
           recentSearches={recentSearches}
-          userName={userName}
+          onOpenRecent={openRecentSearch}
+          userName={displayName}
           userRole={userRole}
         />
       </div>
@@ -195,7 +219,8 @@ export function AppShell({
               onToggleCollapsed={toggleSidebarCollapsed}
               onNewSearch={startNewSearch}
               recentSearches={recentSearches}
-              userName={userName}
+              onOpenRecent={openRecentSearch}
+              userName={displayName}
               userRole={userRole}
             />
           </div>

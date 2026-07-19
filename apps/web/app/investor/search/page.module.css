@@ -6,7 +6,9 @@
 
 .workspace {
   display: grid;
-  grid-template-columns: 574px minmax(0, 1fr);
+  /* Draggable chat width, never narrower than the 574px default and always
+     leaving the results panel at least 420px. */
+  grid-template-columns: min(var(--chat-width, 574px), calc(100% - 420px)) minmax(0, 1fr);
   align-items: start;
   height: 100vh;
 }
@@ -21,6 +23,33 @@
   flex-direction: column;
   border-right: 1px solid var(--border);
   background: var(--surface);
+}
+
+.resizeHandle {
+  position: absolute;
+  top: 0;
+  right: -5px;
+  z-index: 20;
+  width: 10px;
+  height: 100%;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.resizeHandle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 4px;
+  width: 2px;
+  height: 100%;
+  background: transparent;
+  transition: background-color 120ms ease;
+}
+
+.resizeHandle:hover::after,
+.resizeHandle[data-resizing="true"]::after {
+  background: var(--accent);
 }
 
 .chatHead {
@@ -188,6 +217,275 @@
   color: var(--text-tertiary);
   font-family: var(--font-body);
   font-size: 12.5px;
+}
+
+.autoNote {
+  margin: 0;
+  align-self: center;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: var(--surface-subtle);
+  color: var(--text-tertiary);
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-style: italic;
+}
+
+/* ---------- Agent turns ---------- */
+
+.assistantTurn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Shimmering label — adapted from aicss.dev "Thinking State" */
+
+.shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--text-tertiary) 20%,
+    var(--ink) 50%,
+    var(--text-tertiary) 80%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-sweep 1.8s linear infinite;
+}
+
+@keyframes shimmer-sweep {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Grouped research block — adapted from aicss.dev "Web Search" tool state */
+
+.researchBlock {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-subtle);
+}
+
+.researchHead {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  color: var(--text-secondary);
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.researchHead:hover {
+  color: var(--ink);
+}
+
+.researchTitle {
+  flex: 1;
+  min-width: 0;
+}
+
+.researchCaret {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: var(--text-tertiary);
+  transition: transform 180ms ease;
+}
+
+.researchCaret[data-open="true"] {
+  transform: rotate(180deg);
+}
+
+.researchList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 2px 8px 8px;
+}
+
+.activityRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 9px;
+  border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 550;
+  animation: activity-enter 260ms ease both;
+}
+
+@keyframes activity-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+    background: none;
+    background-clip: border-box;
+    -webkit-text-fill-color: currentcolor;
+  }
+
+  .activityRow {
+    animation: none;
+  }
+}
+
+.activityRow[data-state="running"] {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+}
+
+.activityRow[data-state="failed"] {
+  color: var(--risk);
+}
+
+.activityIcon {
+  display: inline-flex;
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+.activityIcon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.activityLabel {
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activityDone {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  color: var(--verified);
+}
+
+.activityFailed {
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.candidateChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  align-self: flex-start;
+  padding: 6px 11px;
+  border-radius: 99px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-family: var(--font-body);
+  font-size: 12px;
+}
+
+.candidateChip svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+}
+
+.emptyThread {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin: auto 0;
+  padding: 24px 18px;
+  text-align: center;
+}
+
+.emptyThread > svg {
+  width: 26px;
+  height: 26px;
+  margin-bottom: 6px;
+  color: var(--accent);
+}
+
+.emptyThreadTitle {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.emptyThreadHint {
+  max-width: 380px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.errorRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--risk) 30%, var(--border));
+  border-radius: var(--radius-md);
+  background: var(--risk-soft);
+}
+
+.errorRow p {
+  margin: 0;
+  color: var(--risk);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.resultsEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 48px 24px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.resultsEmpty p {
+  max-width: 420px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.55;
 }
 
 .thinkingSpin {
@@ -398,6 +696,10 @@
 @media (max-width: 1060px) {
   .workspace {
     grid-template-columns: 420px minmax(0, 1fr);
+  }
+
+  .resizeHandle {
+    display: none;
   }
 }
 

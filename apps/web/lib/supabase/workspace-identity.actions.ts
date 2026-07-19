@@ -27,3 +27,23 @@ export async function loadInvestorIdentityAction(): Promise<InvestorIdentity | n
   const name = profile?.display_name?.trim() || email?.split("@")[0]?.trim() || "";
   return name ? { name } : null;
 }
+
+/**
+ * Updates the caller's own `profiles.display_name`. The migration's
+ * column-level UPDATE grant covers `display_name`, and RLS restricts the
+ * write to `id = auth.uid()`.
+ */
+export async function saveInvestorNameAction(name: string): Promise<boolean> {
+  const normalized = name.trim().replace(/\s+/g, " ").slice(0, 80);
+  if (!normalized) return false;
+
+  const ctx = await getAuthedContext();
+  if (!ctx) return false;
+  const { supabase, userId } = ctx;
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ display_name: normalized })
+    .eq("id", userId);
+  return !error;
+}

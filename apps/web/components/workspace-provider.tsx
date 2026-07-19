@@ -19,6 +19,7 @@ import {
   type ThesisSourceScope,
 } from "@/lib/domain";
 import { writeJsonAtomically } from "@/lib/browser/atomic-storage";
+import { isCandidateReport, type CandidateReport } from "@/lib/ai/sourcing-schema";
 import {
   createSearchSession,
   isSearchSession,
@@ -44,6 +45,10 @@ import {
   removeSavedSearchAction,
   saveSearchAction,
 } from "@/lib/supabase/workspace-searches.actions";
+import {
+  loadInvestorIdentityAction,
+  saveInvestorNameAction,
+} from "@/lib/supabase/workspace-identity.actions";
 
 /**
  * When Supabase is enabled, the thesis/pipeline/saved-searches slices of
@@ -91,12 +96,22 @@ export interface NewSavedSearch {
   criteria?: SearchCriterion[];
 }
 
+/** A person the investor pinned from research: the full candidate card plus when and from which brief it was saved. Browser-only in every mode. */
+export interface RadarPerson {
+  candidate: CandidateReport;
+  savedAt: string;
+  sourceQuery?: string;
+}
+
 interface WorkspaceState {
   activeThesis: ActiveThesis | null;
   pipelineItems: PipelineItem[];
   compareIds: string[];
   savedSearches: SavedSearch[];
+  radarPeople: RadarPerson[];
   sidebarCollapsed: boolean;
+  /** Investor display name. Mirrors `profiles.display_name` in Supabase mode; browser-only otherwise. */
+  profileName: string | null;
 }
 
 export type WorkspaceMutationResult = "saved" | "no_change" | "failed";
@@ -130,6 +145,10 @@ export interface WorkspaceContextValue extends WorkspaceState {
   saveSearch: (search: NewSavedSearch | string) => Promise<string>;
   saveActiveThesis: (thesis: ActiveThesis) => Promise<boolean>;
   setThesisSourceScope: (scope: ThesisSourceScope) => Promise<WorkspaceMutationResult>;
+  saveProfileName: (name: string) => Promise<WorkspaceMutationResult>;
+  addToRadar: (candidate: CandidateReport, sourceQuery?: string) => WorkspaceMutationResult;
+  removeFromRadar: (slug: string) => WorkspaceMutationResult;
+  isOnRadar: (slug: string) => boolean;
   savePendingBrief: (brief: string) => boolean;
   clearPendingBrief: () => void;
   startSearchSession: (session: NewSearchSession) => boolean;
@@ -152,7 +171,9 @@ function freshState(): WorkspaceState {
     pipelineItems: [],
     compareIds: [],
     savedSearches: [],
+    radarPeople: [],
     sidebarCollapsed: false,
+    profileName: null,
   };
 }
 
@@ -226,12 +247,28 @@ function normalizeStoredState(value: unknown): WorkspaceState | null {
       })
     : [];
 
+  const seenRadarSlugs = new Set<string>();
+  const radarPeople: RadarPerson[] = Array.isArray(value.radarPeople)
+    ? value.radarPeople.flatMap((entry) => {
+        if (!isRecord(entry) || !isCandidateReport(entry.candidate)) return [];
+        if (seenRadarSlugs.has(entry.candidate.slug)) return [];
+        seenRadarSlugs.add(entry.candidate.slug);
+        return [{
+          candidate: entry.candidate,
+          savedAt: stringValue(entry.savedAt) ?? now,
+          sourceQuery: stringValue(entry.sourceQuery)?.slice(0, 200) ?? undefined,
+        }];
+      })
+    : [];
+
   return {
     activeThesis,
     pipelineItems,
     compareIds,
     savedSearches,
+    radarPeople,
     sidebarCollapsed: value.sidebarCollapsed === true,
+    profileName: stringValue(value.profileName)?.slice(0, 80) ?? null,
   };
 }
 
@@ -334,14 +371,21 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
 
     (async () => {
-      const [activeThesis, pipelineItems, savedSearches] = await Promise.all([
+      const [activeThesis, pipelineItems, savedSearches, identity] = await Promise.all([
         loadActiveThesisAction(),
         loadPipelineItemsAction(),
         loadSavedSearchesAction(),
+        loadInvestorIdentityAction(),
       ]);
       if (cancelled) return;
       setState((current) => {
-        const next: WorkspaceState = { ...current, activeThesis, pipelineItems, savedSearches };
+        const next: WorkspaceState = {
+          ...current,
+          activeThesis,
+          pipelineItems,
+          savedSearches,
+          profileName: identity?.name ?? null,
+        };
         stateRef.current = next;
         return next;
       });
@@ -713,6 +757,54 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     "Browser storage could not save the sourcing scope. Nothing changed.");
   }, [applyLocalStateChange, commitWorkspaceState]);
 
+  const saveProfileName = useCallback(async (name: string): Promise<WorkspaceMutationResult> => {
+    const normalized = name.trim().replace(/\s+/g, " ").slice(0, 80);
+    if (!normalized) return "failed";
+    if (stateRef.current.profileName === normalized) return "no_change";
+
+    if (SUPABASE_ENABLED) {
+      const ok = await saveInvestorNameAction(normalized);
+      if (!ok) return "failed";
+      applyLocalStateChange((state) => ({ ...state, profileName: normalized }));
+      return "saved";
+    }
+
+    return commitWorkspaceState(
+      (state) => ({ ...state, profileName: normalized }),
+      "Browser storage could not save your name. Nothing changed.",
+    );
+  }, [applyLocalStateChange, commitWorkspaceState]);
+
+  const addToRadar = useCallback((candidate: CandidateReport, sourceQuery?: string): WorkspaceMutationResult => (
+    commitWorkspaceState(
+      (current) => (current.radarPeople.some((person) => person.candidate.slug === candidate.slug)
+        ? current
+        : {
+            ...current,
+            radarPeople: [{
+              candidate,
+              savedAt: new Date().toISOString(),
+              ...(sourceQuery?.trim() ? { sourceQuery: sourceQuery.trim().slice(0, 200) } : {}),
+            }, ...current.radarPeople],
+          }),
+      "Browser storage could not add this person to your radar. Nothing changed.",
+    )
+  ), [commitWorkspaceState]);
+
+  const removeFromRadar = useCallback((slug: string): WorkspaceMutationResult => (
+    commitWorkspaceState(
+      (current) => (current.radarPeople.some((person) => person.candidate.slug === slug)
+        ? { ...current, radarPeople: current.radarPeople.filter((person) => person.candidate.slug !== slug) }
+        : current),
+      "Browser storage could not update your radar. Nothing changed.",
+    )
+  ), [commitWorkspaceState]);
+
+  const isOnRadar = useCallback(
+    (slug: string) => state.radarPeople.some((person) => person.candidate.slug === slug),
+    [state.radarPeople],
+  );
+
   const savePendingBrief = useCallback((brief: string): boolean => {
     const normalized = brief.trim().replace(/\s+/g, " ").slice(0, 1000);
     if (!normalized) return false;
@@ -833,6 +925,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     saveSearch,
     saveActiveThesis,
     setThesisSourceScope,
+    saveProfileName,
+    addToRadar,
+    removeFromRadar,
+    isOnRadar,
     savePendingBrief,
     clearPendingBrief,
     startSearchSession,
@@ -863,6 +959,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     saveSearch,
     saveActiveThesis,
     setThesisSourceScope,
+    saveProfileName,
+    addToRadar,
+    removeFromRadar,
+    isOnRadar,
     savePendingBrief,
     clearPendingBrief,
     startSearchSession,

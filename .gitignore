@@ -3,6 +3,7 @@ node_modules/
 .next/
 out/
 coverage/
+*.tsbuildinfo
 
 # Local configuration and secrets
 .env
@@ -16,6 +17,10 @@ tmp/
 .playwright-cli/
 supabase/.temp/
 *.log
+output/
+
+# Local design reference screenshots
+/image.png
 
 # OS and editor files
 .DS_Store

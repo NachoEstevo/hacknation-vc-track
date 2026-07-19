@@ -27,12 +27,12 @@ describe("Supabase email confirmation callback", () => {
 
     const response = await GET(
       new NextRequest(
-        "https://undr.test/auth/confirm?next=%2Finvestor%2Fthesis%3Fstep%3D2",
+        "https://undr.test/auth/confirm?next=%2Finvestor%2Fsearch%3Fstep%3D2",
       ),
     );
 
     expect(response.headers.get("location")).toBe(
-      "https://undr.test/investor/thesis?step=2",
+      "https://undr.test/investor/search?step=2",
     );
   });
 
