@@ -110,7 +110,8 @@ When you research:
 2. Use your tools iteratively, most-promising first:${undrEngine ? `
    - search_prospect_base — the FIRST call of every research run (see the Data source section above).` : ""}${hackNation ? `
    - search_hack_nation — the FIRST call of every research run and the ONLY source of candidates (see the Data source section above).` : ""}
-   - ${tavilyEnabled ? `tavily_search and web_search — two independent engines that index the web differently; together they are your main ${undrEngine || hackNation ? "gap-filling and verification instrument" : "instrument"}. ${hackNation ? "In this mode they only verify or complete HackNation people — never source from them." : "OPEN every research angle with tavily_search, then run web_search on the same angle (same query or a locally-adapted one — translate to the local language where useful). Never run an angle on one engine only."}` : "web_search — your main instrument."} Compose focused, people-centric queries (e.g. "fintech infrastructure founders Mexico pre-seed 2025", "site:linkedin.com/in CTO payments São Paulo", accelerator/demo-day batch lists, funding announcements). Run several distinct angles, not one broad query.${tavilyEnabled ? `
+   - ${tavilyEnabled ? `tavily_search — your web search engine${undrEngine || hackNation ? " for gap-filling and verification" : ""}. ${hackNation ? "In this mode it only verifies or completes HackNation people — never source from it." : "Run EVERY web angle through it, translating the query to the local language where useful."}
+   - web_search — an expensive backstop, not a routine engine. Use it at most a few times per run, ONLY when tavily_search came back thin on an important angle or to cross-check a critical single-source claim right before reporting someone. Never mirror every Tavily query into it.` : "web_search — your main instrument."} Compose focused, people-centric queries (e.g. "fintech infrastructure founders Mexico pre-seed 2025", "site:linkedin.com/in CTO payments São Paulo", accelerator/demo-day batch lists, funding announcements). Run several distinct angles, not one broad query.${tavilyEnabled ? `
    - read_page — fetches the full content of up to 3 specific URLs from earlier results. Use it before reporting a candidate whose evidence is thin (verify identity, role, and company on the primary source) and to pull details a snippet cut off. Do not read pages unrelated to a candidate at hand.` : ""}${controls?.dataSource === "web_search" || hackNation ? "" : `
    - search_registered_founders and search_internal_catalog — undr's own bases; call each once with the best keyword.
    - search_github — when the profile sought is technical; active repos often name real builders.`}
@@ -363,10 +364,10 @@ export async function POST(request: NextRequest) {
   }
 
   if (anthropic) {
-    // Deliberately tighter than tavily_search's budget: Tavily opens every
-    // angle, this one complements it.
+    // With Tavily on, Claude's built-in search is a metered backstop (it is
+    // the expensive engine) — a handful of uses per run, not one per angle.
     tools.web_search = anthropic.tools.webSearch_20250305({
-      maxUses: isTavilyEnabled() ? Math.min(10, 4 + target) : Math.min(16, 6 + target),
+      maxUses: isTavilyEnabled() ? Math.min(4, 2 + Math.ceil(target / 3)) : Math.min(16, 6 + target),
     });
   }
 
@@ -375,7 +376,7 @@ export async function POST(request: NextRequest) {
     // Per-run budgets: Tavily credits are metered, so the caps live in the
     // tools themselves rather than trusting the prompt. The search budget
     // mirrors web_search's so every angle can run on both engines.
-    let tavilySearchesLeft = Math.min(16, 6 + target);
+    let tavilySearchesLeft = Math.min(18, 8 + target);
     let pageReadsLeft = 5;
 
     tools.tavily_search = defineTool({

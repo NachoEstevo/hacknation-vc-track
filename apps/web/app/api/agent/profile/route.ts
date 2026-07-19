@@ -129,14 +129,15 @@ export async function POST(request: NextRequest) {
     }),
   };
   if (anthropic) {
-    tools.web_search = anthropic.tools.webSearch_20250305({ maxUses: 8 });
+    // With Tavily on, Claude's built-in search is a metered backstop only.
+    tools.web_search = anthropic.tools.webSearch_20250305({ maxUses: isTavilyEnabled() ? 3 : 8 });
   }
 
   const tavilyEnabled = isTavilyEnabled();
   if (tavilyEnabled) {
     // Metered per run — see lib/connectors/tavily/tavily.server.ts. Matches
     // web_search's budget so every angle can run on both engines.
-    let tavilySearchesLeft = 8;
+    let tavilySearchesLeft = 10;
     let pageReadsLeft = 4;
 
     tools.tavily_search = defineTool({
@@ -167,7 +168,7 @@ export async function POST(request: NextRequest) {
   }
 
   const tavilyNote = tavilyEnabled
-    ? "\n\nAdditional tools available: tavily_search (a co-primary web engine, independent from web_search — run EVERY search angle through BOTH engines, translating the query to the person's local language where useful) and read_page (fetches the full content of up to 3 URLs — read the person's strongest sources, starting with the evidence links in the seed, before writing the dossier)."
+    ? "\n\nAdditional tools available: tavily_search (your web search engine — run EVERY search angle through it, translating the query to the person's local language where useful), read_page (fetches the full content of up to 3 URLs — read the person's strongest sources, starting with the evidence links in the seed, before writing the dossier), and web_search (an expensive backstop — at most a couple of uses, only when tavily_search comes back thin on something critical)."
     : "";
 
   const prompt = `Candidate seed (from the sourcing conversation):
