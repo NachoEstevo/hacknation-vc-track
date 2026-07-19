@@ -11,7 +11,7 @@ export type ModelTier = "fast" | "research";
 
 const ANTHROPIC_MODEL_BY_TIER: Record<ModelTier, string> = {
   fast: "claude-haiku-4-5",
-  research: "claude-haiku-4-5",
+  research: "claude-sonnet-5",
 };
 
 /** Cross-provider fallback (https://developers.openai.com/api/docs/models/gpt-5.6-luna): takes over a call when the Anthropic request fails. */
@@ -105,10 +105,11 @@ function resolveOpenAiModel(tier: ModelTier): LanguageModel | null {
 }
 
 /**
- * Claude Haiku is the default for every call. When both keys are configured
- * the returned model automatically retries failed Anthropic requests on
- * OpenAI's gpt-5.6-luna; with a single key it uses that provider directly.
- * Returns null if neither key is configured.
+ * Claude Sonnet is the default for agent work ("research": sourcing chat and
+ * dossiers); Claude Haiku backs the cheap structured calls ("fast"). When
+ * both keys are configured the returned model automatically retries failed
+ * Anthropic requests on OpenAI's gpt-5.6-luna; with a single key it uses
+ * that provider directly. Returns null if neither key is configured.
  */
 export function resolveModel(tier: ModelTier = "fast"): LanguageModel | null {
   const anthropic = resolveAnthropic();
