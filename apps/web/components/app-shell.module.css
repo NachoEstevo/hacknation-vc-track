@@ -221,3 +221,30 @@
     justify-content: flex-start;
   }
 }
+
+/* Print (PDF export): the workspace chrome disappears and content flows
+   from the page edge — the fixed sidebar would otherwise stamp every sheet. */
+
+@media print {
+  .shell {
+    background: none;
+  }
+
+  .desktopSidebar,
+  .mobileHeader,
+  .mobileLayer,
+  .persistenceWarning,
+  .pageHeader {
+    display: none;
+  }
+
+  .main,
+  .shellCollapsed .main {
+    min-height: auto;
+    margin-left: 0;
+  }
+
+  .content {
+    padding: 0;
+  }
+}
