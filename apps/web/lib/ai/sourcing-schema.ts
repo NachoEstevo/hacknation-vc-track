@@ -39,8 +39,8 @@ export const CandidateReportSchema = z.object({
     .max(6)
     .describe("Evidence links from the research; at least one is required"),
   sourceKind: z
-    .enum(["web", "github", "registered", "internal_base", "prospect_base"])
-    .describe("Primary source the person surfaced from; 'prospect_base' = undr's curated prospect base"),
+    .enum(["web", "github", "registered", "internal_base", "prospect_base", "hack_nation"])
+    .describe("Primary source the person surfaced from; 'prospect_base' = undr's curated prospect base, 'hack_nation' = the scraped HackNation founder base"),
 });
 
 export type CandidateReport = z.infer<typeof CandidateReportSchema>;
@@ -63,7 +63,7 @@ export type ThesisContext = z.infer<typeof ThesisContextSchema>;
 /** Composer-selected search controls: which data source the agent may use and where it may look. */
 export const SearchControlsSchema = z.object({
   dataSource: z
-    .enum(["undr_engine", "web_search", "internal_catalog", "registered_founders", "github"])
+    .enum(["undr_engine", "web_search", "hack_nation", "internal_catalog", "registered_founders", "github"])
     .optional(),
   geography: z
     .object({

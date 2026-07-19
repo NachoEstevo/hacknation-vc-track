@@ -19,6 +19,7 @@ const DATA_SOURCE_OPTIONS: readonly {
 }[] = [
   { value: "undr_engine", label: "undr engine", enabled: true },
   { value: "web_search", label: "Web search", enabled: true },
+  { value: "hack_nation", label: "HackNation", enabled: true },
   { value: "internal_catalog", label: "Internal catalog", enabled: false },
   { value: "registered_founders", label: "Registered founders", enabled: false },
   { value: "github", label: "GitHub", enabled: false },
