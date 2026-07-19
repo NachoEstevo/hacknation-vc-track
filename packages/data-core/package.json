@@ -6,6 +6,7 @@
   "exports": "./src/index.ts",
   "scripts": {
     "analyze:seed": "tsx scripts/analyze-seed.ts",
+    "seed:us-early-stage": "tsx scripts/build-us-early-stage-seed.ts",
     "briefs:build": "tsx scripts/build-investment-briefs.ts",
     "enrich:seed": "tsx scripts/enrich-seed.ts",
     "test": "vitest run",

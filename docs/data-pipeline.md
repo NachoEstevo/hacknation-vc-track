@@ -2,9 +2,9 @@
 
 ## Cohort
 
-The VC prototype now uses only the user's latest Clay company search. No Acelera or LATAM records are mixed in.
+The published demo brief remains the original 50-company Clay cohort. The canonical seed is now `data/source/vc-engine-us-uk-early-software.csv`, which retains those 50 and adds 51 conservative US software/AI/IT candidates. No Acelera or LATAM records are mixed in.
 
-Exact search constraints:
+The original Clay search constraints are:
 
 - country: United States or United Kingdom;
 - size: self-employed or 2-10 employees;
@@ -20,7 +20,7 @@ No paid Clay enrichment was run. Clay's browser download was blocked by Brave wh
 
 ## Public-web enrichment
 
-`packages/data-core` enriches each company from its public website and optional public GitHub organization or user profile.
+`packages/data-core` enriches each company from its public website and optional public GitHub organization or user profile. The 51 newly accepted rows were not enriched in this import, so the 50-company public evidence and brief artifacts remain accurate snapshots rather than being mixed with stale or invented evidence.
 
 The crawler:
 
@@ -37,7 +37,7 @@ GitHub activity is an execution signal, not proof of ownership, product quality,
 
 ## Current run
 
-The 2026-07-18 run over all 50 companies produced:
+The existing 2026-07-18 public-web run over the original 50 companies produced:
 
 | Metric | Value |
 | --- | ---: |
@@ -78,6 +78,7 @@ Set-Location packages/data-core
 npm test
 npm run typecheck
 npm run analyze:seed -- ../../data/source/clay-us-uk-early-software.csv
+npm run seed:us-early-stage -- <owner-supplied-csv> ../../data/source/clay-us-uk-early-software.csv ../../data/source/vc-engine-us-uk-early-software.csv ../../data/source/us-early-stage-startups-2026-07-18-audit.json
 npx tsx scripts/enrich-seed.ts
 ```
 

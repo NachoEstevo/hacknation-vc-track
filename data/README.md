@@ -6,6 +6,12 @@ The exact 50-row export from the user's latest Clay search for self-employed or 
 
 The separate authenticated Clay table has a 400-result limit. It is not represented as a local 400-row file because Brave blocked Clay's S3 download; this repository does not fill the gap with Acelera, LATAM, or a different industry search.
 
+## `source/vc-engine-us-uk-early-software.csv`
+
+The canonical 101-company seed: all 50 original Clay records plus 51 US early-stage software/AI/IT candidates accepted from the 2026-07-18 research CSV. The original 100-row research export is deliberately not committed. The generated canonical seed retains only engine fields (identity, description, industry, size, location, domain, and public company LinkedIn URL when supplied); it excludes research scores, founder profiles, customer notes, and source-URL bundles.
+
+`source/us-early-stage-startups-2026-07-18-audit.json` documents the 51 accepted and 49 rejected rows, with row-level reasons and aggregate counts. Inclusion requires an early stage, inferred team size no greater than 50, public domain, software/AI/IT relevance, and no primary physical/life-science business. It found no internal or cross-cohort duplicates. This is a discovery-quality import, not verification of source claims.
+
 ## `enriched/company-web-profiles.json`
 
 A timestamped, reproducible public-web evidence snapshot for all 50 companies. It stores concise extracted facts, company-published profile links, GitHub public metadata, evidence URLs, and typed failures. It never stores downloaded HTML or scraped LinkedIn/X content.

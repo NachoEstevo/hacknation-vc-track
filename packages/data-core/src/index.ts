@@ -1,6 +1,7 @@
 export * from "./build-import-batch.js";
 export * from "./normalize-company.js";
 export * from "./parse-clay-csv.js";
+export * from "./select-us-early-stage.js";
 export * from "./resolve-founder-candidate.js";
 export * from "./types.js";
 export * from "./web/discover-company-pages.js";
