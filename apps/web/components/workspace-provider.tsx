@@ -103,12 +103,20 @@ export interface RadarPerson {
   sourceQuery?: string;
 }
 
+/** A conversation the investor recently opened, saved or not. Browser-only in every mode. */
+export interface RecentChat {
+  id: string;
+  query: string;
+  updatedAt: string;
+}
+
 interface WorkspaceState {
   activeThesis: ActiveThesis | null;
   pipelineItems: PipelineItem[];
   compareIds: string[];
   savedSearches: SavedSearch[];
   radarPeople: RadarPerson[];
+  recentChats: RecentChat[];
   sidebarCollapsed: boolean;
   /** Investor display name. Mirrors `profiles.display_name` in Supabase mode; browser-only otherwise. */
   profileName: string | null;
@@ -172,6 +180,7 @@ function freshState(): WorkspaceState {
     compareIds: [],
     savedSearches: [],
     radarPeople: [],
+    recentChats: [],
     sidebarCollapsed: false,
     profileName: null,
   };
@@ -261,12 +270,27 @@ function normalizeStoredState(value: unknown): WorkspaceState | null {
       })
     : [];
 
+  const seenRecentQueries = new Set<string>();
+  const recentChats: RecentChat[] = Array.isArray(value.recentChats)
+    ? value.recentChats.flatMap((entry) => {
+        if (!isRecord(entry)) return [];
+        const id = stringValue(entry.id);
+        const query = stringValue(entry.query);
+        if (!id || !query || query.length > 1000) return [];
+        const key = query.trim().replace(/\s+/g, " ").toLowerCase();
+        if (seenRecentQueries.has(key)) return [];
+        seenRecentQueries.add(key);
+        return [{ id, query, updatedAt: stringValue(entry.updatedAt) ?? now }];
+      }).slice(0, 6)
+    : [];
+
   return {
     activeThesis,
     pipelineItems,
     compareIds,
     savedSearches,
     radarPeople,
+    recentChats,
     sidebarCollapsed: value.sidebarCollapsed === true,
     profileName: stringValue(value.profileName)?.slice(0, 80) ?? null,
   };
@@ -847,8 +871,24 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     setSearchSessionStorageAvailable(true);
     setSearchSessionError(null);
     setSearchSession(session);
+
+    // Every opened conversation lands in the sidebar's recent chats, saved
+    // or not. Browser-only; a storage failure never blocks the session.
+    const normalizedQuery = session.query.trim().replace(/\s+/g, " ").toLowerCase();
+    commitWorkspaceState(
+      (current) => ({
+        ...current,
+        recentChats: [
+          { id: createId("chat"), query: session.query, updatedAt: session.updatedAt },
+          ...current.recentChats.filter(
+            (chat) => chat.query.trim().replace(/\s+/g, " ").toLowerCase() !== normalizedQuery,
+          ),
+        ].slice(0, 6),
+      }),
+      "Browser storage could not record this chat under Recent.",
+    );
     return true;
-  }, []);
+  }, [commitWorkspaceState]);
 
   const clearSearchSession = useCallback((): boolean => {
     try {
