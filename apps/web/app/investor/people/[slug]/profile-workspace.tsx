@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   ArrowUpRight,
   Check,
+  FileDown,
   Github,
   Globe,
   LoaderCircle,
@@ -227,6 +228,16 @@ function HydratedProfile({ slug }: { slug: string }) {
     requestDossier();
   }
 
+  // Deterministic PDF export: the browser's print engine renders the print
+  // stylesheet — no model involved. The temporary title becomes the
+  // suggested filename in the save dialog.
+  function exportPdf() {
+    const previousTitle = document.title;
+    document.title = `${candidate.name} — undr dossier`;
+    window.print();
+    document.title = previousTitle;
+  }
+
   return (
     <div className={styles.page}>
       <div className={styles.topBar}>
@@ -252,6 +263,15 @@ function HydratedProfile({ slug }: { slug: string }) {
           leadingIcon={<RefreshCw aria-hidden="true" />}
         >
           {isBusy ? "Researching…" : "Refresh dossier"}
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={exportPdf}
+          disabled={isBusy || !dossier}
+          leadingIcon={<FileDown aria-hidden="true" />}
+          aria-label="Export this dossier as a PDF"
+        >
+          Export PDF
         </Button>
       </div>
 
