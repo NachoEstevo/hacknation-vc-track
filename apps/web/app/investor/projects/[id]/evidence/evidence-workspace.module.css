@@ -1,0 +1,252 @@
+.wrap {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.subtitle {
+  margin: 0;
+  max-width: 46rem;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 99px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tab[data-active="true"] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #ffffff;
+}
+
+.tabDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.tabDot[data-tone="verified"] {
+  background: var(--verified);
+}
+
+.tabDot[data-tone="inferred"] {
+  background: var(--inference);
+}
+
+.tabDot[data-tone="unconfirmed"] {
+  background: var(--unknown);
+}
+
+.tabDot[data-tone="contradictions"] {
+  background: var(--risk);
+}
+
+.tab[data-active="true"] .tabDot {
+  background: #ffffff;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 26rem;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rowWrap {
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.rowWrap[data-selected="true"] {
+  outline: 1.5px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.empty {
+  margin: 0;
+  padding: 1.25rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  text-align: center;
+  list-style: none;
+}
+
+.detail {
+  position: sticky;
+  top: 1rem;
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.detailEyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.detailClaim {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.detailBadges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sourceBox {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.85rem;
+  border-radius: var(--radius-md);
+  background: var(--surface-subtle);
+}
+
+.sourceBoxTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sourceBoxDate {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.sourceBoxQuote {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.sourceBoxNote {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+}
+
+.contradictionBox,
+.noContradictionBox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.contradictionBox svg,
+.noContradictionBox svg {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin-top: 0.1rem;
+}
+
+.contradictionBox {
+  background: var(--risk-soft);
+  color: var(--risk);
+}
+
+.noContradictionBox {
+  background: var(--verified-soft);
+  color: var(--verified);
+}
+
+.detailActions {
+  display: flex;
+  align-items: center;
+}
+
+.openSourceButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease;
+}
+
+.openSourceButton svg {
+  width: 14px;
+  height: 14px;
+}
+
+.openSourceButton:hover {
+  background: var(--accent-ink);
+}
+
+.detailActionsNote {
+  color: var(--text-tertiary);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 1100px) {
+  .columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .detail {
+    position: static;
+  }
+}

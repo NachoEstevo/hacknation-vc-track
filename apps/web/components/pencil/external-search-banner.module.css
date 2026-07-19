@@ -1,0 +1,43 @@
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--external-soft);
+  color: var(--external);
+}
+
+.banner svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+.text {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.action {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--external);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

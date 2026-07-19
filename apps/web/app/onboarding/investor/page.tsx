@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { LockKeyhole } from "lucide-react";
+import Link from "next/link";
+import { Check } from "lucide-react";
 import { Brand } from "@/components/brand";
-import { ButtonLink } from "@/components/ui/button";
+import { getClayCatalogSummary } from "@/lib/catalog/index.server";
 import { InvestorThesisForm } from "./investor-thesis-form";
 import styles from "./page.module.css";
 
@@ -11,39 +12,37 @@ export const metadata: Metadata = {
     "Turn an investment mandate into transparent, editable sourcing criteria.",
 };
 
-export default function InvestorOnboardingPage() {
+export default async function InvestorOnboardingPage() {
+  const catalogSummary = await getClayCatalogSummary();
+
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <Brand />
-        <div className={styles.step} aria-label="Onboarding progress: step 2 of 2">
-          <span>Investment thesis</span>
-          <span aria-hidden="true">02 / 02</span>
-        </div>
-        <ButtonLink href="/onboarding/role" variant="quiet" size="sm">
-          Back
-        </ButtonLink>
+        <Brand hideMark />
+        <nav className={styles.stepper} aria-label="Onboarding progress">
+          <div className={styles.step}>
+            <span className={styles.stepDot}>
+              <Check size={11} aria-hidden="true" />
+            </span>
+            <span className={styles.stepLabel}>Workspace</span>
+          </div>
+          <span className={styles.stepLine} aria-hidden="true" />
+          <div className={styles.step}>
+            <span className={styles.stepDot}>2</span>
+            <span className={`${styles.stepLabel} ${styles.stepLabelCurrent}`}>
+              Investment thesis
+            </span>
+          </div>
+        </nav>
+        <Link href="/" className={styles.skip}>
+          Save &amp; exit
+        </Link>
       </header>
 
-      <div className={styles.headingRow}>
-        <div>
-          <p className={styles.eyebrow}>Configure your sourcing lens</p>
-          <h1>
-            Make your thesis
-            <br />
-            <em>legible to the system.</em>
-          </h1>
-        </div>
-        <div className={styles.headingNote}>
-          <LockKeyhole size={16} strokeWidth={1.7} aria-hidden="true" />
-          <p>
-            Your criteria explain why a company appears. They are never used as
-            hidden proxies or automatic investment decisions.
-          </p>
-        </div>
-      </div>
-
-      <InvestorThesisForm initialQuery="" />
+      <InvestorThesisForm
+        initialQuery=""
+        catalogCount={catalogSummary.acceptedCompanies}
+      />
     </main>
   );
 }

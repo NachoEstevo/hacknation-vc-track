@@ -7,6 +7,13 @@ export const THESIS_RISK_POSTURES = ["focused", "balanced", "frontier"] as const
 
 export type ThesisRiskPosture = (typeof THESIS_RISK_POSTURES)[number];
 
+/** Mirrors `fund_theses.source_scope` (see the `product_platform_core` migration): where sourcing looks before it opens up to public discovery. */
+export const THESIS_SOURCE_SCOPES = ["internal", "internal_then_public"] as const;
+
+export type ThesisSourceScope = (typeof THESIS_SOURCE_SCOPES)[number];
+
+export const DEFAULT_THESIS_SOURCE_SCOPE: ThesisSourceScope = "internal_then_public";
+
 export interface ThesisCheckRange {
   currency: "USD";
   min: number;
@@ -24,14 +31,18 @@ export interface ActiveThesis {
   exclusions: string[];
   checkRange: ThesisCheckRange;
   riskPosture: ThesisRiskPosture;
+  sourceScope: ThesisSourceScope;
   criteria: SearchCriterion[];
   updatedAt: string;
 }
 
 export type ActiveThesisInput = Omit<
   ActiveThesis,
-  "version" | "summary" | "criteria" | "updatedAt"
->;
+  "version" | "summary" | "criteria" | "updatedAt" | "sourceScope"
+> & {
+  /** Optional so every existing caller keeps compiling; `createActiveThesis` fills in the default. */
+  sourceScope?: ThesisSourceScope;
+};
 
 const SUPPORTED_SECTORS: Record<string, string> = {
   "ai infrastructure": "ai_infrastructure",
@@ -72,13 +83,24 @@ const SUPPORTED_GEOGRAPHIES: Record<string, string> = {
   europe: "EUROPE",
 };
 
-function normalizeLookup(value: string): string {
+export function normalizeLookup(value: string): string {
   return value
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLocaleLowerCase()
     .replace(/\s+/g, " ")
     .trim();
+}
+
+/** Single-label lookups reused by database-backed persistence, which stores one criterion row per chip. */
+export function mapSectorToken(label: string): string | null {
+  return SUPPORTED_SECTORS[normalizeLookup(label)] ?? null;
+}
+export function mapStageToken(label: string): string | null {
+  return SUPPORTED_STAGES[normalizeLookup(label)] ?? null;
+}
+export function mapGeographyToken(label: string): string | null {
+  return SUPPORTED_GEOGRAPHIES[normalizeLookup(label)] ?? null;
 }
 
 function normalizeList(values: string[]): string[] {
@@ -115,11 +137,48 @@ function mappedEntries(values: string[], mapping: Record<string, string>): {
   return { labels, values: [...new Set(mapped)], unsupported };
 }
 
-function compactUsd(value: number): string {
+export function compactUsd(value: number): string {
   return new Intl.NumberFormat("en", {
     notation: "compact",
     maximumFractionDigits: value < 1_000_000 ? 0 : 1,
   }).format(value).toLocaleLowerCase();
+}
+
+export function describeSourceScope(scope: ThesisSourceScope): string {
+  return scope === "internal" ? "Internal only" : "Internal first + public";
+}
+
+/**
+ * A compact, real-data summary for the home screen's thesis chip: geography
+ * codes (falling back to the raw label when unmapped) plus the first stage
+ * and sector, then how many remaining thesis facts aren't shown. Never
+ * invents a category — every word comes from the caller's own thesis.
+ */
+export function buildThesisChipLabel(thesis: ActiveThesis | null): string {
+  if (!thesis) return "Thesis not configured yet";
+
+  const factCount = thesis.geographies.length
+    + thesis.stages.length
+    + thesis.sectors.length
+    + thesis.signals.length
+    + thesis.exclusions.length;
+  if (factCount === 0) return "No sourcing criteria yet";
+
+  const shownGeographies = thesis.geographies.slice(0, 2);
+  const geoText = shownGeographies.map((geo) => mapGeographyToken(geo) ?? geo).join("/");
+  const stageText = thesis.stages[0] ?? "";
+  const sectorText = thesis.sectors[0] ?? "";
+  const headline = [geoText, [stageText, sectorText].filter(Boolean).join(" ")]
+    .filter(Boolean)
+    .join(" · ");
+
+  const shownCount = shownGeographies.length + (stageText ? 1 : 0) + (sectorText ? 1 : 0);
+  const remaining = factCount - shownCount;
+
+  if (!headline) {
+    return remaining > 0 ? `${remaining} sourcing signal${remaining === 1 ? "" : "s"}` : "No sourcing criteria yet";
+  }
+  return remaining > 0 ? `${headline} · +${remaining}` : headline;
 }
 
 export function formatThesisSummary(input: ActiveThesisInput): string {
@@ -290,7 +349,7 @@ export function createActiveThesis(
   input: ActiveThesisInput,
   updatedAt = new Date().toISOString(),
 ): ActiveThesis {
-  const normalizedInput: ActiveThesisInput = {
+  const normalizedInput = {
     brief: input.brief.trim().replace(/\s+/g, " ").slice(0, 1000),
     sectors: normalizeList(input.sectors),
     stages: normalizeList(input.stages),
@@ -299,6 +358,7 @@ export function createActiveThesis(
     exclusions: normalizeList(input.exclusions),
     checkRange: { ...input.checkRange },
     riskPosture: input.riskPosture,
+    sourceScope: input.sourceScope ?? DEFAULT_THESIS_SOURCE_SCOPE,
   };
 
   if (!normalizedInput.brief) throw new Error("A sourcing brief is required.");
@@ -347,6 +407,9 @@ export function isActiveThesis(value: unknown): value is ActiveThesis {
   if (typeof value.checkRange.max !== "number" || !Number.isFinite(value.checkRange.max)) return false;
   if (value.checkRange.min <= 0 || value.checkRange.max <= 0 || value.checkRange.min > value.checkRange.max) return false;
   if (!THESIS_RISK_POSTURES.includes(value.riskPosture as ThesisRiskPosture)) return false;
+  // Optional for backward compatibility with thesis objects persisted before this field existed;
+  // `buildThesisChipLabel`/`describeSourceScope` callers default a missing value themselves.
+  if (value.sourceScope !== undefined && !THESIS_SOURCE_SCOPES.includes(value.sourceScope as ThesisSourceScope)) return false;
   if (!Array.isArray(value.criteria) || !value.criteria.every(isSearchCriterion)) return false;
   if (typeof value.updatedAt !== "string" || Number.isNaN(Date.parse(value.updatedAt))) return false;
   return true;

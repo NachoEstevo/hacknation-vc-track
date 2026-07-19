@@ -1,43 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import type { Route } from "next";
-import { usePathname } from "next/navigation";
-import {
-  Bookmark,
-  ChartNoAxesGantt,
-  ChevronsLeft,
-  ChevronsRight,
-  GitCompareArrows,
-  Home,
-  Menu,
-  Search,
-  Settings,
-  Sparkles,
-  X,
-  type LucideIcon,
-} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Menu, X } from "lucide-react";
 import clsx from "clsx";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Sidebar } from "./pencil";
 import { Brand } from "./brand";
 import { Chip } from "./ui/chip";
 import { useWorkspace } from "./workspace-provider";
 import styles from "./app-shell.module.css";
-
-export interface AppNavigationItem {
-  label: string;
-  href: string;
-  icon: LucideIcon;
-  exact?: boolean;
-}
-
-export const APP_NAVIGATION: AppNavigationItem[] = [
-  { label: "Home", href: "/investor", icon: Home, exact: true },
-  { label: "Discover", href: "/investor/search", icon: Search },
-  { label: "Pipeline", href: "/investor/pipeline", icon: ChartNoAxesGantt },
-  { label: "Saved searches", href: "/investor/saved-searches", icon: Bookmark },
-  { label: "Compare", href: "/investor/compare", icon: GitCompareArrows },
-];
 
 export interface AppShellProps {
   children: ReactNode;
@@ -48,129 +19,11 @@ export interface AppShellProps {
   hideHeader?: boolean;
   className?: string;
   contentClassName?: string;
-  workspaceName?: string;
   userName?: string;
+  userRole?: string;
 }
 
-function isNavigationItemActive(pathname: string, item: AppNavigationItem) {
-  if (item.exact) return pathname === item.href;
-  return pathname === item.href || pathname.startsWith(`${item.href}/`);
-}
-
-interface SidebarContentProps {
-  collapsed: boolean;
-  mobile?: boolean;
-  pathname: string;
-  workspaceName: string;
-  userName: string;
-  compareCount: number;
-  pipelineCount: number;
-  thesisDescription: string;
-  onNavigate?: () => void;
-  onClose?: () => void;
-}
-
-function SidebarContent({
-  collapsed,
-  mobile = false,
-  pathname,
-  workspaceName,
-  userName,
-  compareCount,
-  pipelineCount,
-  thesisDescription,
-  onNavigate,
-  onClose,
-}: SidebarContentProps) {
-  return (
-    <div className={styles.sidebarInner}>
-      <div className={styles.sidebarBrandRow}>
-        <Brand href="/investor" compact={collapsed && !mobile} />
-        {mobile ? (
-          <button type="button" className={styles.iconButton} onClick={onClose} aria-label="Close navigation">
-            <X aria-hidden="true" />
-          </button>
-        ) : null}
-      </div>
-
-      <div className={styles.workspaceContext}>
-        <span className={styles.workspaceGlyph} aria-hidden="true">MF</span>
-        {!collapsed || mobile ? (
-          <span className={styles.workspaceCopy}>
-            <strong>{workspaceName}</strong>
-            <span>Investor workspace</span>
-          </span>
-        ) : null}
-      </div>
-
-      <nav className={styles.navigation} aria-label="Primary navigation">
-        <span className={clsx(styles.navSectionLabel, collapsed && !mobile && styles.visuallyHidden)}>
-          Workspace
-        </span>
-        {APP_NAVIGATION.map((item) => {
-          const Icon = item.icon;
-          const active = isNavigationItemActive(pathname, item);
-          const count = item.href.endsWith("/compare")
-            ? compareCount
-            : item.href.endsWith("/pipeline")
-              ? pipelineCount
-              : 0;
-          return (
-            <Link
-              key={item.href}
-              href={item.href as Route}
-              className={clsx(styles.navItem, active && styles.navItemActive)}
-              aria-current={active ? "page" : undefined}
-              aria-label={collapsed && !mobile ? item.label : undefined}
-              title={collapsed && !mobile ? item.label : undefined}
-              onClick={onNavigate}
-            >
-              <Icon aria-hidden="true" />
-              {!collapsed || mobile ? <span className={styles.navLabel}>{item.label}</span> : null}
-              {count > 0 ? <span className={styles.navCount}>{count}</span> : null}
-            </Link>
-          );
-        })}
-      </nav>
-
-      <div className={styles.sidebarFoot}>
-        <Link
-          href={"/investor/thesis" as Route}
-          className={clsx(styles.thesisCard, collapsed && !mobile && styles.thesisCardCollapsed)}
-          aria-label={collapsed && !mobile ? "Open investment thesis" : undefined}
-          title={collapsed && !mobile ? "Investment thesis" : undefined}
-          onClick={onNavigate}
-        >
-          <span className={styles.thesisIcon}><Sparkles aria-hidden="true" /></span>
-          {!collapsed || mobile ? (
-            <span className={styles.thesisCopy}>
-              <strong>Investment thesis</strong>
-              <span>{thesisDescription}</span>
-            </span>
-          ) : null}
-        </Link>
-
-        <Link
-          href={"/investor/settings" as Route}
-          className={clsx(styles.account, pathname.startsWith("/investor/settings") && styles.accountActive)}
-          aria-label={collapsed && !mobile ? "Open settings" : undefined}
-          title={collapsed && !mobile ? "Settings" : undefined}
-          onClick={onNavigate}
-        >
-          <span className={styles.avatar} aria-hidden="true">{userName.slice(0, 2).toUpperCase()}</span>
-          {!collapsed || mobile ? (
-            <span className={styles.accountCopy}>
-              <strong>{userName}</strong>
-              <span>Demo workspace</span>
-            </span>
-          ) : null}
-          {!collapsed || mobile ? <Settings className={styles.settingsIcon} aria-hidden="true" /> : null}
-        </Link>
-      </div>
-    </div>
-  );
-}
-
+/** Shared chrome for every `/investor/*` route: the Pencil `Nav / Sidebar` (+ collapsed variant) and the page header. */
 export function AppShell({
   children,
   title,
@@ -180,31 +33,33 @@ export function AppShell({
   hideHeader = false,
   className,
   contentClassName,
-  workspaceName = "Mauro's fund",
   userName = "Demo investor",
+  userRole = "Investor",
 }: AppShellProps) {
-  const pathname = usePathname();
+  const router = useRouter();
   const {
     sidebarCollapsed,
     toggleSidebarCollapsed,
-    compareIds,
-    pipelineItems,
-    activeThesis,
+    savedSearches,
+    clearSearchSession,
     hasHydrated,
     storageAvailable,
     persistenceError,
   } = useWorkspace();
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileTriggerRef = useRef<HTMLButtonElement>(null);
-  const mobileDrawerRef = useRef<HTMLElement>(null);
-  const thesisDescription = !hasHydrated
-    ? "Loading sourcing lens…"
-    : activeThesis
-      ? `${activeThesis.sectors.length} sectors · ${activeThesis.stages.length} stages`
-      : "Not configured yet";
+  const mobileDrawerRef = useRef<HTMLDivElement>(null);
   const persistenceWarning = hasHydrated && (storageAvailable === false || persistenceError)
     ? persistenceError ?? "Browser storage is unavailable. Changes will last only for this session."
     : null;
+  // "Recent" only ever reflects searches this workspace actually saved—never a placeholder.
+  const recentSearches = hasHydrated ? savedSearches.slice(0, 3).map((search) => search.label) : [];
+
+  function startNewSearch() {
+    clearSearchSession();
+    setMobileOpen(false);
+    router.push("/investor");
+  }
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -275,31 +130,20 @@ export function AppShell({
 
   return (
     <div className={clsx(styles.shell, sidebarCollapsed && styles.shellCollapsed, className)}>
-      <aside
+      <div
         className={styles.desktopSidebar}
-        aria-label="Workspace sidebar"
         aria-hidden={mobileOpen || undefined}
         inert={mobileOpen || undefined}
       >
-        <SidebarContent
+        <Sidebar
           collapsed={sidebarCollapsed}
-          pathname={pathname}
-          workspaceName={workspaceName}
+          onToggleCollapsed={toggleSidebarCollapsed}
+          onNewSearch={startNewSearch}
+          recentSearches={recentSearches}
           userName={userName}
-          compareCount={compareIds.length}
-          pipelineCount={pipelineItems.length}
-          thesisDescription={thesisDescription}
+          userRole={userRole}
         />
-        <button
-          type="button"
-          className={styles.collapseButton}
-          onClick={toggleSidebarCollapsed}
-          aria-label={sidebarCollapsed ? "Expand navigation" : "Collapse navigation"}
-          title={sidebarCollapsed ? "Expand navigation" : "Collapse navigation"}
-        >
-          {sidebarCollapsed ? <ChevronsRight aria-hidden="true" /> : <ChevronsLeft aria-hidden="true" />}
-        </button>
-      </aside>
+      </div>
 
       <header
         className={styles.mobileHeader}
@@ -329,7 +173,7 @@ export function AppShell({
             onClick={() => setMobileOpen(false)}
             aria-label="Close navigation"
           />
-          <aside
+          <div
             id="mobile-workspace-navigation"
             ref={mobileDrawerRef}
             className={styles.mobileDrawer}
@@ -338,19 +182,23 @@ export function AppShell({
             aria-label="Workspace navigation"
             tabIndex={-1}
           >
-            <SidebarContent
+            <button
+              type="button"
+              className={styles.mobileClose}
+              onClick={() => setMobileOpen(false)}
+              aria-label="Close navigation"
+            >
+              <X aria-hidden="true" />
+            </button>
+            <Sidebar
               collapsed={false}
-              mobile
-              pathname={pathname}
-              workspaceName={workspaceName}
+              onToggleCollapsed={toggleSidebarCollapsed}
+              onNewSearch={startNewSearch}
+              recentSearches={recentSearches}
               userName={userName}
-              compareCount={compareIds.length}
-              pipelineCount={pipelineItems.length}
-              thesisDescription={thesisDescription}
-              onNavigate={() => setMobileOpen(false)}
-              onClose={() => setMobileOpen(false)}
+              userRole={userRole}
             />
-          </aside>
+          </div>
         </div>
       ) : null}
 

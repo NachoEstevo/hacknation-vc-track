@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
   const redirectUrl = getSafeRedirectUrl(request);
   const tokenHash = request.nextUrl.searchParams.get("token_hash");
   const otpType = request.nextUrl.searchParams.get("type");
+  const code = request.nextUrl.searchParams.get("code");
   const supabase = await createClient();
 
   // The demo remains navigable without a configured Supabase project.
@@ -51,6 +52,16 @@ export async function GET(request: NextRequest) {
     return redirectWithoutCaching(redirectUrl);
   }
 
+  // PKCE flow (default for the browser client): GoTrue already verified the
+  // link and hands back an authorization code to exchange for a session.
+  if (code) {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      return redirectWithoutCaching(redirectUrl);
+    }
+  }
+
+  // Legacy OTP verification flow (token_hash + type).
   if (tokenHash && otpType && EMAIL_OTP_TYPES.has(otpType)) {
     const { error } = await supabase.auth.verifyOtp({
       token_hash: tokenHash,

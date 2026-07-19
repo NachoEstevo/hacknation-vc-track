@@ -1,12 +1,20 @@
-import type { Metadata, Route } from "next";
-import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowUpRight, CheckCircle2, CircleHelp } from "lucide-react";
+import clsx from "clsx";
+import {
+  Building2,
+  FileSearch,
+  FileText,
+  Github,
+  Globe,
+  Trophy,
+  UserCheck,
+  type LucideIcon,
+} from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { Chip } from "@/components/ui/chip";
-import { StatusBadge, type StatusKind } from "@/components/ui/status";
+import { SourceChip, type EvidenceTone } from "@/components/pencil";
 import { DEMO_OPPORTUNITIES, getOpportunity } from "@/lib/demo";
-import type { ClaimRecord, ClaimState, EvidenceRecord } from "@/lib/domain";
+import type { ClaimRecord, OpportunityDetail, SourceType } from "@/lib/domain";
 import {
   claimStateLabel,
   findClaim,
@@ -18,62 +26,159 @@ import {
   getStrongClaims,
   getUnknowns,
 } from "../../_lib/diligence";
-import styles from "../diligence.module.css";
 import { MemoActions } from "./memo-actions";
+import styles from "./memo.module.css";
 
 interface MemoPageProps {
   params: Promise<{ id: string }>;
 }
 
-function claimStatus(state: ClaimState): StatusKind {
-  const statuses: Record<ClaimState, StatusKind> = {
-    supported: "supported",
-    partially_supported: "partial",
-    unverified: "unconfirmed",
-    contradicted: "contradicted",
-    stale: "stale",
-  };
-  return statuses[state];
+const TONE_CLASS: Record<EvidenceTone, string> = {
+  verified: styles.toneVerified,
+  inference: styles.toneInference,
+  risk: styles.toneRisk,
+  unknown: styles.toneUnknown,
+  "founder-provided": styles.toneFounderProvided,
+  external: styles.toneExternal,
+};
+
+const SOURCE_TYPE_META: Record<SourceType, { icon: LucideIcon; label: string }> = {
+  github: { icon: Github, label: "GitHub" },
+  founder_submission: { icon: UserCheck, label: "Founder-provided" },
+  deck: { icon: FileText, label: "Pitch deck" },
+  hackathon: { icon: Trophy, label: "Hackathon" },
+  public_registry: { icon: Building2, label: "Public registry" },
+  website: { icon: Globe, label: "Website" },
+};
+
+/** Trailing qualifier appended to a claim-derived sentence — never lets a statement read as fully verified when it isn't. */
+function qualifier(claim: ClaimRecord | undefined): string {
+  if (!claim) return " (not available)";
+  if (claim.state === "supported") return "";
+  return ` (${claimStateLabel(claim.state).toLowerCase()})`;
 }
 
-function evidenceCitation(
-  claim: ClaimRecord | undefined,
-  evidenceIndex: Map<string, number>,
-) {
-  const firstEvidenceId = claim?.evidence[0]?.evidenceId;
-  if (!firstEvidenceId) return null;
-  return evidenceIndex.get(firstEvidenceId) ?? null;
+function claimTone(opportunity: OpportunityDetail, claim: ClaimRecord | undefined): EvidenceTone {
+  if (!claim) return "unknown";
+  if (claim.state === "contradicted") return "risk";
+  if (claim.state === "unverified" || claim.state === "stale") return "unknown";
+  const links = getEvidenceForClaim(opportunity, claim);
+  const onlyFounderProvided = links.length > 0
+    && links.every((link) => link.evidence.sourceType === "founder_submission");
+  if (onlyFounderProvided) return "founder-provided";
+  return claim.state === "partially_supported" ? "inference" : "verified";
 }
 
-function ClaimBackedBlock({
-  title,
-  text,
-  claim,
-  evidence,
-  citation,
-}: {
+function kpiBadge(opportunity: OpportunityDetail, claim: ClaimRecord | undefined): { tone: EvidenceTone; label: string } {
+  if (!claim) return { tone: "unknown", label: "Not available" };
+  const tone = claimTone(opportunity, claim);
+  return { tone, label: tone === "founder-provided" ? "Founder-provided" : claimStateLabel(claim.state) };
+}
+
+function formatClaimValue(value: ClaimRecord["value"]): string {
+  if (typeof value === "boolean") return value ? "Yes" : "No";
+  if (typeof value === "number") return String(value);
+  if (Array.isArray(value)) return value.map(formatToken).join(", ");
+  return formatToken(value);
+}
+
+function evidenceLinkCount(claims: (ClaimRecord | undefined)[]): number {
+  const ids = new Set<string>();
+  for (const claim of claims) {
+    if (!claim) continue;
+    for (const link of claim.evidence) ids.add(link.evidenceId);
+  }
+  return ids.size;
+}
+
+function buildTeamNarrative(opportunity: OpportunityDetail, technicalClaim: ClaimRecord | undefined): string {
+  const { founders, project, founderScore } = opportunity;
+  if (founders.length === 0) {
+    return "No founders are recorded for this snapshot; team composition is not available.";
+  }
+  const [primary, ...rest] = founders;
+  const namedPart = rest.length
+    ? `${primary.name} (${primary.role}, ${primary.location}), with ${rest.map((founder) => `${founder.name} (${founder.role})`).join(", ")}.`
+    : `${primary.name} (${primary.role}, ${primary.location}).`;
+  const unconfirmedCount = Math.max(project.teamSize - founders.length, 0);
+  const unconfirmedPart = unconfirmedCount > 0
+    ? ` Team size is reported as ${project.teamSize}; ${unconfirmedCount} additional member${unconfirmedCount === 1 ? "" : "s"} ${unconfirmedCount === 1 ? "is" : "are"} not individually confirmed.`
+    : "";
+  const technicalPart = technicalClaim
+    ? ` ${technicalClaim.statement}${qualifier(technicalClaim)}${technicalClaim.state === "supported" ? "" : "."}`
+    : " No claim about technical founder status is captured.";
+  const scorePart = founderScore
+    ? ` Founder Score: ${founderScore.score === null ? "not enough evidence" : `${founderScore.score}/100`} (${founderScore.confidence} confidence).`
+    : " Founder Score is not available for this snapshot.";
+  return `${namedPart}${technicalPart}${scorePart}${unconfirmedPart}`;
+}
+
+interface RiskItem {
   title: string;
-  text: string;
-  claim: ClaimRecord | undefined;
-  evidence: EvidenceRecord | undefined;
-  citation: number | null;
+  note: string;
+}
+
+function buildRiskItems(opportunity: OpportunityDetail, weakClaims: ClaimRecord[]): RiskItem[] {
+  if (opportunity.contradictions.length > 0) {
+    return opportunity.contradictions.map((contradiction) => {
+      const claim = opportunity.claims.find((item) => item.id === contradiction.claimId);
+      return { title: claim?.statement ?? "Conflicting claim", note: contradiction.summary };
+    });
+  }
+  if (weakClaims.length > 0) {
+    return weakClaims.map((claim) => ({
+      title: claim.statement,
+      note: `${claimStateLabel(claim.state)} — treat this field as unresolved until independently corroborated.`,
+    }));
+  }
+  return [{
+    title: "No contradictions or unresolved high-trust claims recorded",
+    note: "Absence of risk signals in this snapshot has not been independently verified.",
+  }];
+}
+
+function SectionHead({ id, title, evidenceCount }: { id: string; title: string; evidenceCount?: number }) {
+  return (
+    <div className={styles.sectionHead}>
+      <h2 id={id} className={styles.sectionTitle}>{title}</h2>
+      <div className={styles.sectionSpacer} aria-hidden="true" />
+      {evidenceCount !== undefined ? (
+        <span className={styles.evidencePill}>
+          <FileSearch aria-hidden="true" />
+          {evidenceCount} evidence
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
+function SnapshotCell({ label, value, muted }: { label: string; value: string; muted?: boolean }) {
+  return (
+    <div className={styles.snapshotCell}>
+      <span className={styles.snapshotKey}>{label}</span>
+      <strong className={clsx(styles.snapshotValue, muted && styles.snapshotValueMuted)}>{value}</strong>
+    </div>
+  );
+}
+
+function KpiTile({
+  value,
+  label,
+  badge,
+  muted,
+}: {
+  value: string;
+  label: string;
+  badge: { tone: EvidenceTone; label: string };
+  muted?: boolean;
 }) {
   return (
-    <div className={styles.memoClaim}>
-      <div className={styles.memoClaimTop}>
-        <strong>{title}</strong>
-        {claim ? (
-          <StatusBadge status={claimStatus(claim.state)} label={claimStateLabel(claim.state)} />
-        ) : (
-          <StatusBadge status="missing" />
-        )}
-      </div>
-      <blockquote>{text}{citation ? <sup> [{citation}]</sup> : null}</blockquote>
-      <cite>
-        {evidence
-          ? `${evidence.sourceName} · captured ${formatDate(evidence.capturedAt)}`
-          : "No supporting evidence is linked; treat this field as unknown."}
-      </cite>
+    <div className={styles.tkTile}>
+      <span className={clsx(styles.tkNum, value.length > 10 && styles.tkNumCompact, muted && styles.tkNumMuted)}>
+        {value}
+      </span>
+      <span className={styles.tkLabel}>{label}</span>
+      <span className={clsx(styles.tkBadge, TONE_CLASS[badge.tone])}>{badge.label}</span>
     </div>
   );
 }
@@ -93,233 +198,304 @@ export default async function MemoPage({ params }: MemoPageProps) {
   const opportunity = getOpportunity(id);
   if (!opportunity) notFound();
 
-  const evidenceIndex = new Map(
-    opportunity.evidence.map((evidence, index) => [evidence.id, index + 1]),
-  );
   const problemClaim = findClaim(opportunity, "project.problem");
   const productClaim = findClaim(opportunity, "project.product");
   const tractionClaim = findClaim(opportunity, "project.traction");
   const workingDemoClaim = findClaim(opportunity, "project.working_demo");
-  const problemEvidence = problemClaim ? getEvidenceForClaim(opportunity, problemClaim)[0]?.evidence : undefined;
-  const productEvidence = productClaim ? getEvidenceForClaim(opportunity, productClaim)[0]?.evidence : undefined;
-  const tractionEvidence = tractionClaim ? getEvidenceForClaim(opportunity, tractionClaim)[0]?.evidence : undefined;
-  const workingDemoEvidence = workingDemoClaim ? getEvidenceForClaim(opportunity, workingDemoClaim)[0]?.evidence : undefined;
+  const teamSizeClaim = findClaim(opportunity, "project.team_size");
+  const technicalClaim = findClaim(opportunity, "founder.technical");
+  const raisingClaim = findClaim(opportunity, "project.raising");
+  const hackathonClaim = findClaim(opportunity, "project.hackathon_origin");
+
   const strongClaims = getStrongClaims(opportunity);
   const unknowns = getUnknowns(opportunity);
+  const weakClaims = opportunity.claims.filter((claim) => claim.state !== "supported").slice(0, 3);
   const strengths = getMemoStrengths(opportunity);
   const weaknesses = getMemoWeaknesses(opportunity);
-  const projectHref = `/investor/projects/${opportunity.id}` as Route;
 
-  const analysisBasis = strongClaims.slice(0, 2).map((claim) => claim.statement).join(" ");
-  const opportunityAnalysis = [
-    `Analysis — test whether ${opportunity.project.sectorTags.map(formatToken).join(" / ")} fits the fund’s explicit thesis.`,
-    `Analysis — a founder evidence request could resolve ${unknowns.length} open fields without treating them as negative signals.`,
-  ];
-  const riskAnalysis = opportunity.contradictions.length
-    ? opportunity.contradictions.map((item) => `Open evidence conflict: ${item.summary}`)
-    : ["Analysis — the current synthetic snapshot may be incomplete and needs independent customer corroboration."];
+  const hypothesisClaims = strongClaims.slice(0, 2);
+  const analysisBasis = hypothesisClaims.map((claim) => claim.statement).join(" ");
+  const hypothesisText = analysisBasis
+    ? `${analysisBasis} Together, these signals justify a founder conversation to test whether demonstrated execution can translate into durable usage and thesis fit.`
+    : "The captured evidence is not sufficient to form a thesis hypothesis. Gather direct product and customer evidence before interpreting the opportunity.";
+
+  const opportunitiesText = [
+    `Testing whether ${opportunity.project.sectorTags.map(formatToken).join(" / ") || "the covered sector"} fits the fund's explicit thesis could unlock conviction.`,
+    `A founder evidence request could resolve ${unknowns.length} open field${unknowns.length === 1 ? "" : "s"} without treating them as a negative signal.`,
+  ].join(" ");
+  const threatsText = opportunity.contradictions.length
+    ? opportunity.contradictions.map((item) => item.summary).join(" ")
+    : "The current snapshot may be incomplete and needs independent customer corroboration.";
+
+  const problemSentence = `${opportunity.project.problem}${qualifier(problemClaim)}`;
+  const productSentence = `${opportunity.project.product}${qualifier(productClaim)}`;
+  const demoSentence = workingDemoClaim
+    ? `${workingDemoClaim.statement}${qualifier(workingDemoClaim)}${workingDemoClaim.state === "supported" ? "" : "."}`
+    : "Working demo status is not available for this snapshot.";
+  const problemProductText = `${problemSentence} ${productSentence} ${demoSentence}`;
+
+  const productStatusValue = !workingDemoClaim
+    ? "Not available"
+    : workingDemoClaim.value === true
+      ? "Working demo"
+      : workingDemoClaim.value === false
+        ? "No working demo"
+        : formatClaimValue(workingDemoClaim.value);
+
+  const teamNarrative = buildTeamNarrative(opportunity, technicalClaim);
+  const riskItems = buildRiskItems(opportunity, weakClaims);
+  const riskEvidenceCount = opportunity.contradictions.length > 0
+    ? new Set(opportunity.contradictions.flatMap((item) => item.evidenceIds)).size
+    : evidenceLinkCount(weakClaims);
+
+  const unknownLabels = unknowns.map((item) => item.label);
+  const shownUnknowns = unknownLabels.slice(0, 6);
+  const extraUnknowns = unknownLabels.length - shownUnknowns.length;
+
+  const sourceCounts = new Map<SourceType, number>();
+  for (const evidence of opportunity.evidence) {
+    sourceCounts.set(evidence.sourceType, (sourceCounts.get(evidence.sourceType) ?? 0) + 1);
+  }
+
+  const stepItems = [
+    ...(opportunity.contradictions.length
+      ? [`Resolve the open contradiction: ${opportunity.contradictions[0].summary}`]
+      : []),
+    ...unknowns.slice(0, 3).map((item) => `Request evidence to resolve: ${item.label}`),
+    "Re-check every cited source before sharing an investment recommendation.",
+  ].slice(0, 5);
+
+  const founded = hackathonClaim
+    ? `${hackathonClaim.statement}${qualifier(hackathonClaim)}`
+    : "Not available — no founding date is captured.";
+  const teamCell = (() => {
+    const founders = opportunity.founders;
+    if (founders.length === 0) return "Not available — no founders recorded.";
+    const extra = founders.length > 1 ? ` + ${founders.length - 1}` : "";
+    const unconfirmed = opportunity.project.teamSize - founders.length;
+    return `${founders[0].name}${extra}${unconfirmed > 0 ? ` (${unconfirmed} unconfirmed)` : ""}`;
+  })();
+  const productCell = workingDemoClaim
+    ? `${productStatusValue} · ${claimStateLabel(workingDemoClaim.state).toLowerCase()}`
+    : "Not available";
+  const ask = raisingClaim
+    ? `${raisingClaim.statement}${qualifier(raisingClaim)}`
+    : "Not available — fundraising status not captured.";
+
+  const founderScoreBadge: { tone: EvidenceTone; label: string } = opportunity.founderScore
+    ? {
+        tone: opportunity.founderScore.confidence === "high"
+          ? "verified"
+          : opportunity.founderScore.confidence === "medium"
+            ? "inference"
+            : "unknown",
+        label: `${formatToken(opportunity.founderScore.confidence)} confidence`,
+      }
+    : { tone: "unknown", label: "Not available" };
 
   return (
-    <AppShell
-      eyebrow={`${opportunity.project.name} · decision artifact`}
-      title="Investment memo"
-      actions={<MemoActions projectId={opportunity.id} />}
-    >
+    <AppShell hideHeader>
       <div className={styles.page}>
-        <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
-          <Link href="/investor/search">Discover</Link>
-          <span>/</span>
-          <Link href={projectHref}>{opportunity.project.name}</Link>
-          <span>/</span>
-          <span aria-current="page">Memo</span>
-        </nav>
+        <div className={styles.column}>
+          <MemoActions projectId={opportunity.id} evidenceCount={opportunity.evidence.length} />
 
-        <div className={styles.demoNotice} role="note">
-          <CircleHelp aria-hidden="true" />
-          <span>
-            Draft generated from a <strong>synthetic_demo</strong> snapshot. Source-backed claims,
-            analysis, contradictions, and unknowns are deliberately separated.
-          </span>
-        </div>
+          <article className={styles.doc} aria-labelledby="memo-title">
+            <p className={styles.kicker}>
+              INVESTMENT MEMO · DRAFT · {formatDate(opportunity.updatedAt).toUpperCase()} · {formatToken(opportunity.dataLabel).toUpperCase()}
+            </p>
+            <h1 id="memo-title" className={styles.title}>
+              {opportunity.project.name} — {opportunity.project.tagline}
+            </h1>
 
-        <article className={styles.memoPaper} aria-labelledby="memo-title">
-          <header className={styles.memoMasthead}>
-            <div>
-              <Chip tone="accent" size="sm">Internal · diligence draft</Chip>
-              <h2 id="memo-title">{opportunity.project.name}</h2>
-              <p>{opportunity.project.tagline}</p>
-            </div>
-            <div className={styles.memoMeta}>
-              <strong>Snapshot</strong>
-              {formatDate(opportunity.updatedAt)}<br />
-              {opportunity.company.city}, {opportunity.company.countryCode}<br />
-              {opportunity.dataLabel}
-            </div>
-          </header>
-
-          <section className={styles.memoSection} aria-labelledby="snapshot-title">
-            <h2 id="snapshot-title">Snapshot</h2>
-            <div className={styles.snapshotGrid}>
-              <div className={styles.snapshotCell}>
-                <span>Stage</span>
-                <strong>{formatToken(opportunity.project.stage)}</strong>
+            <div className={styles.snapshot}>
+              <div className={styles.snapshotRow}>
+                <SnapshotCell label="FOUNDED" value={founded} muted={!hackathonClaim} />
+                <SnapshotCell label="LOCATION" value={`${opportunity.company.city}, ${opportunity.company.countryCode}`} />
+                <SnapshotCell label="STAGE" value={formatToken(opportunity.project.stage)} />
               </div>
-              <div className={styles.snapshotCell}>
-                <span>Team</span>
-                <strong>{opportunity.project.teamSize} people</strong>
-              </div>
-              <div className={styles.snapshotCell}>
-                <span>Sector</span>
-                <strong>{opportunity.project.sectorTags.map(formatToken).join(", ")}</strong>
-              </div>
-              <div className={styles.snapshotCell}>
-                <span>Evidence</span>
-                <strong>{opportunity.evidence.length} artifacts</strong>
+              <div className={styles.snapshotRow}>
+                <SnapshotCell label="TEAM" value={teamCell} />
+                <SnapshotCell label="PRODUCT" value={productCell} muted={!workingDemoClaim} />
+                <SnapshotCell label="ASK" value={ask} muted={!raisingClaim} />
               </div>
             </div>
-          </section>
 
-          <section className={styles.memoSection} aria-labelledby="hypothesis-title">
-            <h2 id="hypothesis-title">Thesis hypothesis</h2>
-            <div className={styles.analysisCallout}>
-              <span className={styles.analysisLabel}>Analysis · not a sourced claim</span>
-              <p>
-                {analysisBasis || "The captured evidence is not sufficient to form a thesis hypothesis."}
-                {analysisBasis
-                  ? " Together, these signals justify a founder conversation to test whether demonstrated execution can translate into durable usage and thesis fit."
-                  : " Gather direct product and customer evidence before interpreting the opportunity."}
-              </p>
-            </div>
-          </section>
+            <section className={styles.section} aria-labelledby="hypothesis-title">
+              <SectionHead id="hypothesis-title" title="Investment hypothesis" evidenceCount={evidenceLinkCount(hypothesisClaims)} />
+              <p className={styles.analysisNote}>Analysis — synthesizes captured claims; not itself an individually sourced claim.</p>
+              <p className={styles.bodyText}>{hypothesisText}</p>
+            </section>
 
-          <section className={styles.memoSection} aria-labelledby="problem-product-memo-title">
-            <h2 id="problem-product-memo-title">Problem &amp; product</h2>
-            <ClaimBackedBlock
-              title="Problem"
-              text={opportunity.project.problem}
-              claim={problemClaim}
-              evidence={problemEvidence}
-              citation={evidenceCitation(problemClaim, evidenceIndex)}
-            />
-            <ClaimBackedBlock
-              title="Product"
-              text={opportunity.project.product}
-              claim={productClaim}
-              evidence={productEvidence}
-              citation={evidenceCitation(productClaim, evidenceIndex)}
-            />
-            {workingDemoClaim ? (
-              <ClaimBackedBlock
-                title="Product status"
-                text={workingDemoClaim.statement}
-                claim={workingDemoClaim}
-                evidence={workingDemoEvidence}
-                citation={evidenceCitation(workingDemoClaim, evidenceIndex)}
+            <section className={styles.section} aria-labelledby="swot-title">
+              <SectionHead
+                id="swot-title"
+                title="SWOT"
+                evidenceCount={evidenceLinkCount([...strongClaims.slice(0, 4), ...weakClaims])}
               />
-            ) : null}
-          </section>
-
-          <section className={styles.memoSection} aria-labelledby="traction-title">
-            <h2 id="traction-title">Traction &amp; KPIs</h2>
-            {tractionClaim ? (
-              <ClaimBackedBlock
-                title="Captured traction claim"
-                text={tractionClaim.statement}
-                claim={tractionClaim}
-                evidence={tractionEvidence}
-                citation={evidenceCitation(tractionClaim, evidenceIndex)}
-              />
-            ) : (
-              <div className={styles.unknownItem}>
-                <CircleHelp aria-hidden="true" />
-                <span>
-                  No traction claim or KPI evidence is captured. Revenue, retention, usage,
-                  growth, and customer counts remain unknown; this memo does not infer them.
-                </span>
-              </div>
-            )}
-          </section>
-
-          <section className={styles.memoSection} aria-labelledby="swot-title">
-            <h2 id="swot-title">SWOT evidence frame</h2>
-            <div className={styles.swotGrid}>
-              <div className={`${styles.swotCard} ${styles.swotPositive}`}>
-                <h3>Strengths · evidence</h3>
-                <ul>{strengths.map((item) => <li key={item}>{item}</li>)}</ul>
-              </div>
-              <div className={`${styles.swotCard} ${styles.swotCaution}`}>
-                <h3>Weaknesses · evidence gaps</h3>
-                <ul>{weaknesses.map((item) => <li key={item}>{item}</li>)}</ul>
-              </div>
-              <div className={`${styles.swotCard} ${styles.swotAnalysis}`}>
-                <h3>Opportunities · analysis</h3>
-                <ul>{opportunityAnalysis.map((item) => <li key={item}>{item}</li>)}</ul>
-              </div>
-              <div className={`${styles.swotCard} ${styles.swotRisk}`}>
-                <h3>Threats · unresolved</h3>
-                <ul>{riskAnalysis.map((item) => <li key={item}>{item}</li>)}</ul>
-              </div>
-            </div>
-          </section>
-
-          <section className={styles.memoSection} aria-labelledby="unknowns-memo-title">
-            <h2 id="unknowns-memo-title">Unknowns &amp; contradictions</h2>
-            <ul className={styles.unknownList}>
-              {unknowns.map((unknown, index) => (
-                <li key={`${unknown.predicate}-${index}`} className={styles.unknownItem}>
-                  <CircleHelp aria-hidden="true" />
-                  <span>{unknown.label}</span>
-                </li>
-              ))}
-            </ul>
-            {opportunity.contradictions.map((contradiction) => (
-              <div key={contradiction.id} className={styles.contradictionCard} style={{ marginTop: "0.7rem" }}>
-                <div className={styles.contradictionTop}>
-                  <strong>Open contradiction</strong>
-                  <StatusBadge status="conflict" label={formatToken(contradiction.state)} />
+              <div className={styles.swotGrid}>
+                <div className={styles.swotRow}>
+                  <div className={styles.swotCard}>
+                    <span className={clsx(styles.swotLabel, styles.toneVerified)}>STRENGTHS · EVIDENCE</span>
+                    <p className={styles.swotBody}>{strengths.join(" ")}</p>
+                  </div>
+                  <div className={styles.swotCard}>
+                    <span className={clsx(styles.swotLabel, styles.toneRisk)}>WEAKNESSES · EVIDENCE GAPS</span>
+                    <p className={styles.swotBody}>{weaknesses.join(" ")}</p>
+                  </div>
                 </div>
-                <p>{contradiction.summary}</p>
+                <div className={styles.swotRow}>
+                  <div className={styles.swotCard}>
+                    <span className={clsx(styles.swotLabel, styles.toneExternal)}>OPPORTUNITIES · ANALYSIS</span>
+                    <p className={styles.swotBody}>{opportunitiesText}</p>
+                  </div>
+                  <div className={styles.swotCard}>
+                    <span className={clsx(styles.swotLabel, styles.toneInference)}>THREATS · UNRESOLVED</span>
+                    <p className={styles.swotBody}>{threatsText}</p>
+                  </div>
+                </div>
               </div>
-            ))}
-          </section>
+            </section>
 
-          <section className={styles.memoSection} aria-labelledby="citations-title">
-            <h2 id="citations-title">Sources &amp; citations</h2>
-            <ol className={styles.citationList}>
-              {opportunity.evidence.map((evidence, index) => (
-                <li key={evidence.id} className={styles.citationItem}>
-                  <span className={styles.citationNumber}>{index + 1}</span>
-                  <span>
-                    <strong>{evidence.sourceName}</strong> · {formatToken(evidence.sourceType)} · captured {formatDate(evidence.capturedAt)}.
-                    {" “"}{evidence.excerpt}{"”"}
+            <section className={styles.section} aria-labelledby="problem-product-title">
+              <SectionHead
+                id="problem-product-title"
+                title="Problem & product"
+                evidenceCount={evidenceLinkCount([problemClaim, productClaim, workingDemoClaim])}
+              />
+              <p className={styles.bodyText}>{problemProductText}</p>
+            </section>
+
+            <section className={styles.section} aria-labelledby="traction-title">
+              <SectionHead
+                id="traction-title"
+                title="Traction & KPIs"
+                evidenceCount={evidenceLinkCount([tractionClaim, teamSizeClaim, workingDemoClaim])}
+              />
+              <div className={styles.tkRow}>
+                <KpiTile
+                  value={`${opportunity.project.teamSize}`}
+                  label="people on team"
+                  badge={kpiBadge(opportunity, teamSizeClaim)}
+                  muted={!teamSizeClaim}
+                />
+                <KpiTile
+                  value={tractionClaim ? formatClaimValue(tractionClaim.value) : "Not available"}
+                  label="traction signal"
+                  badge={kpiBadge(opportunity, tractionClaim)}
+                  muted={!tractionClaim}
+                />
+                <KpiTile
+                  value={productStatusValue}
+                  label="product status"
+                  badge={kpiBadge(opportunity, workingDemoClaim)}
+                  muted={!workingDemoClaim}
+                />
+                <KpiTile
+                  value={
+                    opportunity.founderScore
+                      ? opportunity.founderScore.score === null ? "N/A" : `${opportunity.founderScore.score}/100`
+                      : "Not available"
+                  }
+                  label="Founder Score"
+                  badge={founderScoreBadge}
+                  muted={!opportunity.founderScore || opportunity.founderScore.score === null}
+                />
+              </div>
+              <p className={styles.tkNote}>
+                All figures reflect the {opportunity.dataLabel} snapshot captured {formatDate(opportunity.updatedAt)}.
+                Founder-provided figures are not independently verified.
+              </p>
+            </section>
+
+            <section className={styles.section} aria-labelledby="team-title">
+              <SectionHead
+                id="team-title"
+                title="Team"
+                evidenceCount={evidenceLinkCount([technicalClaim, teamSizeClaim])}
+              />
+              <p className={styles.bodyText}>{teamNarrative}</p>
+            </section>
+
+            <section className={styles.section} aria-labelledby="risks-title">
+              <SectionHead id="risks-title" title="Risks" evidenceCount={riskEvidenceCount} />
+              <div className={styles.riskList}>
+                {riskItems.map((item) => (
+                  <div key={item.title} className={styles.riskRow}>
+                    <span className={styles.riskDot} aria-hidden="true" />
+                    <div className={styles.riskCol}>
+                      <span className={styles.riskTitle}>{item.title}</span>
+                      <p className={styles.riskNote}>
+                        {item.note} · <a className={styles.riskLink} href="#sources-title">evidence →</a>
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className={styles.section} aria-labelledby="contradictions-title">
+              <SectionHead id="contradictions-title" title="Contradictions & missing information" />
+              <div className={styles.cmRow}>
+                <div className={clsx(styles.cmCard, styles.cmContra)}>
+                  <span className={styles.cmLabel}>
+                    {opportunity.contradictions.length
+                      ? `${opportunity.contradictions.length} CONTRADICTION${opportunity.contradictions.length === 1 ? "" : "S"}`
+                      : "NO CONTRADICTIONS RECORDED"}
                   </span>
-                </li>
-              ))}
-            </ol>
-          </section>
+                  <p className={styles.cmBody}>
+                    {contradictionSummaries(opportunity)}
+                  </p>
+                </div>
+                <div className={clsx(styles.cmCard, styles.cmMissing)}>
+                  <span className={styles.cmLabel}>STILL UNKNOWN ({unknownLabels.length})</span>
+                  <p className={styles.cmBody}>
+                    {shownUnknowns.join(" · ")}{extraUnknowns > 0 ? ` · +${extraUnknowns} more open field${extraUnknowns === 1 ? "" : "s"}` : ""}
+                  </p>
+                </div>
+              </div>
+            </section>
 
-          <section className={styles.memoSection} aria-labelledby="next-steps-title">
-            <h2 id="next-steps-title">Next diligence steps</h2>
-            <ol className={styles.nextStepList}>
-              {unknowns.slice(0, 4).map((unknown, index) => (
-                <li key={`${unknown.label}-${index}`} className={styles.nextStepItem}>
-                  <ArrowUpRight aria-hidden="true" />
-                  <span>Request evidence to resolve: {unknown.label}</span>
-                </li>
-              ))}
-              <li className={styles.nextStepItem}>
-                <CheckCircle2 aria-hidden="true" />
-                <span>Re-check every cited source and contradiction before sharing an investment recommendation.</span>
-              </li>
-            </ol>
-          </section>
+            <section className={styles.section} aria-labelledby="sources-title">
+              <SectionHead id="sources-title" title="Sources" />
+              <div className={styles.sourcesRow}>
+                {opportunity.evidence.length === 0 ? (
+                  <p className={styles.bodyText}>No sources are captured for this snapshot.</p>
+                ) : (
+                  [...sourceCounts.entries()].map(([sourceType, count]) => {
+                    const meta = SOURCE_TYPE_META[sourceType];
+                    const Icon = meta.icon;
+                    return <SourceChip key={sourceType} icon={<Icon aria-hidden="true" />} label={meta.label} meta={count} />;
+                  })
+                )}
+              </div>
+            </section>
 
-          <footer className={styles.memoFooter}>
-            Generated from {opportunity.dataLabel} data · evidence snapshot {formatDate(opportunity.updatedAt)} ·
-            this memo preserves unknowns and does not infer missing metrics.
-          </footer>
-        </article>
+            <section className={styles.section} aria-labelledby="next-steps-title">
+              <SectionHead id="next-steps-title" title="Next steps" />
+              <div className={styles.stepsList}>
+                {stepItems.map((step, index) => (
+                  <div key={step} className={styles.step}>
+                    <span className={styles.stepNum} aria-hidden="true">{index + 1}</span>
+                    <p className={styles.stepText}>{step}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <p className={styles.footerNote}>
+              Generated from {opportunity.dataLabel} data · evidence snapshot {formatDate(opportunity.updatedAt)} ·
+              this memo preserves unknowns and does not infer missing metrics.
+            </p>
+          </article>
+        </div>
       </div>
     </AppShell>
   );
+}
+
+function contradictionSummaries(opportunity: OpportunityDetail): string {
+  if (opportunity.contradictions.length === 0) {
+    return "No contradictions are recorded in this snapshot. This does not mean the claim set is complete.";
+  }
+  return opportunity.contradictions.map((item) => item.summary).join(" · ");
 }

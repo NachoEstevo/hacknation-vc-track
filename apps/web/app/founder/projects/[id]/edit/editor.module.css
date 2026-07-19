@@ -1,0 +1,467 @@
+.page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 28px 96px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px 0 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.headerTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.projectName {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.headerMeta {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-body), sans-serif;
+  font-size: 12.5px;
+}
+
+.completionRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.completionTrack {
+  width: 160px;
+  height: 6px;
+  overflow: hidden;
+  background: var(--surface-subtle);
+  border-radius: 99px;
+}
+
+.completionFill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 200ms ease;
+}
+
+.completionLabel {
+  color: var(--ink);
+  font-family: var(--font-mono), monospace;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.completionNote {
+  color: var(--text-secondary);
+  font-family: var(--font-body), sans-serif;
+  font-size: 12.5px;
+}
+
+.inlineError {
+  margin: 0;
+  color: var(--risk);
+  font-family: var(--font-body), sans-serif;
+  font-size: 12.5px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 32px;
+  padding-top: 24px;
+}
+
+.sidebar {
+  position: sticky;
+  top: 76px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-self: start;
+}
+
+.sidebarLabel {
+  margin-bottom: 8px;
+  color: var(--text-tertiary);
+  font-family: var(--font-body), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 8px;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.sidebarItem:hover {
+  color: var(--ink);
+  background: var(--surface-subtle);
+}
+
+.iconComplete {
+  flex: none;
+  color: var(--verified);
+}
+
+.iconWarning {
+  flex: none;
+  color: var(--inference);
+}
+
+.iconMissing {
+  flex: none;
+  color: var(--text-tertiary);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.sectionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  scroll-margin-top: 76px;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.claimCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  background: var(--surface-subtle);
+  border-radius: var(--radius-md);
+}
+
+.claimCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.claimCardActions {
+  display: flex;
+  gap: 4px;
+}
+
+.iconButton {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  place-items: center;
+}
+
+.iconButton:hover {
+  color: var(--ink);
+  background: var(--border);
+}
+
+.claimStatement {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-body), sans-serif;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+.editArea {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editTextarea {
+  width: 100%;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body), sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.editTextarea:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.editActions {
+  display: flex;
+  gap: 8px;
+}
+
+.suggestionBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--inference-soft);
+  border-radius: var(--radius-md);
+}
+
+.suggestionNote {
+  margin: 0;
+  color: var(--inference);
+  font-family: var(--font-body), sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.suggestionActions {
+  display: flex;
+  gap: 8px;
+}
+
+.addTrigger {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.addTrigger:hover {
+  opacity: 0.85;
+}
+
+.addForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--surface-subtle);
+  border-radius: var(--radius-md);
+}
+
+.addForm input {
+  padding: 9px 11px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13.5px;
+}
+
+.dateField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-family: var(--font-body), sans-serif;
+  font-size: 12.5px;
+}
+
+.dateField input {
+  padding: 6px 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body), sans-serif;
+  font-size: 12.5px;
+}
+
+.linkFormRow {
+  display: flex;
+  gap: 8px;
+}
+
+.linkFormRow select {
+  padding: 9px 10px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+}
+
+.linkFormRow input {
+  flex: 1;
+  padding: 9px 11px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13.5px;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.warningBox {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  color: var(--inference);
+  background: var(--inference-soft);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.linkList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.linkItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--surface-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+}
+
+.linkType {
+  flex: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.linkHref {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  color: var(--accent-ink);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.evidenceList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evidenceItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--surface-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+}
+
+.evidenceType {
+  color: var(--ink);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.evidenceDate {
+  color: var(--text-tertiary);
+  font-size: 12px;
+}
+
+.evidenceExcerpt {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+}
+
+.emptyNote {
+  color: var(--text-tertiary);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}

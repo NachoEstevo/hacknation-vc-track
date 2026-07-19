@@ -1,0 +1,132 @@
+.sectorTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+}
+
+.sectorTagLabel {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.stageBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid var(--border-strong);
+}
+
+.stageDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
+
+.stageLabel {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.dataBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.dataBadge svg {
+  width: 11px;
+  height: 11px;
+  flex: none;
+}
+
+.dataBadgeLabel {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.confidenceBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.confidenceDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.confidenceLabel {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.trendIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trendIndicator svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+
+.trendLabel {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sourceChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.sourceChip svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  color: var(--text-secondary);
+}
+
+.sourceChipLabel {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.sourceChipMeta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+}

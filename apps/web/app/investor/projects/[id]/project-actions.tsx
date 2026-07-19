@@ -7,6 +7,7 @@ import {
   FileText,
   GitCompareArrows,
   ScanSearch,
+  UserRoundSearch,
   UserPlus,
 } from "lucide-react";
 import { useState } from "react";
@@ -31,13 +32,13 @@ export function ProjectActions({ projectId, founderId }: ProjectActionsProps) {
   const saved = isInPipeline(projectId);
   const comparing = isComparing(projectId);
 
-  function handleSave() {
+  async function handleSave() {
     if (saved) {
       if (!window.confirm("Remove this project from the local demo pipeline?")) {
         setMessage("Project kept in the pipeline.");
         return;
       }
-      const result = removeFromPipeline(projectId);
+      const result = await removeFromPipeline(projectId);
       setMessage(result === "saved"
         ? "Removed from the browser-saved pipeline."
         : result === "no_change"
@@ -45,7 +46,7 @@ export function ProjectActions({ projectId, founderId }: ProjectActionsProps) {
           : "Browser storage could not remove this project. Nothing changed.");
       return;
     }
-    const result = addToPipeline({ projectId, stage: "reviewing" });
+    const result = await addToPipeline({ projectId, stage: "reviewing" });
     setMessage(result === "saved"
       ? "Saved to the Reviewing stage in this browser."
       : result === "no_change"
@@ -70,12 +71,12 @@ export function ProjectActions({ projectId, founderId }: ProjectActionsProps) {
     <div className={styles.wrap}>
       <div className={styles.primaryActions}>
         <Button
-          variant={saved ? "secondary" : "primary"}
+          variant={saved ? "secondary" : "ghost"}
           size="sm"
           leadingIcon={saved ? <BookmarkCheck /> : <BookmarkPlus />}
           onClick={handleSave}
         >
-          {saved ? "Remove from pipeline" : "Save to pipeline"}
+          {saved ? "Remove from pipeline" : "Save"}
         </Button>
         <Button
           variant={comparing ? "secondary" : "ghost"}
@@ -85,6 +86,14 @@ export function ProjectActions({ projectId, founderId }: ProjectActionsProps) {
         >
           {comparing ? "In compare" : "Compare"}
         </Button>
+        <ButtonLink
+          href={`/investor/projects/${projectId}/memo` as Route}
+          variant="primary"
+          size="sm"
+          leadingIcon={<FileText />}
+        >
+          Generate memo
+        </ButtonLink>
       </div>
 
       <div className={styles.secondaryActions}>
@@ -96,14 +105,16 @@ export function ProjectActions({ projectId, founderId }: ProjectActionsProps) {
         >
           Evidence
         </ButtonLink>
-        <ButtonLink
-          href={`/investor/projects/${projectId}/memo` as Route}
-          variant="quiet"
-          size="sm"
-          leadingIcon={<FileText />}
-        >
-          Memo
-        </ButtonLink>
+        {founderId ? (
+          <ButtonLink
+            href={`/investor/founders/${founderId}` as Route}
+            variant="quiet"
+            size="sm"
+            leadingIcon={<UserRoundSearch />}
+          >
+            Founder profile
+          </ButtonLink>
+        ) : null}
         {founderId ? (
           <ButtonLink
             href={`/investor/founders/${founderId}/invite?project=${projectId}` as Route}

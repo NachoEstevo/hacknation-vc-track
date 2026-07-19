@@ -15,7 +15,10 @@ import { Chip } from "@/components/ui/chip";
 import { useWorkspace } from "@/components/workspace-provider";
 import type { SearchCriterion } from "@/lib/domain";
 import { DEMO_OPPORTUNITIES } from "@/lib/demo";
+import { isSupabaseEnabled } from "@/lib/env";
 import styles from "./page.module.css";
+
+const SUPABASE_ENABLED = isSupabaseEnabled();
 
 const STARTER_BRIEF =
   "Technical founders building developer infrastructure with a working product, before institutional seed.";
@@ -55,7 +58,7 @@ export function ThesisWorkspace() {
       title="Investment thesis"
       headerAside={(
         <Chip tone={activeThesis ? "accent" : "inference"} size="sm">
-          {activeThesis ? "browser_saved" : "starter_demo"}
+          {activeThesis ? (SUPABASE_ENABLED ? "account_saved" : "browser_saved") : "starter_demo"}
         </Chip>
       )}
       actions={(
@@ -72,18 +75,20 @@ export function ThesisWorkspace() {
       <div className={styles.page}>
         <section className={styles.hero}>
           <div className={styles.heroCopy}>
-            <p>{activeThesis ? "Active browser thesis" : "Starter demo thesis"}</p>
+            <p>{activeThesis ? (SUPABASE_ENABLED ? "Active account thesis" : "Active browser thesis") : "Starter demo thesis"}</p>
             <h2>A visible lens for sourcing, not a hidden score for deciding.</h2>
-            <blockquote>{hasHydrated ? brief : "Reading the sourcing lens saved in this browser…"}</blockquote>
+            <blockquote>{hasHydrated ? brief : "Reading your sourcing lens…"}</blockquote>
           </div>
           <aside className={styles.snapshot}>
             <span className={styles.snapshotIcon}><HardDrive aria-hidden="true" /></span>
             <div>
-              <strong>{activeThesis ? "Saved in this browser" : "No configured thesis saved"}</strong>
+              <strong>{activeThesis ? (SUPABASE_ENABLED ? "Saved to your account" : "Saved in this browser") : "No configured thesis saved"}</strong>
               <p>
                 {activeThesis
-                  ? "This sourcing lens persists only in local browser storage. It is not an account record and is not synced to Supabase."
-                  : "Starter values keep the demo usable. Configure the lens to save a browser-only active thesis."}
+                  ? (SUPABASE_ENABLED
+                    ? "This sourcing lens is a real fund_theses record tied to your signed-in account, with one thesis_criteria row per criterion."
+                    : "This sourcing lens persists only in local browser storage. It is not an account record and is not synced to Supabase.")
+                  : "Starter values keep the demo usable. Configure the lens to save an active thesis."}
               </p>
             </div>
           </aside>

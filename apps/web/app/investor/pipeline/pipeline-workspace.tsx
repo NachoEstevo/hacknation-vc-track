@@ -2,16 +2,21 @@
 
 import Link from "next/link";
 import type { Route } from "next";
+import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowUpRight,
+  BookmarkCheck,
   FolderKanban,
-  Plus,
+  Globe,
+  MoreHorizontal,
   Search,
+  SlidersHorizontal,
   Trash2,
+  X,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 import { Chip } from "@/components/ui/chip";
 import {
   PIPELINE_STAGES,
@@ -19,7 +24,8 @@ import {
   type PipelineStage,
   useWorkspace,
 } from "@/components/workspace-provider";
-import { DEMO_OPPORTUNITIES, getOpportunity } from "@/lib/demo";
+import { getOpportunity } from "@/lib/demo";
+import type { OpportunityDetail } from "@/lib/domain";
 import styles from "./page.module.css";
 
 const STAGE_LABELS: Record<PipelineStage, string> = {
@@ -31,8 +37,35 @@ const STAGE_LABELS: Record<PipelineStage, string> = {
   passed: "Passed",
 };
 
+const HIGH_SCORE_THRESHOLD = 75;
+
+/** "pre_seed" -> "Pre-seed", "seed" -> "Seed". Mirrors the funding-stage vocabulary already in the fixtures. */
+function formatFundingStage(stage: string): string {
+  const words = stage.split("_").filter(Boolean);
+  if (words.length === 0) return stage;
+  return words
+    .map((word, index) => (index === 0 ? `${word.charAt(0).toUpperCase()}${word.slice(1)}` : word))
+    .join("-");
+}
+
+/** "ai_infrastructure" -> "AI Infrastructure". Reused for the sector filter menu. */
+function formatSector(tag: string): string {
+  return tag
+    .split("_")
+    .filter(Boolean)
+    .map((word) => (word === "ai" ? "AI" : `${word.charAt(0).toUpperCase()}${word.slice(1)}`))
+    .join(" ");
+}
+
+/** True when every piece of evidence for this profile came from outside the founder — never a guess. */
+function isExternallySourced(opportunity: OpportunityDetail): boolean {
+  return opportunity.evidence.length > 0
+    && opportunity.evidence.every((record) => record.sourceType !== "founder_submission");
+}
+
 function PipelineCard({
   item,
+  isNewest,
   shouldFocus,
   onMove,
   onFocused,
@@ -40,6 +73,7 @@ function PipelineCard({
   onRemoved,
 }: {
   item: PipelineItem;
+  isNewest: boolean;
   shouldFocus: boolean;
   onMove: (projectId: string, stage: PipelineStage) => void;
   onFocused: () => void;
@@ -48,10 +82,8 @@ function PipelineCard({
 }) {
   const opportunity = getOpportunity(item.projectId);
   const cardRef = useRef<HTMLElement>(null);
-  const {
-    removeFromPipeline,
-    updatePipelineNote,
-  } = useWorkspace();
+  const [expanded, setExpanded] = useState(false);
+  const { removeFromPipeline, updatePipelineNote } = useWorkspace();
 
   useEffect(() => {
     if (!shouldFocus) return;
@@ -59,10 +91,10 @@ function PipelineCard({
     onFocused();
   }, [onFocused, shouldFocus]);
 
-  function remove() {
+  async function remove() {
     const label = opportunity?.project.name ?? "this project";
     if (window.confirm(`Remove ${label} from the local demo pipeline?`)) {
-      const result = removeFromPipeline(item.projectId);
+      const result = await removeFromPipeline(item.projectId);
       if (result === "saved") {
         onRemoved(label);
       } else {
@@ -73,171 +105,157 @@ function PipelineCard({
     }
   }
 
+  const projectName = opportunity?.project.name ?? item.projectId;
+  const founderName = opportunity?.founders[0]?.name;
+  const score = opportunity?.founderScore?.score ?? null;
+  const external = !isNewest && opportunity ? isExternallySourced(opportunity) : false;
+  const panelId = `pipeline-card-panel-${item.projectId}`;
+
   return (
     <article
       ref={cardRef}
-      className={styles.card}
+      className={clsx(styles.card, isNewest && styles.cardNew)}
       tabIndex={-1}
-      aria-label={opportunity?.project.name ?? item.projectId}
+      aria-label={projectName}
     >
-      <div className={styles.cardTopline}>
-        <Chip tone="accent" size="sm">synthetic_demo</Chip>
+      <div className={styles.cardTop}>
+        <span className={styles.cardName}>{projectName}</span>
+        <span className={clsx(styles.cardScore, score !== null && score >= HIGH_SCORE_THRESHOLD && styles.cardScoreHigh)}>
+          {score !== null ? Math.round(score) : "—"}
+        </span>
         <button
           type="button"
-          className={styles.removeButton}
-          onClick={remove}
-          aria-label={`Remove ${opportunity?.project.name ?? item.projectId} from pipeline`}
-          title="Remove from pipeline"
+          className={styles.cardMenu}
+          onClick={() => setExpanded((value) => !value)}
+          aria-expanded={expanded}
+          aria-controls={panelId}
+          aria-label={expanded ? `Hide actions for ${projectName}` : `Show actions for ${projectName}`}
         >
-          <Trash2 aria-hidden="true" />
+          <MoreHorizontal aria-hidden="true" />
         </button>
       </div>
 
-      <div className={styles.cardIdentity}>
-        <p>{opportunity?.company.city ?? "Project record"}</p>
-        <h3>{opportunity?.project.name ?? item.projectId}</h3>
-        <span>{opportunity?.project.tagline ?? "The source record is no longer in this demo catalog."}</span>
-      </div>
+      <span className={styles.cardFounder}>
+        {founderName ?? (opportunity ? opportunity.company.city : "Project record no longer in this demo catalog")}
+      </span>
 
       {opportunity ? (
-        <div className={styles.cardMeta}>
-          <span>{opportunity.project.stage.replace("_", "-")}</span>
-          <span>{opportunity.project.teamSize} people</span>
-          <span>{opportunity.evidence.length} evidence items</span>
+        <div className={styles.cardStageRow}>
+          <span className={styles.cardStageDot} aria-hidden="true" />
+          <span className={styles.cardStageLabel}>{formatFundingStage(opportunity.project.stage)}</span>
+          {isNewest ? (
+            <span className={clsx(styles.cardIndicator, styles.cardIndicatorNew)}>
+              <BookmarkCheck aria-hidden="true" /> Newest addition
+            </span>
+          ) : external ? (
+            <span className={clsx(styles.cardIndicator, styles.cardIndicatorExternal)}>
+              <Globe aria-hidden="true" /> External
+            </span>
+          ) : null}
         </div>
       ) : null}
 
-      <label className={styles.stageField}>
-        <span>Stage</span>
-        <select
-          value={item.stage}
-          onChange={(event) => onMove(item.projectId, event.target.value as PipelineStage)}
-        >
-          {PIPELINE_STAGES.map((stage) => (
-            <option key={stage} value={stage}>{STAGE_LABELS[stage]}</option>
-          ))}
-        </select>
-      </label>
+      {expanded ? (
+        <div id={panelId} className={styles.cardExpanded}>
+          <label className={styles.stageField}>
+            <span>Move to stage</span>
+            <select
+              value={item.stage}
+              onChange={(event) => onMove(item.projectId, event.target.value as PipelineStage)}
+            >
+              {PIPELINE_STAGES.map((stage) => (
+                <option key={stage} value={stage}>{STAGE_LABELS[stage]}</option>
+              ))}
+            </select>
+          </label>
 
-      <label className={styles.noteField}>
-        <span>Private note</span>
-        <textarea
-          rows={3}
-          defaultValue={item.note ?? ""}
-          placeholder="Record a question, decision, or next step…"
-          onBlur={(event) => {
-            const result = updatePipelineNote(item.projectId, event.target.value);
-            if (result === "failed") event.currentTarget.value = item.note ?? "";
-            onMessage(result === "saved"
-              ? "Private note saved in this browser."
-              : result === "no_change"
-                ? "Private note unchanged."
-                : "Browser storage could not save this note. The previous note was restored.");
-          }}
-        />
-        <small>Saved locally when you leave this field.</small>
-      </label>
+          <label className={styles.noteField}>
+            <span>Private note</span>
+            <textarea
+              rows={2}
+              defaultValue={item.note ?? ""}
+              placeholder="Record a question, decision, or next step…"
+              onBlur={async (event) => {
+                const field = event.currentTarget;
+                const result = await updatePipelineNote(item.projectId, field.value);
+                if (result === "failed") field.value = item.note ?? "";
+                onMessage(result === "saved"
+                  ? "Private note saved in this browser."
+                  : result === "no_change"
+                    ? "Private note unchanged."
+                    : "Browser storage could not save this note. The previous note was restored.");
+              }}
+            />
+          </label>
 
-      {opportunity ? (
-        <Link
-          href={`/investor/projects/${opportunity.id}` as Route}
-          className={styles.briefLink}
-        >
-          Open evidence brief <ArrowUpRight aria-hidden="true" />
-        </Link>
+          <div className={styles.cardExpandedActions}>
+            {opportunity ? (
+              <Link href={`/investor/projects/${opportunity.id}` as Route} className={styles.briefLink}>
+                Open evidence brief <ArrowUpRight aria-hidden="true" />
+              </Link>
+            ) : <span />}
+            <button type="button" className={styles.removeAction} onClick={remove}>
+              <Trash2 aria-hidden="true" /> Remove
+            </button>
+          </div>
+        </div>
       ) : null}
     </article>
   );
 }
 
-function DemoCatalog({
-  pipelineIds,
-  onAdd,
-}: {
-  pipelineIds: string[];
-  onAdd: (projectId: string, projectName: string) => void;
-}) {
-  const available = DEMO_OPPORTUNITIES.filter((opportunity) => !pipelineIds.includes(opportunity.id));
-
-  if (!available.length) return null;
-
-  return (
-    <section className={styles.catalog} aria-labelledby="demo-catalog-title">
-      <div className={styles.sectionHeading}>
-        <div>
-          <p>Demo catalog</p>
-          <h2 id="demo-catalog-title">Add another opportunity</h2>
-        </div>
-        <span>Local action · no CRM sync</span>
-      </div>
-      <div className={styles.catalogGrid}>
-        {available.map((opportunity) => (
-          <article key={opportunity.id} className={styles.catalogCard}>
-            <div>
-              <Chip tone="accent" size="sm">synthetic_demo</Chip>
-              <h3>{opportunity.project.name}</h3>
-              <p>{opportunity.project.tagline}</p>
-            </div>
-            <Button
-              variant="secondary"
-              size="sm"
-              leadingIcon={<Plus />}
-              onClick={() => onAdd(opportunity.id, opportunity.project.name)}
-            >
-              Add to pipeline
-            </Button>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 export function PipelineWorkspace() {
   const {
-    addToPipeline,
     pipelineItems,
-    pipelineIds,
     hasHydrated,
     movePipelineItem,
   } = useWorkspace();
   const [workspaceAnnouncement, setWorkspaceAnnouncement] = useState("");
   const [focusProjectId, setFocusProjectId] = useState<string | null>(null);
-  const focusIntroRef = useRef(false);
-  const introHeadingRef = useRef<HTMLHeadingElement>(null);
+  const [sectorFilter, setSectorFilter] = useState<string | null>(null);
+  const focusBoardRef = useRef(false);
+  const boardRegionRef = useRef<HTMLDivElement>(null);
+
+  const availableSectors = useMemo(() => {
+    const tags = new Set<string>();
+    for (const item of pipelineItems) {
+      getOpportunity(item.projectId)?.project.sectorTags.forEach((tag) => tags.add(tag));
+    }
+    return [...tags].sort();
+  }, [pipelineItems]);
+
+  const filteredItems = useMemo(() => {
+    if (!sectorFilter) return pipelineItems;
+    return pipelineItems.filter((item) =>
+      getOpportunity(item.projectId)?.project.sectorTags.includes(sectorFilter));
+  }, [pipelineItems, sectorFilter]);
+
   const grouped = useMemo(() => Object.fromEntries(
     PIPELINE_STAGES.map((stage) => [
       stage,
-      pipelineItems.filter((item) => item.stage === stage),
+      filteredItems.filter((item) => item.stage === stage),
     ]),
-  ) as Record<PipelineStage, PipelineItem[]>, [pipelineItems]);
+  ) as Record<PipelineStage, PipelineItem[]>, [filteredItems]);
+
+  const newestAddedAt = useMemo(() => pipelineItems.reduce<string | null>(
+    (latest, item) => (!latest || item.addedAt > latest ? item.addedAt : latest),
+    null,
+  ), [pipelineItems]);
 
   useEffect(() => {
-    if (!focusIntroRef.current) return;
-    introHeadingRef.current?.focus();
-    focusIntroRef.current = false;
+    if (!focusBoardRef.current) return;
+    boardRegionRef.current?.focus();
+    focusBoardRef.current = false;
   }, [pipelineItems]);
-
-  function handleAdd(projectId: string, projectName: string) {
-    const result = addToPipeline(projectId);
-    if (result === "saved") {
-      setFocusProjectId(projectId);
-      setWorkspaceAnnouncement(`${projectName} saved to the browser pipeline.`);
-      return;
-    }
-    setWorkspaceAnnouncement(result === "no_change"
-      ? `${projectName} is already in the pipeline.`
-      : `Browser storage could not add ${projectName}. Nothing changed.`);
-  }
 
   function handleRemoved(projectName: string) {
     setWorkspaceAnnouncement(`${projectName} removed from the browser-saved pipeline.`);
-    focusIntroRef.current = true;
+    focusBoardRef.current = true;
   }
 
-  function handleMove(projectId: string, stage: PipelineStage) {
+  async function handleMove(projectId: string, stage: PipelineStage) {
     const projectName = getOpportunity(projectId)?.project.name ?? projectId;
-    const result = movePipelineItem(projectId, stage);
+    const result = await movePipelineItem(projectId, stage);
     if (result === "saved") {
       setFocusProjectId(projectId);
       setWorkspaceAnnouncement(`${projectName} saved in ${STAGE_LABELS[stage]}.`);
@@ -251,74 +269,101 @@ export function PipelineWorkspace() {
   return (
     <AppShell
       eyebrow="Private workspace"
-      title="Investment pipeline"
+      title="Pipeline"
       headerAside={<Chip tone="accent" size="sm">synthetic_demo</Chip>}
       actions={(
-        <Link href={"/investor/search" as Route} className={styles.searchLink}>
-          <Search aria-hidden="true" /> Discover projects
-        </Link>
+        <ButtonLink
+          href={"/investor/search" as Route}
+          variant="secondary"
+          size="sm"
+          leadingIcon={<Search size={15} aria-hidden="true" />}
+        >
+          Add from search
+        </ButtonLink>
       )}
     >
-      <div className={styles.page}>
+      <div className={styles.page} ref={boardRegionRef} tabIndex={-1}>
         <p className="sr-only" role="status" aria-live="polite">
           {workspaceAnnouncement}
         </p>
-        <section className={styles.intro}>
-          <div>
-            <p className={styles.kicker}>Decision context stays attached</p>
-            <h2 ref={introHeadingRef} tabIndex={-1}>
-              Move a project without losing the reasoning behind it.
-            </h2>
-          </div>
-          <p>
-            Stages and private notes are stored only in this browser during the demo.
-            Moving a card does not contact a founder or create an external record.
-          </p>
-        </section>
 
         {!hasHydrated ? (
           <div className={styles.loading} aria-live="polite">Loading local pipeline…</div>
         ) : pipelineItems.length === 0 ? (
           <section className={styles.empty}>
             <span className={styles.emptyIcon}><FolderKanban aria-hidden="true" /></span>
-            <Chip tone="accent" size="sm">synthetic_demo</Chip>
             <h2>Your pipeline is deliberately empty.</h2>
             <p>
-              Add a synthetic opportunity below to try stage moves and private notes.
+              Add a synthetic opportunity from search to try stage moves and private notes.
               Nothing leaves this device.
             </p>
           </section>
         ) : (
-          <section className={styles.board} aria-label="Pipeline stages">
-            {PIPELINE_STAGES.map((stage) => (
-              <section className={styles.column} key={stage} aria-labelledby={`stage-${stage}`}>
-                <header className={styles.columnHeader}>
-                  <h2 id={`stage-${stage}`}>{STAGE_LABELS[stage]}</h2>
-                  <span>{grouped[stage].length}</span>
-                </header>
-                <div className={styles.columnBody}>
-                  {grouped[stage].length ? grouped[stage].map((item) => (
-                    <PipelineCard
-                      key={item.projectId}
-                      item={item}
-                      shouldFocus={focusProjectId === item.projectId}
-                      onMove={handleMove}
-                      onFocused={() => setFocusProjectId(null)}
-                      onMessage={setWorkspaceAnnouncement}
-                      onRemoved={handleRemoved}
-                    />
-                  )) : (
-                    <p className={styles.columnEmpty}>No projects at this stage.</p>
-                  )}
-                </div>
-              </section>
-            ))}
-          </section>
-        )}
+          <>
+            <div className={styles.boardHead}>
+              <p className={styles.boardCount}>
+                {pipelineItems.length} project{pipelineItems.length === 1 ? "" : "s"} · saved in this browser
+              </p>
+              <div className={styles.boardHeadActions}>
+                {sectorFilter ? (
+                  <button type="button" className={styles.clearFilter} onClick={() => setSectorFilter(null)}>
+                    <X aria-hidden="true" /> Clear filter
+                  </button>
+                ) : null}
+                {availableSectors.length > 0 ? (
+                  <details className={styles.filterMenu}>
+                    <summary className={styles.filterTrigger}>
+                      <SlidersHorizontal aria-hidden="true" />
+                      {sectorFilter ? `Filter: ${formatSector(sectorFilter)}` : "Filter"}
+                    </summary>
+                    <div className={styles.filterPanel}>
+                      {availableSectors.map((tag) => (
+                        <button
+                          key={tag}
+                          type="button"
+                          className={styles.filterOption}
+                          data-active={sectorFilter === tag || undefined}
+                          onClick={() => setSectorFilter((current) => (current === tag ? null : tag))}
+                        >
+                          {formatSector(tag)}
+                        </button>
+                      ))}
+                    </div>
+                  </details>
+                ) : null}
+              </div>
+            </div>
 
-        {hasHydrated ? (
-          <DemoCatalog pipelineIds={pipelineIds} onAdd={handleAdd} />
-        ) : null}
+            <section className={styles.board} aria-label="Pipeline stages">
+              {PIPELINE_STAGES.map((stage) => (
+                <section className={styles.column} key={stage} aria-labelledby={`stage-${stage}`}>
+                  <header className={styles.columnHeader}>
+                    <h2 id={`stage-${stage}`}>{STAGE_LABELS[stage]}</h2>
+                    <span className={styles.columnCount}>{grouped[stage].length}</span>
+                  </header>
+                  <div className={styles.columnBody}>
+                    {grouped[stage].length ? grouped[stage].map((item) => (
+                      <PipelineCard
+                        key={item.projectId}
+                        item={item}
+                        isNewest={item.addedAt === newestAddedAt}
+                        shouldFocus={focusProjectId === item.projectId}
+                        onMove={handleMove}
+                        onFocused={() => setFocusProjectId(null)}
+                        onMessage={setWorkspaceAnnouncement}
+                        onRemoved={handleRemoved}
+                      />
+                    )) : (
+                      <p className={styles.columnEmpty}>
+                        {sectorFilter ? "No matches for this filter." : "No projects at this stage."}
+                      </p>
+                    )}
+                  </div>
+                </section>
+              ))}
+            </section>
+          </>
+        )}
       </div>
     </AppShell>
   );

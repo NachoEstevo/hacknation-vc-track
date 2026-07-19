@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { getOpportunity } from "../../../../lib/demo";
 import {
+  confidenceLevelFromTrust,
   getDiligenceAxes,
   getEvidenceCoverage,
   getStrongClaims,
@@ -42,5 +43,12 @@ describe("diligence view model", () => {
   it("surfaces contradictory evidence as unresolved", () => {
     const unknowns = getUnknowns(fixture("relay-mesh"));
     expect(unknowns.some((item) => item.reason === "contradicted")).toBe(true);
+  });
+
+  it("buckets a claim's Trust Score into a confidence tier without inventing a new number", () => {
+    expect(confidenceLevelFromTrust(87)).toBe("high");
+    expect(confidenceLevelFromTrust(75)).toBe("high");
+    expect(confidenceLevelFromTrust(65)).toBe("medium");
+    expect(confidenceLevelFromTrust(49)).toBe("low");
   });
 });

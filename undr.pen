@@ -16,8 +16,8 @@
         {
           "type": "frame",
           "id": "tmovE",
-          "x": 385,
-          "y": -9,
+          "x": 265,
+          "y": 71,
           "name": "Atlas",
           "width": "fit_content(640)",
           "height": "fit_content(610)",
@@ -44,10 +44,11 @@
     {
       "type": "frame",
       "id": "X3tiKW",
-      "x": 0,
-      "y": 900,
+      "x": 1548,
+      "y": -458,
       "name": "Design System",
-      "width": 1200,
+      "width": 1529,
+      "height": 3203,
       "fill": "$surface",
       "cornerRadius": 16,
       "stroke": "$border",
@@ -1353,7 +1354,7 @@
                   "id": "lHN3m",
                   "name": "SB Wordmark",
                   "fill": "$ink",
-                  "content": "Scout",
+                  "content": "undr",
                   "fontFamily": "$font-display",
                   "fontSize": 21,
                   "fontWeight": "600"
@@ -1530,6 +1531,42 @@
                 },
                 {
                   "type": "frame",
+                  "id": "r7lmy",
+                  "name": "SB Item My thesis",
+                  "context": "Open investment thesis",
+                  "width": "fill_container",
+                  "cornerRadius": "$radius-sm",
+                  "gap": 10,
+                  "padding": [
+                    9,
+                    10
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "R4KKba",
+                      "name": "SBI Thesis Icon",
+                      "width": 16,
+                      "height": 16,
+                      "icon": "sliders-horizontal",
+                      "library": "lucide",
+                      "fill": "$text-secondary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "fFo8G",
+                      "name": "SBI Thesis Label",
+                      "fill": "$text-secondary",
+                      "content": "My thesis",
+                      "fontFamily": "$font-body",
+                      "fontSize": 13.5,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
                   "id": "qNifM",
                   "name": "SB Item Notifications",
                   "width": "fill_container",
@@ -1597,7 +1634,7 @@
                   "fill": "$text-secondary",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "AI security founders LatAm",
+                  "content": "Small B2B software · US/UK",
                   "fontFamily": "$font-body",
                   "fontSize": 12.5,
                   "fontWeight": "normal"
@@ -1609,7 +1646,7 @@
                   "fill": "$text-secondary",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "Climate fintech, pre-seed",
+                  "content": "Technical teams · no funding signal",
                   "fontFamily": "$font-body",
                   "fontSize": 12.5,
                   "fontWeight": "normal"
@@ -1774,6 +1811,7 @@
               "type": "icon",
               "id": "mYp4q",
               "name": "SBC Expand",
+              "context": "Expand navigation",
               "width": 16,
               "height": 16,
               "icon": "panel-left-open",
@@ -1784,8 +1822,9 @@
               "type": "frame",
               "id": "oM8T2",
               "name": "SBC New",
-              "width": 36,
-              "height": 36,
+              "context": "New search",
+              "width": 44,
+              "height": 44,
               "fill": "$accent",
               "cornerRadius": "$radius-md",
               "justifyContent": "center",
@@ -1807,8 +1846,9 @@
               "type": "frame",
               "id": "t7WTyk",
               "name": "SBC Item search",
-              "width": 36,
-              "height": 36,
+              "context": "Search",
+              "width": 44,
+              "height": 44,
               "fill": "$accent-soft",
               "cornerRadius": "$radius-sm",
               "justifyContent": "center",
@@ -1830,8 +1870,9 @@
               "type": "frame",
               "id": "wGRwN",
               "name": "SBC Item kanban",
-              "width": 36,
-              "height": 36,
+              "context": "Pipeline",
+              "width": 44,
+              "height": 44,
               "cornerRadius": "$radius-sm",
               "justifyContent": "center",
               "alignItems": "center",
@@ -1852,8 +1893,9 @@
               "type": "frame",
               "id": "pZ6Mv",
               "name": "SBC Item bookmark",
-              "width": 36,
-              "height": 36,
+              "context": "Saved searches",
+              "width": 44,
+              "height": 44,
               "cornerRadius": "$radius-sm",
               "justifyContent": "center",
               "alignItems": "center",
@@ -1874,8 +1916,9 @@
               "type": "frame",
               "id": "I4tYrO",
               "name": "SBC Item bell",
-              "width": 36,
-              "height": 36,
+              "context": "Notifications",
+              "width": 44,
+              "height": 44,
               "cornerRadius": "$radius-sm",
               "justifyContent": "center",
               "alignItems": "center",
@@ -1894,6 +1937,29 @@
             },
             {
               "type": "frame",
+              "id": "B1b2VG",
+              "name": "SBC Item My thesis",
+              "context": "My thesis",
+              "width": 44,
+              "height": 44,
+              "cornerRadius": "$radius-sm",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "JZd0Z",
+                  "name": "SBC Icon My thesis",
+                  "width": 16,
+                  "height": 16,
+                  "icon": "sliders-horizontal",
+                  "library": "lucide",
+                  "fill": "$text-secondary"
+                }
+              ]
+            },
+            {
+              "type": "frame",
               "id": "m8yEK4",
               "name": "SBC Spacer",
               "width": 1,
@@ -1903,8 +1969,9 @@
               "type": "frame",
               "id": "B65ifs",
               "name": "SBC Settings",
-              "width": 36,
-              "height": 36,
+              "context": "Settings",
+              "width": 44,
+              "height": 44,
               "cornerRadius": "$radius-sm",
               "justifyContent": "center",
               "alignItems": "center",
@@ -1950,625 +2017,612 @@
       "children": [
         {
           "type": "frame",
-          "id": "C3dzB",
-          "name": "Landing Header",
+          "id": "Za0Gn",
+          "name": "Hero",
+          "clip": true,
           "width": "fill_container",
-          "gap": 40,
+          "height": 680,
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "q8k9m",
+              "x": 0,
+              "y": -40,
+              "name": "Hero BG",
+              "metadata": {
+                "type": "unsplash",
+                "username": "paradoxis",
+                "link": "https://unsplash.com/@paradoxis",
+                "author": "Luke Paris"
+              },
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "https://images.unsplash.com/photo-1656355691752-a576cbf30ac5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3ODQ0MjQ3MjB8&ixlib=rb-4.1.0&q=80&w=1080",
+                "mode": "fill"
+              },
+              "width": 1440,
+              "height": 760,
+              "effect": {
+                "type": "blur",
+                "radius": 9
+              }
+            },
+            {
+              "type": "rectangle",
+              "id": "leJS0",
+              "x": 0,
+              "y": 0,
+              "name": "Hero Wash",
+              "fill": [
+                "#F7F6F266",
+                {
+                  "type": "gradient",
+                  "gradientType": "linear",
+                  "enabled": true,
+                  "rotation": 180,
+                  "size": {
+                    "height": 1
+                  },
+                  "colors": [
+                    {
+                      "color": "#F7F6F200",
+                      "position": 0
+                    },
+                    {
+                      "color": "#F7F6F2",
+                      "position": 0.98
+                    }
+                  ]
+                }
+              ],
+              "width": 1440,
+              "height": 680
+            },
+            {
+              "type": "frame",
+              "id": "pM9dD",
+              "x": 0,
+              "y": 0,
+              "name": "Hero Content",
+              "width": 1440,
+              "height": 680,
+              "layout": "vertical",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "C3dzB",
+                  "name": "Landing Header",
+                  "width": "fill_container",
+                  "gap": 40,
+                  "padding": [
+                    24,
+                    64
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "KRIb9",
+                      "name": "Brand",
+                      "gap": 9,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "J8qiku",
+                          "name": "Wordmark",
+                          "fill": "$ink",
+                          "content": "undr",
+                          "fontFamily": "$font-display",
+                          "fontSize": 24,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "AHerv",
+                      "name": "Header Spacer",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "l2URU",
+                      "name": "Header Auth",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "id": "CchTx",
+                          "type": "ref",
+                          "ref": "X0qM9N",
+                          "name": "Log In Btn",
+                          "descendants": {
+                            "UWuIL": {
+                              "content": "Log in"
+                            }
+                          }
+                        },
+                        {
+                          "id": "EQjb9",
+                          "type": "ref",
+                          "ref": "flOE1",
+                          "name": "Sign Up Btn",
+                          "descendants": {
+                            "zF3Gg": {
+                              "content": "Get started"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "EeGQh",
+                  "name": "Hero",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": [
+                    74,
+                    0,
+                    42,
+                    0
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "H2ZgL",
+                      "name": "Headline",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": 860,
+                      "content": "Find overlooked companies before the market does.",
+                      "lineHeight": 1.08,
+                      "textAlign": "center",
+                      "fontFamily": "$font-display",
+                      "fontSize": 56,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "iOFdr",
+                      "name": "Subhead",
+                      "fill": "$text-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": 660,
+                      "content": "Describe your thesis in plain language. undr surfaces early teams, explains every match, and keeps the evidence, gaps, and contradictions attached.",
+                      "lineHeight": 1.55,
+                      "textAlign": "center",
+                      "fontFamily": "$font-body",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "le6JG",
+                      "name": "Hero Search Wrap",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": [
+                        14,
+                        0,
+                        0,
+                        0
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "W4aace",
+                          "name": "Landing Search Box",
+                          "width": 760,
+                          "fill": "$surface",
+                          "cornerRadius": 16,
+                          "stroke": "$border-strong",
+                          "strokeWidth": 1,
+                          "effect": {
+                            "type": "shadow",
+                            "shadowType": "outer",
+                            "color": "#1B1A170F",
+                            "offset": {
+                              "x": 0,
+                              "y": 2
+                            },
+                            "blur": 12
+                          },
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "wdtAn",
+                              "name": "Input Area",
+                              "width": "fill_container",
+                              "padding": [
+                                20,
+                                20,
+                                14,
+                                20
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "XeVtA",
+                                  "name": "Input Placeholder",
+                                  "fill": "$text-tertiary",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Describe the founders, teams, or projects you want to investigate…",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "$font-body",
+                                  "fontSize": 15.5,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "jRZuP",
+                              "name": "Box Bar",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "padding": [
+                                10,
+                                14,
+                                14,
+                                14
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "vZNR8",
+                                  "name": "Scope Chip",
+                                  "fill": "$surface-subtle",
+                                  "cornerRadius": 99,
+                                  "gap": 6,
+                                  "padding": [
+                                    6,
+                                    12
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "crx9o",
+                                      "name": "Scope Icon",
+                                      "width": 13,
+                                      "height": 13,
+                                      "icon": "layers",
+                                      "library": "lucide",
+                                      "fill": "$text-secondary"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "hEg3t",
+                                      "name": "Scope Label",
+                                      "fill": "$text-secondary",
+                                      "content": "All sources",
+                                      "fontFamily": "$font-body",
+                                      "fontSize": 12.5,
+                                      "fontWeight": "500"
+                                    },
+                                    {
+                                      "type": "icon",
+                                      "id": "Ls1wI",
+                                      "name": "Scope Chevron",
+                                      "width": 12,
+                                      "height": 12,
+                                      "icon": "chevron-down",
+                                      "library": "lucide",
+                                      "fill": "$text-tertiary"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "v1spu",
+                                  "x": 207,
+                                  "y": 15.5,
+                                  "name": "Thesis Chip",
+                                  "enabled": false,
+                                  "fill": "$accent-soft",
+                                  "cornerRadius": 99,
+                                  "gap": 6,
+                                  "padding": [
+                                    6,
+                                    12
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "Y6rU8",
+                                      "name": "Thesis Icon",
+                                      "width": 13,
+                                      "height": 13,
+                                      "icon": "compass",
+                                      "library": "lucide",
+                                      "fill": "$accent-ink"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "crgZ7",
+                                      "name": "Thesis Label",
+                                      "fill": "$accent-ink",
+                                      "content": "US/UK early B2B · +6",
+                                      "fontFamily": "$font-body",
+                                      "fontSize": 12.5,
+                                      "fontWeight": "500"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "e5KeG",
+                                  "name": "Bar Spacer",
+                                  "width": "fill_container",
+                                  "height": 1
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "vTSb2",
+                                  "name": "Send Button",
+                                  "context": "Run search",
+                                  "width": 38,
+                                  "height": 38,
+                                  "fill": "$accent",
+                                  "cornerRadius": 99,
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "daThy",
+                                      "name": "Send Icon",
+                                      "width": 17,
+                                      "height": 17,
+                                      "icon": "arrow-up",
+                                      "library": "lucide",
+                                      "fill": "#FFFFFF"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "R3HAp",
+                          "name": "Try Row",
+                          "width": 767,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "MYXyX",
+                              "name": "Try Label",
+                              "fill": "$text-tertiary",
+                              "content": "Try:",
+                              "fontFamily": "$font-body",
+                              "fontSize": 12.5,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "id": "MVFID",
+                              "type": "ref",
+                              "ref": "oZkcJ",
+                              "name": "Try Climate hardware in the Nordics",
+                              "descendants": {
+                                "oUHPM": {
+                                  "content": "Small B2B teams with shipped products"
+                                }
+                              }
+                            },
+                            {
+                              "id": "e0YEk0",
+                              "type": "ref",
+                              "ref": "oZkcJ",
+                              "name": "Try Solo devtools founders with shipped code",
+                              "descendants": {
+                                "oUHPM": {
+                                  "content": "Technical founders with public code"
+                                }
+                              }
+                            },
+                            {
+                              "id": "G3PHt",
+                              "type": "ref",
+                              "ref": "oZkcJ",
+                              "name": "Try Health AI out of university labs",
+                              "descendants": {
+                                "oUHPM": {
+                                  "content": "Pre-seed teams with missing evidence"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "pwueF",
+          "name": "How It Works",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 32,
           "padding": [
-            22,
+            52,
+            64,
+            20,
             64
           ],
           "alignItems": "center",
           "children": [
             {
-              "type": "frame",
-              "id": "KRIb9",
-              "name": "Brand",
-              "gap": 9,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "XthyJ",
-                  "name": "Brand Mark",
-                  "width": 20,
-                  "height": 20,
-                  "icon": "compass",
-                  "library": "lucide",
-                  "fill": "$accent"
-                },
-                {
-                  "type": "text",
-                  "id": "J8qiku",
-                  "name": "Wordmark",
-                  "fill": "$ink",
-                  "content": "Scout",
-                  "fontFamily": "$font-display",
-                  "fontSize": 24,
-                  "fontWeight": "600"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "AHerv",
-              "name": "Header Spacer",
-              "width": "fill_container",
-              "height": 1
-            },
-            {
-              "type": "frame",
-              "id": "shXfk",
-              "name": "Header Links",
-              "gap": 28,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "crqgK",
-                  "name": "How it works",
-                  "fill": "$text-secondary",
-                  "content": "How it works",
-                  "fontFamily": "$font-body",
-                  "fontSize": 13.5,
-                  "fontWeight": "500"
-                },
-                {
-                  "type": "text",
-                  "id": "bKJfu",
-                  "name": "For investors",
-                  "fill": "$text-secondary",
-                  "content": "For investors",
-                  "fontFamily": "$font-body",
-                  "fontSize": 13.5,
-                  "fontWeight": "500"
-                },
-                {
-                  "type": "text",
-                  "id": "Pu5fL",
-                  "name": "For founders",
-                  "fill": "$text-secondary",
-                  "content": "For founders",
-                  "fontFamily": "$font-body",
-                  "fontSize": 13.5,
-                  "fontWeight": "500"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "l2URU",
-              "name": "Header Auth",
-              "gap": 10,
-              "alignItems": "center",
-              "children": [
-                {
-                  "id": "CchTx",
-                  "type": "ref",
-                  "ref": "X0qM9N",
-                  "name": "Log In Btn",
-                  "descendants": {
-                    "UWuIL": {
-                      "content": "Log in"
-                    }
-                  }
-                },
-                {
-                  "id": "EQjb9",
-                  "type": "ref",
-                  "ref": "flOE1",
-                  "name": "Sign Up Btn",
-                  "descendants": {
-                    "zF3Gg": {
-                      "content": "Sign up"
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "EeGQh",
-          "name": "Hero",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 22,
-          "padding": [
-            76,
-            0,
-            56,
-            0
-          ],
-          "alignItems": "center",
-          "children": [
-            {
               "type": "text",
-              "id": "PpVGK",
-              "name": "Eyebrow",
+              "id": "wYKjR",
+              "name": "HIW Label",
               "fill": "$text-tertiary",
-              "content": "VENTURE SOURCING INTELLIGENCE",
+              "content": "HOW IT WORKS",
               "fontFamily": "$font-body",
               "fontSize": 11,
               "fontWeight": "600",
-              "letterSpacing": 1.6
-            },
-            {
-              "type": "text",
-              "id": "H2ZgL",
-              "name": "Headline",
-              "fill": "$ink",
-              "textGrowth": "fixed-width",
-              "width": 820,
-              "content": "Discover founders and projects before they raise.",
-              "lineHeight": 1.12,
-              "textAlign": "center",
-              "fontFamily": "$font-display",
-              "fontSize": 54,
-              "fontWeight": "500"
-            },
-            {
-              "type": "text",
-              "id": "iOFdr",
-              "name": "Subhead",
-              "fill": "$text-secondary",
-              "textGrowth": "fixed-width",
-              "width": 600,
-              "content": "Describe the founders you want to back in plain language. Scout searches registered profiles, its internal base and public sources — and shows you why each result matches.",
-              "lineHeight": 1.6,
-              "textAlign": "center",
-              "fontFamily": "$font-body",
-              "fontSize": 15.5,
-              "fontWeight": "normal"
+              "letterSpacing": 1.4
             },
             {
               "type": "frame",
-              "id": "le6JG",
-              "name": "Hero Search Wrap",
-              "layout": "vertical",
-              "gap": 12,
-              "padding": [
-                14,
-                0,
-                0,
-                0
-              ],
+              "id": "zxhdM",
+              "name": "HIW Cols",
+              "width": "fill_container",
+              "gap": 56,
+              "justifyContent": "center",
               "alignItems": "center",
               "children": [
                 {
                   "type": "frame",
-                  "id": "DFcKh",
-                  "name": "Hero Search Box",
-                  "width": 760,
-                  "fill": "$surface",
-                  "cornerRadius": "$radius-lg",
-                  "stroke": "$border-strong",
-                  "strokeWidth": 1,
-                  "gap": 14,
-                  "padding": [
-                    14,
-                    14,
-                    14,
-                    20
-                  ],
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "EtDCw",
-                      "name": "Search Icon",
-                      "width": 18,
-                      "height": 18,
-                      "icon": "search",
-                      "library": "lucide",
-                      "fill": "$text-tertiary"
-                    },
-                    {
-                      "type": "text",
-                      "id": "piiNF",
-                      "name": "Search Placeholder",
-                      "fill": "$text-tertiary",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Technical founders in Latin America building AI infrastructure, pre-seed…",
-                      "fontFamily": "$font-body",
-                      "fontSize": 15,
-                      "fontWeight": "normal"
-                    },
-                    {
-                      "id": "JqrDC",
-                      "type": "ref",
-                      "ref": "flOE1",
-                      "name": "Search Btn",
-                      "descendants": {
-                        "zF3Gg": {
-                          "content": "Search"
-                        }
-                      }
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "R3HAp",
-                  "name": "Try Row",
+                  "id": "JxbA8",
+                  "name": "Step Describe",
+                  "width": 300,
+                  "layout": "vertical",
                   "gap": 8,
-                  "alignItems": "center",
                   "children": [
                     {
                       "type": "text",
-                      "id": "MYXyX",
-                      "name": "Try Label",
-                      "fill": "$text-tertiary",
-                      "content": "Try:",
-                      "fontFamily": "$font-body",
-                      "fontSize": 12.5,
-                      "fontWeight": "normal"
-                    },
-                    {
-                      "id": "MVFID",
-                      "type": "ref",
-                      "ref": "oZkcJ",
-                      "name": "Try Climate hardware in the Nordics",
-                      "descendants": {
-                        "oUHPM": {
-                          "content": "Climate hardware in the Nordics"
-                        }
-                      }
-                    },
-                    {
-                      "id": "e0YEk0",
-                      "type": "ref",
-                      "ref": "oZkcJ",
-                      "name": "Try Solo devtools founders with shipped code",
-                      "descendants": {
-                        "oUHPM": {
-                          "content": "Solo devtools founders with shipped code"
-                        }
-                      }
-                    },
-                    {
-                      "id": "G3PHt",
-                      "type": "ref",
-                      "ref": "oZkcJ",
-                      "name": "Try Health AI out of university labs",
-                      "descendants": {
-                        "oUHPM": {
-                          "content": "Health AI out of university labs"
-                        }
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "xOzQy",
-          "name": "Trust Row",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 18,
-          "padding": [
-            8,
-            0,
-            0,
-            0
-          ],
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "mmGSb",
-              "name": "Trust Label",
-              "fill": "$text-tertiary",
-              "content": "Every search looks across",
-              "fontFamily": "$font-body",
-              "fontSize": 12,
-              "fontWeight": "600",
-              "letterSpacing": 0.6
-            },
-            {
-              "type": "frame",
-              "id": "S0MbWG",
-              "name": "Trust Cols",
-              "gap": 56,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "cQjNQ",
-                  "name": "Trust Registered profiles",
-                  "width": 280,
-                  "layout": "vertical",
-                  "gap": 6,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "dYMCI",
-                      "name": "Icon",
-                      "width": 18,
-                      "height": 18,
-                      "icon": "user-check",
-                      "library": "lucide",
-                      "fill": "$accent"
+                      "id": "nRLmU",
+                      "name": "Step Num",
+                      "fill": "$accent",
+                      "content": "01",
+                      "fontFamily": "$font-mono",
+                      "fontSize": 12,
+                      "fontWeight": "700"
                     },
                     {
                       "type": "text",
-                      "id": "uolJx",
-                      "name": "Title",
+                      "id": "e04T1",
+                      "name": "Step Title",
                       "fill": "$ink",
-                      "content": "Registered profiles",
-                      "fontFamily": "$font-body",
-                      "fontSize": 14,
-                      "fontWeight": "600"
-                    },
-                    {
-                      "type": "text",
-                      "id": "koYU3",
-                      "name": "Desc",
-                      "fill": "$text-secondary",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Founders who created and verified their own profile",
-                      "lineHeight": 1.5,
-                      "textAlign": "center",
-                      "fontFamily": "$font-body",
-                      "fontSize": 12.5,
-                      "fontWeight": "normal"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "dDlq8",
-                  "name": "Trust Scout's internal base",
-                  "width": 280,
-                  "layout": "vertical",
-                  "gap": 6,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "Dwvj2",
-                      "name": "Icon",
-                      "width": 18,
-                      "height": 18,
-                      "icon": "database",
-                      "library": "lucide",
-                      "fill": "$accent"
-                    },
-                    {
-                      "type": "text",
-                      "id": "NRPn0",
-                      "name": "Title",
-                      "fill": "$ink",
-                      "content": "Scout's internal base",
-                      "fontFamily": "$font-body",
-                      "fontSize": 14,
-                      "fontWeight": "600"
-                    },
-                    {
-                      "type": "text",
-                      "id": "KrKsz",
-                      "name": "Desc",
-                      "fill": "$text-secondary",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Projects and signals gathered from past searches",
-                      "lineHeight": 1.5,
-                      "textAlign": "center",
-                      "fontFamily": "$font-body",
-                      "fontSize": 12.5,
-                      "fontWeight": "normal"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "UxxV2",
-                  "name": "Trust Public sources",
-                  "width": 280,
-                  "layout": "vertical",
-                  "gap": 6,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "icon",
-                      "id": "NgM9R",
-                      "name": "Icon",
-                      "width": 18,
-                      "height": 18,
-                      "icon": "globe",
-                      "library": "lucide",
-                      "fill": "$accent"
-                    },
-                    {
-                      "type": "text",
-                      "id": "TcFgO",
-                      "name": "Title",
-                      "fill": "$ink",
-                      "content": "Public sources",
-                      "fontFamily": "$font-body",
-                      "fontSize": 14,
-                      "fontWeight": "600"
-                    },
-                    {
-                      "type": "text",
-                      "id": "zha3D",
-                      "name": "Desc",
-                      "fill": "$text-secondary",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "GitHub, Devpost, arXiv, personal sites and more",
-                      "lineHeight": 1.5,
-                      "textAlign": "center",
-                      "fontFamily": "$font-body",
-                      "fontSize": 12.5,
-                      "fontWeight": "normal"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "l96rf",
-          "name": "Entry Points",
-          "width": "fill_container",
-          "gap": 24,
-          "padding": [
-            52,
-            0,
-            0,
-            0
-          ],
-          "justifyContent": "center",
-          "children": [
-            {
-              "type": "frame",
-              "id": "TwUoi",
-              "name": "Entry I'm an investor",
-              "width": 430,
-              "fill": "$surface",
-              "cornerRadius": "$radius-lg",
-              "stroke": "$border",
-              "strokeWidth": 1,
-              "layout": "vertical",
-              "gap": 10,
-              "padding": [
-                26,
-                28
-              ],
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "kSxbt",
-                  "name": "Entry Top",
-                  "width": "fill_container",
-                  "justifyContent": "space_between",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "v8xlhL",
-                      "name": "Entry Title",
-                      "fill": "$ink",
-                      "content": "I'm an investor",
+                      "content": "Describe",
                       "fontFamily": "$font-display",
-                      "fontSize": 23,
+                      "fontSize": 19,
                       "fontWeight": "500"
                     },
                     {
-                      "type": "icon",
-                      "id": "tPu41",
-                      "name": "Entry Arrow",
-                      "width": 18,
-                      "height": 18,
-                      "icon": "arrow-right",
-                      "library": "lucide",
-                      "fill": "$accent"
+                      "type": "text",
+                      "id": "x6bRXK",
+                      "name": "Step Desc",
+                      "fill": "$text-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Write what you're looking for in plain language — sector, stage, geography, signals.",
+                      "lineHeight": 1.55,
+                      "fontFamily": "$font-body",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
                 {
-                  "type": "text",
-                  "id": "r4aWl",
-                  "name": "Entry Desc",
-                  "fill": "$text-secondary",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "Search founders and projects with natural language and build a pipeline.",
-                  "lineHeight": 1.55,
-                  "fontFamily": "$font-body",
-                  "fontSize": 13.5,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "VCI0d",
-                  "name": "Entry CTA",
-                  "fill": "$accent",
-                  "content": "Start sourcing",
-                  "fontFamily": "$font-body",
-                  "fontSize": 13.5,
-                  "fontWeight": "600"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "E8Kxh",
-              "name": "Entry I'm a founder",
-              "width": 430,
-              "fill": "$surface",
-              "cornerRadius": "$radius-lg",
-              "stroke": "$border",
-              "strokeWidth": 1,
-              "layout": "vertical",
-              "gap": 10,
-              "padding": [
-                26,
-                28
-              ],
-              "children": [
-                {
                   "type": "frame",
-                  "id": "q0qba",
-                  "name": "Entry Top",
-                  "width": "fill_container",
-                  "justifyContent": "space_between",
-                  "alignItems": "center",
+                  "id": "aX7kQ",
+                  "name": "Step Inspect",
+                  "width": 300,
+                  "layout": "vertical",
+                  "gap": 8,
                   "children": [
                     {
                       "type": "text",
-                      "id": "YJKD8",
-                      "name": "Entry Title",
+                      "id": "CqHho",
+                      "name": "Step Num",
+                      "fill": "$accent",
+                      "content": "02",
+                      "fontFamily": "$font-mono",
+                      "fontSize": 12,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "STtLZ",
+                      "name": "Step Title",
                       "fill": "$ink",
-                      "content": "I'm a founder",
+                      "content": "Inspect",
                       "fontFamily": "$font-display",
-                      "fontSize": 23,
+                      "fontSize": 19,
                       "fontWeight": "500"
                     },
                     {
-                      "type": "icon",
-                      "id": "Q8FXnP",
-                      "name": "Entry Arrow",
-                      "width": 18,
-                      "height": 18,
-                      "icon": "arrow-right",
-                      "library": "lucide",
-                      "fill": "$accent"
+                      "type": "text",
+                      "id": "TJfcH",
+                      "name": "Step Desc",
+                      "fill": "$text-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Every match arrives with its sources, confidence level and contradictions attached.",
+                      "lineHeight": 1.55,
+                      "fontFamily": "$font-body",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
                 {
-                  "type": "text",
-                  "id": "LXZMN",
-                  "name": "Entry Desc",
-                  "fill": "$text-secondary",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "Create your profile and get discovered before you raise.",
-                  "lineHeight": 1.55,
-                  "fontFamily": "$font-body",
-                  "fontSize": 13.5,
-                  "fontWeight": "normal"
-                },
-                {
-                  "type": "text",
-                  "id": "ILUOU",
-                  "name": "Entry CTA",
-                  "fill": "$accent",
-                  "content": "Create profile",
-                  "fontFamily": "$font-body",
-                  "fontSize": 13.5,
-                  "fontWeight": "600"
+                  "type": "frame",
+                  "id": "Au1GP",
+                  "name": "Step Decide",
+                  "width": 300,
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "s0GaH",
+                      "name": "Step Num",
+                      "fill": "$accent",
+                      "content": "03",
+                      "fontFamily": "$font-mono",
+                      "fontSize": 12,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Zgotn",
+                      "name": "Step Title",
+                      "fill": "$ink",
+                      "content": "Decide",
+                      "fontFamily": "$font-display",
+                      "fontSize": 19,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "R7ZYF",
+                      "name": "Step Desc",
+                      "fill": "$text-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Compare teams, generate an evidence-linked memo, and move the best into your pipeline.",
+                      "lineHeight": 1.55,
+                      "fontFamily": "$font-body",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
                 }
               ]
             }
@@ -2598,7 +2652,7 @@
               "id": "GCjEC",
               "name": "Copyright",
               "fill": "$text-tertiary",
-              "content": "© 2026 Scout",
+              "content": "© 2026 undr",
               "fontFamily": "$font-body",
               "fontSize": 12,
               "fontWeight": "normal"
@@ -2659,6 +2713,58 @@
       "alignItems": "center",
       "children": [
         {
+          "type": "rectangle",
+          "id": "N9097",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": -40,
+          "name": "Role BG",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "https://images.unsplash.com/photo-1656355691752-a576cbf30ac5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3ODQ0MjQ3MjB8&ixlib=rb-4.1.0&q=80&w=1080",
+            "mode": "fill"
+          },
+          "width": 1440,
+          "height": 1104,
+          "effect": {
+            "type": "blur",
+            "radius": 20
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "w39gSI",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Role Wash",
+          "fill": [
+            "#F7F6F2B3",
+            {
+              "type": "gradient",
+              "gradientType": "linear",
+              "enabled": true,
+              "rotation": 180,
+              "size": {
+                "height": 1
+              },
+              "colors": [
+                {
+                  "color": "#F7F6F200",
+                  "position": 0
+                },
+                {
+                  "color": "#F7F6F2",
+                  "position": 0.96
+                }
+              ]
+            }
+          ],
+          "width": 1440,
+          "height": 1024
+        },
+        {
           "type": "frame",
           "id": "G2DwIi",
           "name": "Role Header",
@@ -2678,21 +2784,11 @@
               "alignItems": "center",
               "children": [
                 {
-                  "type": "icon",
-                  "id": "kC5aZ",
-                  "name": "Brand Mark",
-                  "width": 20,
-                  "height": 20,
-                  "icon": "compass",
-                  "library": "lucide",
-                  "fill": "$accent"
-                },
-                {
                   "type": "text",
                   "id": "e0l9I",
                   "name": "Wordmark",
                   "fill": "$ink",
-                  "content": "Scout",
+                  "content": "undr",
                   "fontFamily": "$font-display",
                   "fontSize": 24,
                   "fontWeight": "600"
@@ -2703,11 +2799,12 @@
               "type": "text",
               "id": "qXROY",
               "name": "Step Note",
-              "fill": "$text-tertiary",
-              "content": "Step 1 of 2 · Choose your role",
+              "fill": "$text-secondary",
+              "content": "SETUP 1 OF 2 · CHOOSE WORKSPACE",
               "fontFamily": "$font-body",
-              "fontSize": 12.5,
-              "fontWeight": "normal"
+              "fontSize": 12,
+              "fontWeight": "normal",
+              "letterSpacing": 0.6
             }
           ]
         },
@@ -2716,9 +2813,9 @@
           "id": "A1c75",
           "name": "Role Body",
           "layout": "vertical",
-          "gap": 14,
+          "gap": 12,
           "padding": [
-            100,
+            82,
             0,
             0,
             0
@@ -2730,9 +2827,9 @@
               "id": "x9BBN",
               "name": "Role Title",
               "fill": "$ink",
-              "content": "How will you use Scout?",
+              "content": "Choose your workspace",
               "fontFamily": "$font-display",
-              "fontSize": 42,
+              "fontSize": 44,
               "fontWeight": "500"
             },
             {
@@ -2740,18 +2837,18 @@
               "id": "DrmJ9",
               "name": "Role Sub",
               "fill": "$text-secondary",
-              "content": "You can switch roles later in Settings.",
+              "content": "Your workspace sets permissions, tools, and the onboarding you’ll see. Add another later.",
               "fontFamily": "$font-body",
-              "fontSize": 14.5,
+              "fontSize": 15,
               "fontWeight": "normal"
             },
             {
               "type": "frame",
               "id": "o1KMe4",
               "name": "Role Cards",
-              "gap": 28,
+              "gap": 24,
               "padding": [
-                38,
+                32,
                 0,
                 0,
                 0
@@ -2762,13 +2859,13 @@
                   "id": "JlaLg",
                   "name": "Role I am an Investor",
                   "width": 400,
-                  "height": 280,
+                  "height": 310,
                   "fill": "$surface",
                   "cornerRadius": "$radius-lg",
                   "stroke": "$accent",
-                  "strokeWidth": 1.5,
+                  "strokeWidth": 2,
                   "layout": "vertical",
-                  "gap": 14,
+                  "gap": 12,
                   "padding": 30,
                   "children": [
                     {
@@ -2841,7 +2938,7 @@
                       "id": "t4wGg3",
                       "name": "Role Card Title",
                       "fill": "$ink",
-                      "content": "I am an Investor",
+                      "content": "Investor workspace",
                       "fontFamily": "$font-display",
                       "fontSize": 24,
                       "fontWeight": "500"
@@ -2853,11 +2950,111 @@
                       "fill": "$text-secondary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Search founders and projects with natural language, and build a pipeline of the ones worth watching.",
-                      "lineHeight": 1.6,
+                      "content": "Turn your thesis into evidence-backed shortlists, company briefs, comparisons, and next actions.",
+                      "lineHeight": 1.55,
                       "fontFamily": "$font-body",
-                      "fontSize": 14,
+                      "fontSize": 14.5,
                       "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "zNxSV",
+                      "name": "Investor Benefits",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ynYZ3",
+                          "name": "Investor Benefit Search by thesis, not rigid filters",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "qFzsl",
+                              "name": "Investor Benefit Icon",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "scan-search",
+                              "library": "lucide",
+                              "fill": "$accent"
+                            },
+                            {
+                              "type": "text",
+                              "id": "D729n",
+                              "name": "Investor Benefit Text",
+                              "fill": "$text-secondary",
+                              "content": "Search by thesis, not rigid filters",
+                              "fontFamily": "$font-body",
+                              "fontSize": 12.5,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "iBUi3",
+                          "name": "Investor Benefit Inspect claims, sources, and confidence",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "frwGI",
+                              "name": "Investor Benefit Icon",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "badge-check",
+                              "library": "lucide",
+                              "fill": "$accent"
+                            },
+                            {
+                              "type": "text",
+                              "id": "pC8ON",
+                              "name": "Investor Benefit Text",
+                              "fill": "$text-secondary",
+                              "content": "Inspect claims, sources, and confidence",
+                              "fontFamily": "$font-body",
+                              "fontSize": 12.5,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "dZE47",
+                          "name": "Investor Benefit Move qualified companies into your pipeline",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "yCDnT",
+                              "name": "Investor Benefit Icon",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "kanban",
+                              "library": "lucide",
+                              "fill": "$accent"
+                            },
+                            {
+                              "type": "text",
+                              "id": "blNVR",
+                              "name": "Investor Benefit Text",
+                              "fill": "$text-secondary",
+                              "content": "Move qualified companies into your pipeline",
+                              "fontFamily": "$font-body",
+                              "fontSize": 12.5,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 },
@@ -2866,13 +3063,13 @@
                   "id": "v3qAOU",
                   "name": "Role I am a Founder",
                   "width": 400,
-                  "height": 280,
+                  "height": 310,
                   "fill": "$surface",
                   "cornerRadius": "$radius-lg",
                   "stroke": "$border",
                   "strokeWidth": 1,
                   "layout": "vertical",
-                  "gap": 14,
+                  "gap": 12,
                   "padding": 30,
                   "children": [
                     {
@@ -2937,7 +3134,7 @@
                       "id": "wQk13",
                       "name": "Role Card Title",
                       "fill": "$ink",
-                      "content": "I am a Founder",
+                      "content": "Founder workspace",
                       "fontFamily": "$font-display",
                       "fontSize": 24,
                       "fontWeight": "500"
@@ -2949,11 +3146,111 @@
                       "fill": "$text-secondary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Create your profile once and get discovered by investors before you raise.",
-                      "lineHeight": 1.6,
+                      "content": "Claim a company, add founder proof, correct public facts, and resolve investor questions.",
+                      "lineHeight": 1.55,
                       "fontFamily": "$font-body",
-                      "fontSize": 14,
+                      "fontSize": 14.5,
                       "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "OQEup",
+                      "name": "Founder Benefits",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "n6FoB",
+                          "name": "Founder Benefit Create or claim a company profile",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "TYNMY",
+                              "name": "Founder Benefit Icon",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "building-2",
+                              "library": "lucide",
+                              "fill": "$text-secondary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "I8bOe",
+                              "name": "Founder Benefit Text",
+                              "fill": "$text-secondary",
+                              "content": "Create or claim a company profile",
+                              "fontFamily": "$font-body",
+                              "fontSize": 12.5,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "UdqZ0",
+                          "name": "Founder Benefit Submit decks, links, and proof",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "A9G3qU",
+                              "name": "Founder Benefit Icon",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "file-up",
+                              "library": "lucide",
+                              "fill": "$text-secondary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "KptAX",
+                              "name": "Founder Benefit Text",
+                              "fill": "$text-secondary",
+                              "content": "Submit decks, links, and proof",
+                              "fontFamily": "$font-body",
+                              "fontSize": 12.5,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "F2S9F",
+                          "name": "Founder Benefit See what changed after new evidence",
+                          "width": "fill_container",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "z7bEx",
+                              "name": "Founder Benefit Icon",
+                              "width": 14,
+                              "height": 14,
+                              "icon": "history",
+                              "library": "lucide",
+                              "fill": "$text-secondary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "bMxp4",
+                              "name": "Founder Benefit Text",
+                              "fill": "$text-secondary",
+                              "content": "See what changed after new evidence",
+                              "fontFamily": "$font-body",
+                              "fontSize": 12.5,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }
@@ -2964,9 +3261,9 @@
               "id": "C398JI",
               "name": "Role Actions",
               "layout": "vertical",
-              "gap": 14,
+              "gap": 12,
               "padding": [
-                36,
+                30,
                 0,
                 0,
                 0
@@ -2984,7 +3281,7 @@
                   ],
                   "descendants": {
                     "zF3Gg": {
-                      "content": "Continue as Investor"
+                      "content": "Continue as investor"
                     }
                   }
                 },
@@ -2993,7 +3290,7 @@
                   "id": "lVsk9",
                   "name": "Signin Note",
                   "fill": "$text-secondary",
-                  "content": "Already have an account? Log in",
+                  "content": "Already have an account? Log in with a secure email link.",
                   "fontFamily": "$font-body",
                   "fontSize": 13,
                   "fontWeight": "normal"
@@ -3050,7 +3347,7 @@
                   "id": "JobvG",
                   "name": "Wordmark",
                   "fill": "$ink",
-                  "content": "Scout",
+                  "content": "undr",
                   "fontFamily": "$font-display",
                   "fontSize": 24,
                   "fontWeight": "600"
@@ -3100,8 +3397,8 @@
                       "type": "text",
                       "id": "KqsIw",
                       "name": "Step Label",
-                      "fill": "$text-tertiary",
-                      "content": "Role",
+                      "fill": "$text-secondary",
+                      "content": "Workspace",
                       "fontFamily": "$font-body",
                       "fontSize": 12.5,
                       "fontWeight": "500"
@@ -3153,114 +3450,10 @@
                       "id": "eRZiE",
                       "name": "Step Label",
                       "fill": "$ink",
-                      "content": "Thesis",
+                      "content": "Investment thesis",
                       "fontFamily": "$font-body",
                       "fontSize": 12.5,
                       "fontWeight": "600"
-                    }
-                  ]
-                },
-                {
-                  "type": "rectangle",
-                  "id": "jmfas",
-                  "name": "Step Line",
-                  "fill": "$border-strong",
-                  "width": 26,
-                  "height": 1
-                },
-                {
-                  "type": "frame",
-                  "id": "c9NfSY",
-                  "name": "Step Signals",
-                  "gap": 7,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "aeYuw",
-                      "name": "Step Dot",
-                      "width": 22,
-                      "height": 22,
-                      "fill": "$surface",
-                      "cornerRadius": 99,
-                      "stroke": "$border-strong",
-                      "strokeWidth": 1,
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "OtH3K",
-                          "name": "Step Num",
-                          "fill": "$text-tertiary",
-                          "content": "3",
-                          "fontFamily": "$font-body",
-                          "fontSize": 11,
-                          "fontWeight": "600"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "zU2Sj",
-                      "name": "Step Label",
-                      "fill": "$text-tertiary",
-                      "content": "Signals",
-                      "fontFamily": "$font-body",
-                      "fontSize": 12.5,
-                      "fontWeight": "500"
-                    }
-                  ]
-                },
-                {
-                  "type": "rectangle",
-                  "id": "S7VSg",
-                  "name": "Step Line",
-                  "fill": "$border-strong",
-                  "width": 26,
-                  "height": 1
-                },
-                {
-                  "type": "frame",
-                  "id": "nAkSF",
-                  "name": "Step Review",
-                  "gap": 7,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "XWR8e",
-                      "name": "Step Dot",
-                      "width": 22,
-                      "height": 22,
-                      "fill": "$surface",
-                      "cornerRadius": 99,
-                      "stroke": "$border-strong",
-                      "strokeWidth": 1,
-                      "justifyContent": "center",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "oZISH",
-                          "name": "Step Num",
-                          "fill": "$text-tertiary",
-                          "content": "4",
-                          "fontFamily": "$font-body",
-                          "fontSize": 11,
-                          "fontWeight": "600"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "u2n6Fb",
-                      "name": "Step Label",
-                      "fill": "$text-tertiary",
-                      "content": "Review",
-                      "fontFamily": "$font-body",
-                      "fontSize": 12.5,
-                      "fontWeight": "500"
                     }
                   ]
                 }
@@ -3283,11 +3476,9 @@
           "id": "Wi7Lq",
           "name": "Onb Body",
           "width": "fill_container",
-          "gap": 56,
+          "gap": 44,
           "padding": [
-            28,
-            64,
-            0,
+            24,
             64
           ],
           "children": [
@@ -3297,7 +3488,7 @@
               "name": "Onb Main",
               "width": "fill_container",
               "layout": "vertical",
-              "gap": 26,
+              "gap": 18,
               "children": [
                 {
                   "type": "frame",
@@ -3312,9 +3503,9 @@
                       "id": "b5mSgC",
                       "name": "Onb Title",
                       "fill": "$ink",
-                      "content": "What are you looking for?",
+                      "content": "Set your investment thesis",
                       "fontFamily": "$font-display",
-                      "fontSize": 34,
+                      "fontSize": 36,
                       "fontWeight": "500"
                     },
                     {
@@ -3322,10 +3513,82 @@
                       "id": "iywTD",
                       "name": "Onb Sub",
                       "fill": "$text-secondary",
-                      "content": "Pick what applies — everything is editable later. Step 2 of 4.",
+                      "content": "Start in plain language, then confirm the criteria undr extracted. Missing evidence stays unknown—not negative.",
+                      "fontFamily": "$font-body",
+                      "fontSize": 14.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rvFkJ",
+                  "name": "Natural Language Thesis",
+                  "width": "fill_container",
+                  "fill": "$surface",
+                  "cornerRadius": "$radius-md",
+                  "stroke": "$border-strong",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 9,
+                  "padding": [
+                    14,
+                    16
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ATEhm",
+                      "name": "Thesis Input Label",
+                      "fill": "$text-secondary",
+                      "content": "DESCRIBE OR PASTE YOUR THESIS",
+                      "fontFamily": "$font-body",
+                      "fontSize": 11,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.8
+                    },
+                    {
+                      "type": "text",
+                      "id": "qG6Ew",
+                      "name": "Thesis Input Text",
+                      "fill": "$ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "We invest in early B2B software teams in the US or UK, usually fewer than 10 people, with technical founders and evidence of shipped product.",
+                      "lineHeight": 1.45,
                       "fontFamily": "$font-body",
                       "fontSize": 14,
                       "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "xVDLY",
+                      "name": "Thesis Parsing Helper",
+                      "width": "fill_container",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "j7A9Fq",
+                          "name": "Thesis Parsing Icon",
+                          "width": 12,
+                          "height": 12,
+                          "icon": "sparkles",
+                          "library": "lucide",
+                          "fill": "$accent"
+                        },
+                        {
+                          "type": "text",
+                          "id": "FgexC",
+                          "name": "Thesis Parsing Text",
+                          "fill": "$text-secondary",
+                          "content": "Use “must” for required criteria; everything else remains a preference.",
+                          "fontFamily": "$font-body",
+                          "fontSize": 11.5,
+                          "fontWeight": "500"
+                        }
+                      ]
                     }
                   ]
                 },
@@ -3341,7 +3604,7 @@
                       "type": "text",
                       "id": "TCVQW",
                       "name": "Sec Label",
-                      "fill": "$text-tertiary",
+                      "fill": "$text-secondary",
                       "content": "SECTORS",
                       "fontFamily": "$font-body",
                       "fontSize": 12,
@@ -3564,8 +3827,8 @@
                       "type": "text",
                       "id": "QETae",
                       "name": "Sec Label",
-                      "fill": "$text-tertiary",
-                      "content": "STAGE",
+                      "fill": "$text-secondary",
+                      "content": "STAGE & FUNDRAISING",
                       "fontFamily": "$font-body",
                       "fontSize": 12,
                       "fontWeight": "600",
@@ -3733,7 +3996,7 @@
                       "type": "text",
                       "id": "Yn3fa",
                       "name": "Sec Label",
-                      "fill": "$text-tertiary",
+                      "fill": "$text-secondary",
                       "content": "GEOGRAPHY",
                       "fontFamily": "$font-body",
                       "fontSize": 12,
@@ -3778,7 +4041,7 @@
                               "id": "apvaF",
                               "name": "Chip Label",
                               "fill": "$accent-ink",
-                              "content": "Latin America",
+                              "content": "United States & UK",
                               "fontFamily": "$font-body",
                               "fontSize": 13,
                               "fontWeight": "500"
@@ -3882,7 +4145,7 @@
                       "type": "text",
                       "id": "yFs3G",
                       "name": "Sec Label",
-                      "fill": "$text-tertiary",
+                      "fill": "$text-secondary",
                       "content": "CHECK SIZE",
                       "fontFamily": "$font-body",
                       "fontSize": 12,
@@ -4031,8 +4294,8 @@
                       "type": "text",
                       "id": "FOTDV",
                       "name": "Sec Label",
-                      "fill": "$text-tertiary",
-                      "content": "RISK APPETITE",
+                      "fill": "$text-secondary",
+                      "content": "RISK TOLERANCE",
                       "fontFamily": "$font-body",
                       "fontSize": 12,
                       "fontWeight": "600",
@@ -4153,8 +4416,8 @@
                       "type": "text",
                       "id": "C7qlMS",
                       "name": "Sec Label",
-                      "fill": "$text-tertiary",
-                      "content": "TRAITS SOUGHT",
+                      "fill": "$text-secondary",
+                      "content": "FOUNDER & TEAM SIGNALS",
                       "fontFamily": "$font-body",
                       "fontSize": 12,
                       "fontWeight": "600",
@@ -4312,7 +4575,7 @@
                       "type": "text",
                       "id": "PLi96",
                       "name": "Sec Label",
-                      "fill": "$text-tertiary",
+                      "fill": "$text-secondary",
                       "content": "EXCLUSIONS",
                       "fontFamily": "$font-body",
                       "fontSize": 12,
@@ -4427,8 +4690,8 @@
                       "type": "text",
                       "id": "c6ukUU",
                       "name": "Sec Label",
-                      "fill": "$text-tertiary",
-                      "content": "SIGNALS YOU VALUE",
+                      "fill": "$text-secondary",
+                      "content": "EVIDENCE YOU VALUE",
                       "fontFamily": "$font-body",
                       "fontSize": 12,
                       "fontWeight": "600",
@@ -4646,7 +4909,7 @@
                       "name": "Continue Btn",
                       "descendants": {
                         "zF3Gg": {
-                          "content": "Continue"
+                          "content": "Finish setup"
                         }
                       }
                     },
@@ -4654,8 +4917,8 @@
                       "type": "text",
                       "id": "ERnSj",
                       "name": "Autosave Note",
-                      "fill": "$text-tertiary",
-                      "content": "Answers save automatically",
+                      "fill": "$text-secondary",
+                      "content": "Saved automatically",
                       "fontFamily": "$font-body",
                       "fontSize": 12.5,
                       "fontWeight": "normal"
@@ -4668,17 +4931,14 @@
               "type": "frame",
               "id": "T7Epzi",
               "name": "Thesis Panel",
-              "width": 380,
+              "width": 390,
               "fill": "$surface",
               "cornerRadius": "$radius-lg",
               "stroke": "$border",
               "strokeWidth": 1,
               "layout": "vertical",
-              "gap": 16,
-              "padding": [
-                24,
-                26
-              ],
+              "gap": 15,
+              "padding": 24,
               "children": [
                 {
                   "type": "frame",
@@ -4692,8 +4952,8 @@
                       "type": "text",
                       "id": "WWLNv",
                       "name": "Panel Title",
-                      "fill": "$text-tertiary",
-                      "content": "Your thesis so far",
+                      "fill": "$text-secondary",
+                      "content": "INVESTMENT THESIS",
                       "fontFamily": "$font-body",
                       "fontSize": 12,
                       "fontWeight": "600",
@@ -4735,10 +4995,10 @@
                   "fill": "$ink",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "You back pre-seed and seed teams — including ones not raising yet — building AI infrastructure or dev tools in Latin America, with $100–500k checks and a balanced risk appetite.",
-                  "lineHeight": 1.55,
+                  "content": "Early B2B software teams in the US or UK, usually under 10 people, at pre-seed or seed—including companies not raising yet.",
+                  "lineHeight": 1.5,
                   "fontFamily": "$font-display",
-                  "fontSize": 19,
+                  "fontSize": 19.5,
                   "fontWeight": "normal"
                 },
                 {
@@ -4748,11 +5008,117 @@
                   "fill": "$text-secondary",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "You look for technical founders with an open-source track record, value shipped code and hackathon wins, and exclude crypto/web3 and agencies.",
-                  "lineHeight": 1.6,
+                  "content": "Prefer technical founders and shipped code. Exclude crypto/web3 and agencies. Missing public evidence stays unknown—it is never scored as negative.",
+                  "lineHeight": 1.55,
                   "fontFamily": "$font-body",
                   "fontSize": 13.5,
                   "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "Oz8pN",
+                  "name": "Match State Legend",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "QsWdq",
+                      "name": "State MATCH",
+                      "fill": "$verified-soft",
+                      "cornerRadius": 99,
+                      "padding": [
+                        5,
+                        8
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "B8him",
+                          "name": "State MATCH Label",
+                          "fill": "$verified",
+                          "content": "MATCH",
+                          "fontFamily": "$font-body",
+                          "fontSize": 9.5,
+                          "fontWeight": "700",
+                          "letterSpacing": 0.5
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "gob46",
+                      "name": "State PARTIAL",
+                      "fill": "$inference-soft",
+                      "cornerRadius": 99,
+                      "padding": [
+                        5,
+                        8
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t3YwZ4",
+                          "name": "State PARTIAL Label",
+                          "fill": "$inference",
+                          "content": "PARTIAL",
+                          "fontFamily": "$font-body",
+                          "fontSize": 9.5,
+                          "fontWeight": "700",
+                          "letterSpacing": 0.5
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "XCyhH",
+                      "name": "State MISSING",
+                      "fill": "$unknown-soft",
+                      "cornerRadius": 99,
+                      "padding": [
+                        5,
+                        8
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "qyN0v",
+                          "name": "State MISSING Label",
+                          "fill": "$unknown",
+                          "content": "MISSING",
+                          "fontFamily": "$font-body",
+                          "fontSize": 9.5,
+                          "fontWeight": "700",
+                          "letterSpacing": 0.5
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ouxHp",
+                      "name": "State CONFLICT",
+                      "fill": "$risk-soft",
+                      "cornerRadius": 99,
+                      "padding": [
+                        5,
+                        8
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "d7xBe8",
+                          "name": "State CONFLICT Label",
+                          "fill": "$risk",
+                          "content": "CONFLICT",
+                          "fontFamily": "$font-body",
+                          "fontSize": 9.5,
+                          "fontWeight": "700",
+                          "letterSpacing": 0.5
+                        }
+                      ]
+                    }
+                  ]
                 },
                 {
                   "type": "rectangle",
@@ -4782,7 +5148,7 @@
                           "id": "lhiYe",
                           "name": "Match Count",
                           "fill": "$accent-ink",
-                          "content": "~38",
+                          "content": "50",
                           "fontFamily": "$font-mono",
                           "fontSize": 20,
                           "fontWeight": "700"
@@ -4792,7 +5158,7 @@
                           "id": "B8Q3x",
                           "name": "Match Label",
                           "fill": "$text-secondary",
-                          "content": "profiles match today",
+                          "content": "seed companies indexed",
                           "fontFamily": "$font-body",
                           "fontSize": 13.5,
                           "fontWeight": "normal"
@@ -4803,8 +5169,11 @@
                       "type": "text",
                       "id": "p8cT1",
                       "name": "Match Note",
-                      "fill": "$text-tertiary",
-                      "content": "Demo data · estimate refreshes as you refine",
+                      "fill": "$text-secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Clay import · discovery fields remain unverified until evidence is attached",
+                      "lineHeight": 1.4,
                       "fontFamily": "$font-body",
                       "fontSize": 11.5,
                       "fontWeight": "normal"
@@ -13391,7 +13760,7 @@
           "width": "fill_container",
           "height": "fill_container",
           "layout": "vertical",
-          "gap": 44,
+          "gap": 28,
           "justifyContent": "center",
           "alignItems": "center",
           "children": [
@@ -13407,21 +13776,21 @@
                   "type": "text",
                   "id": "Wcjtr",
                   "name": "Date Line",
-                  "fill": "$text-tertiary",
-                  "content": "SATURDAY, JULY 18",
+                  "fill": "$text-secondary",
+                  "content": "TODAY · INVESTOR WORKSPACE",
                   "fontFamily": "$font-body",
-                  "fontSize": 13,
+                  "fontSize": 12,
                   "fontWeight": "500",
-                  "letterSpacing": 0.4
+                  "letterSpacing": 0.8
                 },
                 {
                   "type": "text",
                   "id": "uVEQG",
                   "name": "Greeting H1",
                   "fill": "$ink",
-                  "content": "Who are you looking for, Marcus?",
+                  "content": "What are you looking for, Marcus?",
                   "fontFamily": "$font-display",
-                  "fontSize": 38,
+                  "fontSize": 40,
                   "fontWeight": "500"
                 },
                 {
@@ -13429,7 +13798,7 @@
                   "id": "xMhfI",
                   "name": "Greeting Sub",
                   "fill": "$text-secondary",
-                  "content": "Search registered founders, your internal base, and public sources in plain language.",
+                  "content": "Describe a search in plain language. Every result will retain its evidence, confidence, contradictions, and unknowns.",
                   "fontFamily": "$font-body",
                   "fontSize": 14.5,
                   "fontWeight": "normal"
@@ -13476,7 +13845,7 @@
                       "fill": "$text-tertiary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Describe the founders or projects you want to find…",
+                      "content": "Describe the founders, teams, or projects you want to investigate…",
                       "lineHeight": 1.5,
                       "fontFamily": "$font-body",
                       "fontSize": 15.5,
@@ -13526,7 +13895,7 @@
                           "id": "elyuM",
                           "name": "Scope Label",
                           "fill": "$text-secondary",
-                          "content": "All sources",
+                          "content": "Internal first + public",
                           "fontFamily": "$font-body",
                           "fontSize": 12.5,
                           "fontWeight": "500"
@@ -13571,12 +13940,23 @@
                           "id": "y7aZ5B",
                           "name": "Thesis Label",
                           "fill": "$accent-ink",
-                          "content": "My thesis: on",
+                          "content": "US/UK early B2B · +6",
                           "fontFamily": "$font-body",
                           "fontSize": 12.5,
                           "fontWeight": "500"
                         }
                       ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "ZnNX4",
+                      "name": "Review Thesis Link",
+                      "context": "Open investment thesis",
+                      "fill": "$accent",
+                      "content": "Review thesis",
+                      "fontFamily": "$font-body",
+                      "fontSize": 12.5,
+                      "fontWeight": "600"
                     },
                     {
                       "type": "frame",
@@ -13589,6 +13969,7 @@
                       "type": "frame",
                       "id": "S9SP7",
                       "name": "Send Button",
+                      "context": "Run search",
                       "width": 38,
                       "height": 38,
                       "fill": "$accent",
@@ -13652,7 +14033,7 @@
                       "fill": "$text-secondary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Find technical founders in Latin America building AI infrastructure.",
+                      "content": "Find US or UK B2B software teams under 10 with technical founders.",
                       "fontFamily": "$font-body",
                       "fontSize": 14,
                       "fontWeight": "normal"
@@ -13702,7 +14083,7 @@
                       "fill": "$text-secondary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Show projects born at hackathons that have early user traction.",
+                      "content": "Show companies with shipped code but missing institutional funding evidence.",
                       "fontFamily": "$font-body",
                       "fontSize": 14,
                       "fontWeight": "normal"
@@ -13749,7 +14130,7 @@
                       "fill": "$text-secondary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Find first-time founders building developer tools without previous VC funding.",
+                      "content": "Find overlooked devtools teams and explain every thesis match.",
                       "fontFamily": "$font-body",
                       "fontSize": 14,
                       "fontWeight": "normal"
@@ -13770,6 +14151,172 @@
             },
             {
               "type": "frame",
+              "id": "JIWtd",
+              "name": "Search Coverage Strip",
+              "width": 760,
+              "fill": "$surface-subtle",
+              "cornerRadius": "$radius-md",
+              "gap": 18,
+              "padding": [
+                14,
+                16
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "puWUG",
+                  "name": "Coverage 50 seed companies",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "T7VsA",
+                      "name": "Coverage 50 seed companies Top",
+                      "width": "fill_container",
+                      "gap": 7,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "ub6xt",
+                          "name": "Coverage 50 seed companies Icon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "database",
+                          "library": "lucide",
+                          "fill": "$accent"
+                        },
+                        {
+                          "type": "text",
+                          "id": "SQVQU",
+                          "name": "Coverage 50 seed companies Title",
+                          "fill": "$ink",
+                          "content": "50 seed companies",
+                          "fontFamily": "$font-body",
+                          "fontSize": 12.5,
+                          "fontWeight": "650"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "ekIIi",
+                      "name": "Coverage 50 seed companies Meta",
+                      "fill": "$text-secondary",
+                      "content": "Imported discovery data",
+                      "fontFamily": "$font-body",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "UVNME",
+                  "name": "Coverage GitHub + websites",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ZF2SA",
+                      "name": "Coverage GitHub + websites Top",
+                      "width": "fill_container",
+                      "gap": 7,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "HYv2K",
+                          "name": "Coverage GitHub + websites Icon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "github",
+                          "library": "lucide",
+                          "fill": "$accent"
+                        },
+                        {
+                          "type": "text",
+                          "id": "oX3BK",
+                          "name": "Coverage GitHub + websites Title",
+                          "fill": "$ink",
+                          "content": "GitHub + websites",
+                          "fontFamily": "$font-body",
+                          "fontSize": 12.5,
+                          "fontWeight": "650"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "i4eS24",
+                      "name": "Coverage GitHub + websites Meta",
+                      "fill": "$text-secondary",
+                      "content": "Timestamped public evidence",
+                      "fontFamily": "$font-body",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "tbXQy",
+                  "name": "Coverage Claim-level trust",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "WzDkH",
+                      "name": "Coverage Claim-level trust Top",
+                      "width": "fill_container",
+                      "gap": 7,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "nDjhX",
+                          "name": "Coverage Claim-level trust Icon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "badge-check",
+                          "library": "lucide",
+                          "fill": "$accent"
+                        },
+                        {
+                          "type": "text",
+                          "id": "qxywL",
+                          "name": "Coverage Claim-level trust Title",
+                          "fill": "$ink",
+                          "content": "Claim-level trust",
+                          "fontFamily": "$font-body",
+                          "fontSize": 12.5,
+                          "fontWeight": "650"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "kByxV",
+                      "name": "Coverage Claim-level trust Meta",
+                      "fill": "$text-secondary",
+                      "content": "Sources, confidence, conflicts",
+                      "fontFamily": "$font-body",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
               "id": "i48e58",
               "name": "Recent Searches",
               "width": 760,
@@ -13780,8 +14327,8 @@
                   "type": "text",
                   "id": "yqKaU",
                   "name": "Recent Label",
-                  "fill": "$text-tertiary",
-                  "content": "RECENT",
+                  "fill": "$text-secondary",
+                  "content": "RECENT INVESTIGATIONS",
                   "fontFamily": "$font-body",
                   "fontSize": 11,
                   "fontWeight": "600",
@@ -13814,7 +14361,7 @@
                           "id": "q7UT1",
                           "name": "Recent Q",
                           "fill": "$ink",
-                          "content": "AI security founders in Latin America",
+                          "content": "Small B2B software · US & UK",
                           "fontFamily": "$font-body",
                           "fontSize": 13,
                           "fontWeight": "500"
@@ -13823,8 +14370,8 @@
                           "type": "text",
                           "id": "oEgLA",
                           "name": "Recent Meta",
-                          "fill": "$text-tertiary",
-                          "content": "2 days ago · 9 results",
+                          "fill": "$text-secondary",
+                          "content": "9 results · 31 sources · updated 2d ago",
                           "fontFamily": "$font-body",
                           "fontSize": 11.5,
                           "fontWeight": "normal"
@@ -13851,7 +14398,7 @@
                           "id": "cqUAM",
                           "name": "Recent Q",
                           "fill": "$ink",
-                          "content": "Climate fintech, pre-seed, Brazil",
+                          "content": "Technical teams · no funding signal",
                           "fontFamily": "$font-body",
                           "fontSize": 13,
                           "fontWeight": "500"
@@ -13860,8 +14407,8 @@
                           "type": "text",
                           "id": "IU7hQ",
                           "name": "Recent Meta",
-                          "fill": "$text-tertiary",
-                          "content": "1 week ago · 5 results",
+                          "fill": "$text-secondary",
+                          "content": "5 results · 18 sources · updated 1w ago",
                           "fontFamily": "$font-body",
                           "fontSize": 11.5,
                           "fontWeight": "normal"
@@ -18828,7 +19375,8 @@
                           "width": "fill_container",
                           "content": "Solid",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "icon",
@@ -18875,7 +19423,8 @@
                           "width": "fill_container",
                           "content": "Unknown",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "icon",
@@ -18956,7 +19505,8 @@
                           "width": "fill_container",
                           "content": "Promising",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "icon",
@@ -19052,7 +19602,8 @@
                           "width": "fill_container",
                           "content": "Promising",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "icon",
@@ -19182,7 +19733,8 @@
                           "width": "fill_container",
                           "content": "Crowded",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "icon",
@@ -19229,7 +19781,8 @@
                           "width": "fill_container",
                           "content": "Too early to tell",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "icon",
@@ -19359,7 +19912,8 @@
                           "width": "fill_container",
                           "content": "340 stars · pilot LOI",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "icon",
@@ -19406,7 +19960,8 @@
                           "width": "fill_container",
                           "content": "120 commits / 60d",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         },
                         {
                           "type": "icon",
@@ -19526,7 +20081,8 @@
                           "width": "fill_container",
                           "content": "14 verified · 0 contra",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -19563,7 +20119,8 @@
                           "width": "fill_container",
                           "content": "3 verified · 9 unconfirmed",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -19634,7 +20191,8 @@
                           "width": "fill_container",
                           "content": "Team size contradiction",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -19671,7 +20229,8 @@
                           "width": "fill_container",
                           "content": "Incumbent competition",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -19708,7 +20267,8 @@
                           "width": "fill_container",
                           "content": "Identity unconfirmed",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -19779,7 +20339,8 @@
                           "width": "fill_container",
                           "content": "Revenue, pricing",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -19816,7 +20377,8 @@
                           "width": "fill_container",
                           "content": "Team background",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -19853,7 +20415,8 @@
                           "width": "fill_container",
                           "content": "Almost everything",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -19963,7 +20526,8 @@
                           "width": "fill_container",
                           "content": "Partial — stage fits",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -20000,7 +20564,8 @@
                           "width": "fill_container",
                           "content": "Unclear",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -20149,7 +20714,8 @@
                           "width": "fill_container",
                           "content": "Low",
                           "fontFamily": "$font-body",
-                          "fontSize": 12.5
+                          "fontSize": 12.5,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -24092,7 +24658,7 @@
           "width": "fill_container",
           "height": "fill_container",
           "layout": "vertical",
-          "gap": 44,
+          "gap": 28,
           "padding": [
             110,
             0,
@@ -24114,21 +24680,21 @@
                   "type": "text",
                   "id": "FFqBk",
                   "name": "Date Line",
-                  "fill": "$text-tertiary",
-                  "content": "SATURDAY, JULY 18",
+                  "fill": "$text-secondary",
+                  "content": "TODAY · INVESTOR WORKSPACE",
                   "fontFamily": "$font-body",
-                  "fontSize": 13,
+                  "fontSize": 12,
                   "fontWeight": "500",
-                  "letterSpacing": 0.4
+                  "letterSpacing": 0.8
                 },
                 {
                   "type": "text",
                   "id": "gYkcc",
                   "name": "Greeting H1",
                   "fill": "$ink",
-                  "content": "Who are you looking for, Marcus?",
+                  "content": "What are you looking for, Marcus?",
                   "fontFamily": "$font-display",
-                  "fontSize": 38,
+                  "fontSize": 40,
                   "fontWeight": "500"
                 },
                 {
@@ -24136,7 +24702,7 @@
                   "id": "toGqi",
                   "name": "Greeting Sub",
                   "fill": "$text-secondary",
-                  "content": "Search registered founders, your internal base, and public sources in plain language.",
+                  "content": "Describe a search in plain language. Every result will retain its evidence, confidence, contradictions, and unknowns.",
                   "fontFamily": "$font-body",
                   "fontSize": 14.5,
                   "fontWeight": "normal"
@@ -24147,7 +24713,7 @@
               "type": "frame",
               "id": "cERgd",
               "name": "Search Box",
-              "width": 760,
+              "width": 840,
               "fill": "$surface",
               "cornerRadius": 16,
               "stroke": "$border-strong",
@@ -24183,7 +24749,7 @@
                       "fill": "$text-tertiary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Describe the founders or projects you want to find…",
+                      "content": "Describe the founders, teams, or projects you want to investigate…",
                       "lineHeight": 1.5,
                       "fontFamily": "$font-body",
                       "fontSize": 15.5,
@@ -24233,7 +24799,7 @@
                           "id": "PZNld",
                           "name": "Scope Label",
                           "fill": "$text-secondary",
-                          "content": "All sources",
+                          "content": "Internal first + public",
                           "fontFamily": "$font-body",
                           "fontSize": 12.5,
                           "fontWeight": "500"
@@ -24278,12 +24844,23 @@
                           "id": "sq1fC",
                           "name": "Thesis Label",
                           "fill": "$accent-ink",
-                          "content": "My thesis: on",
+                          "content": "US/UK early B2B · +6",
                           "fontFamily": "$font-body",
                           "fontSize": 12.5,
                           "fontWeight": "500"
                         }
                       ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Z52by",
+                      "name": "Review Thesis Link",
+                      "context": "Open investment thesis",
+                      "fill": "$accent",
+                      "content": "Review thesis",
+                      "fontFamily": "$font-body",
+                      "fontSize": 12.5,
+                      "fontWeight": "600"
                     },
                     {
                       "type": "frame",
@@ -24296,6 +24873,7 @@
                       "type": "frame",
                       "id": "VFk8o",
                       "name": "Send Button",
+                      "context": "Run search",
                       "width": 38,
                       "height": 38,
                       "fill": "$accent",
@@ -24323,7 +24901,7 @@
               "type": "frame",
               "id": "AmnkN",
               "name": "Example Queries",
-              "width": 760,
+              "width": 840,
               "layout": "vertical",
               "children": [
                 {
@@ -24359,7 +24937,7 @@
                       "fill": "$text-secondary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Find technical founders in Latin America building AI infrastructure.",
+                      "content": "Find US or UK B2B software teams under 10 with technical founders.",
                       "fontFamily": "$font-body",
                       "fontSize": 14,
                       "fontWeight": "normal"
@@ -24409,7 +24987,7 @@
                       "fill": "$text-secondary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Show projects born at hackathons that have early user traction.",
+                      "content": "Show companies with shipped code but missing institutional funding evidence.",
                       "fontFamily": "$font-body",
                       "fontSize": 14,
                       "fontWeight": "normal"
@@ -24456,7 +25034,7 @@
                       "fill": "$text-secondary",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Find first-time founders building developer tools without previous VC funding.",
+                      "content": "Find overlooked devtools teams and explain every thesis match.",
                       "fontFamily": "$font-body",
                       "fontSize": 14,
                       "fontWeight": "normal"
@@ -24477,9 +25055,175 @@
             },
             {
               "type": "frame",
+              "id": "IjYBf",
+              "name": "Search Coverage Strip",
+              "width": 840,
+              "fill": "$surface-subtle",
+              "cornerRadius": "$radius-md",
+              "gap": 18,
+              "padding": [
+                14,
+                16
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "vQgyw",
+                  "name": "Coverage 50 seed companies",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "SGzKi",
+                      "name": "Coverage 50 seed companies Top",
+                      "width": "fill_container",
+                      "gap": 7,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "O5OKk",
+                          "name": "Coverage 50 seed companies Icon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "database",
+                          "library": "lucide",
+                          "fill": "$accent"
+                        },
+                        {
+                          "type": "text",
+                          "id": "P2jrN",
+                          "name": "Coverage 50 seed companies Title",
+                          "fill": "$ink",
+                          "content": "50 seed companies",
+                          "fontFamily": "$font-body",
+                          "fontSize": 12.5,
+                          "fontWeight": "650"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "c7UUx",
+                      "name": "Coverage 50 seed companies Meta",
+                      "fill": "$text-secondary",
+                      "content": "Imported discovery data",
+                      "fontFamily": "$font-body",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ND0OU",
+                  "name": "Coverage GitHub + websites",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "bhGft",
+                      "name": "Coverage GitHub + websites Top",
+                      "width": "fill_container",
+                      "gap": 7,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "kCb5m",
+                          "name": "Coverage GitHub + websites Icon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "github",
+                          "library": "lucide",
+                          "fill": "$accent"
+                        },
+                        {
+                          "type": "text",
+                          "id": "TC2Xl",
+                          "name": "Coverage GitHub + websites Title",
+                          "fill": "$ink",
+                          "content": "GitHub + websites",
+                          "fontFamily": "$font-body",
+                          "fontSize": 12.5,
+                          "fontWeight": "650"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "XzYBO",
+                      "name": "Coverage GitHub + websites Meta",
+                      "fill": "$text-secondary",
+                      "content": "Timestamped public evidence",
+                      "fontFamily": "$font-body",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "H5BWj",
+                  "name": "Coverage Claim-level trust",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "u9eAMP",
+                      "name": "Coverage Claim-level trust Top",
+                      "width": "fill_container",
+                      "gap": 7,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "ay8r5",
+                          "name": "Coverage Claim-level trust Icon",
+                          "width": 14,
+                          "height": 14,
+                          "icon": "badge-check",
+                          "library": "lucide",
+                          "fill": "$accent"
+                        },
+                        {
+                          "type": "text",
+                          "id": "TDLcJ",
+                          "name": "Coverage Claim-level trust Title",
+                          "fill": "$ink",
+                          "content": "Claim-level trust",
+                          "fontFamily": "$font-body",
+                          "fontSize": 12.5,
+                          "fontWeight": "650"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "b9CXI",
+                      "name": "Coverage Claim-level trust Meta",
+                      "fill": "$text-secondary",
+                      "content": "Sources, confidence, conflicts",
+                      "fontFamily": "$font-body",
+                      "fontSize": 11.5,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
               "id": "p14Qkh",
               "name": "Recent Searches",
-              "width": 760,
+              "width": 840,
               "layout": "vertical",
               "gap": 12,
               "children": [
@@ -24487,8 +25231,8 @@
                   "type": "text",
                   "id": "wbcYv",
                   "name": "Recent Label",
-                  "fill": "$text-tertiary",
-                  "content": "RECENT",
+                  "fill": "$text-secondary",
+                  "content": "RECENT INVESTIGATIONS",
                   "fontFamily": "$font-body",
                   "fontSize": 11,
                   "fontWeight": "600",
@@ -24521,7 +25265,7 @@
                           "id": "HLpsL",
                           "name": "Recent Q",
                           "fill": "$ink",
-                          "content": "AI security founders in Latin America",
+                          "content": "Small B2B software · US & UK",
                           "fontFamily": "$font-body",
                           "fontSize": 13,
                           "fontWeight": "500"
@@ -24530,8 +25274,8 @@
                           "type": "text",
                           "id": "A2Px0D",
                           "name": "Recent Meta",
-                          "fill": "$text-tertiary",
-                          "content": "2 days ago · 9 results",
+                          "fill": "$text-secondary",
+                          "content": "9 results · 31 sources · updated 2d ago",
                           "fontFamily": "$font-body",
                           "fontSize": 11.5,
                           "fontWeight": "normal"
@@ -24558,7 +25302,7 @@
                           "id": "MyMUg",
                           "name": "Recent Q",
                           "fill": "$ink",
-                          "content": "Climate fintech, pre-seed, Brazil",
+                          "content": "Technical teams · no funding signal",
                           "fontFamily": "$font-body",
                           "fontSize": 13,
                           "fontWeight": "500"
@@ -24567,8 +25311,8 @@
                           "type": "text",
                           "id": "b2D5Db",
                           "name": "Recent Meta",
-                          "fill": "$text-tertiary",
-                          "content": "1 week ago · 5 results",
+                          "fill": "$text-secondary",
+                          "content": "5 results · 18 sources · updated 1w ago",
                           "fontFamily": "$font-body",
                           "fontSize": 11.5,
                           "fontWeight": "normal"

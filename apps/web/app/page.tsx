@@ -1,143 +1,88 @@
 import type { Metadata } from "next";
-import {
-  Check,
-  CircleDashed,
-  FileSearch,
-  Globe2,
-} from "lucide-react";
-import { Brand } from "@/components/brand";
-import { ButtonLink } from "@/components/ui/button";
+import Link from "next/link";
+import { ButtonLink } from "@/components/pencil";
 import { LandingBriefFlow } from "./landing-brief-flow";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Evidence-first venture sourcing",
   description:
-    "Discover early founders and projects through structured, source-backed evidence.",
+    "Describe your thesis in plain language. undr surfaces early teams, explains every match, and keeps the evidence, gaps, and contradictions attached.",
 };
 
-const ledgerRows = [
+const STEPS = [
   {
-    icon: Check,
-    label: "Working product",
-    detail: "Verified from product and repository",
-    tone: "verified",
+    number: "01",
+    title: "Describe",
+    description: "Write what you're looking for in plain language — sector, stage, geography, signals.",
   },
   {
-    icon: Globe2,
-    label: "Latin America",
-    detail: "Founder-provided + public profile",
-    tone: "external",
+    number: "02",
+    title: "Inspect",
+    description: "Every match arrives with its sources, confidence level and contradictions attached.",
   },
   {
-    icon: CircleDashed,
-    label: "Institutional funding",
-    detail: "Not enough evidence yet",
-    tone: "unknown",
+    number: "03",
+    title: "Decide",
+    description: "Compare teams, generate an evidence-linked memo, and move the best into your pipeline.",
   },
 ] as const;
 
 export default function LandingPage() {
   return (
     <main className={styles.page}>
-      <header className={styles.header}>
-        <Brand />
-        <nav className={styles.nav} aria-label="Main navigation">
-          <a href="#how-it-works">How it works</a>
-          <a href="#principles">Principles</a>
-        </nav>
-        <div className={styles.headerActions}>
-          <ButtonLink href="/sign-in" variant="ghost" size="sm">
-            Sign in
-          </ButtonLink>
-          <ButtonLink href="/onboarding/role" size="sm">
-            Get started
-          </ButtonLink>
-        </div>
-      </header>
+      <div className={styles.heroBg} aria-hidden="true" />
+      <div className={styles.heroWash} aria-hidden="true" />
 
-      <section className={styles.hero} aria-labelledby="landing-heading">
-        <div className={styles.heroCopy}>
-          <p className={styles.eyebrow}>
-            <span aria-hidden="true" /> Evidence-first venture sourcing
-          </p>
-          <h1 id="landing-heading">
-            Find conviction
-            <br />
-            <em>before consensus.</em>
-          </h1>
-          <p className={styles.intro}>
-            Discover founders and projects before they enter traditional venture
-            channels. Every signal stays connected to its source, confidence,
-            and contradictions.
-          </p>
-
-          <div className={styles.principles} id="principles">
-            <div>
-              <span>01</span>
-              <p>Search internal knowledge first.</p>
+      <div className={styles.hero}>
+        <div className={styles.heroContent}>
+          <header className={styles.header}>
+            <Link href="/" className={styles.brand} aria-label="undr home">
+              <span className={styles.brandWordmark}>undr</span>
+            </Link>
+            <div className={styles.headerSpacer} />
+            <div className={styles.headerAuth}>
+              <ButtonLink href="/onboarding/role" variant="primary">
+                Get started
+              </ButtonLink>
             </div>
-            <div>
-              <span>02</span>
-              <p>Enrich with permitted public evidence.</p>
-            </div>
-            <div>
-              <span>03</span>
-              <p>Keep the investment decision human.</p>
-            </div>
-          </div>
-        </div>
+          </header>
 
-        <div className={styles.discoveryColumn}>
-          <LandingBriefFlow />
-        </div>
-      </section>
+          <section className={styles.heroInner} aria-labelledby="landing-heading">
+            <h1 id="landing-heading" className={styles.headline}>
+              Find overlooked companies before the market does.
+            </h1>
+            <p className={styles.subhead}>
+              Describe your thesis in plain language. undr surfaces early teams,
+              explains every match, and keeps the evidence, gaps, and
+              contradictions attached.
+            </p>
 
-      <section className={styles.proof} id="how-it-works" aria-labelledby="proof-heading">
-        <div className={styles.proofIntro}>
-          <FileSearch size={21} strokeWidth={1.6} aria-hidden="true" />
-          <p className={styles.kicker}>What survives the conversation</p>
-          <h2 id="proof-heading">A research record, not another chat transcript.</h2>
-          <p>
-            Results become reusable founders, projects, claims, sources, and
-            decisions. Unknown information remains unknown.
-          </p>
+            <LandingBriefFlow />
+          </section>
         </div>
+      </div>
 
-        <article className={styles.ledger} aria-label="Example evidence ledger">
-          <div className={styles.ledgerHeader}>
-            <div>
-              <span className={styles.demoBadge}>Illustrative record</span>
-              <h3>Relay Metrics</h3>
+      <section className={styles.howItWorks} aria-label="How undr works">
+        <p className={styles.hiwLabel}>HOW IT WORKS</p>
+        <div className={styles.hiwCols}>
+          {STEPS.map(({ number, title, description }) => (
+            <div className={styles.hiwCol} key={title}>
+              <span className={styles.hiwNumber}>{number}</span>
+              <p className={styles.hiwTitle}>{title}</p>
+              <p className={styles.hiwDesc}>{description}</p>
             </div>
-            <span className={styles.match}>Strong thesis match</span>
-          </div>
-          <p className={styles.companyLine}>
-            Open-source data reliability · Pre-seed · 3-person team
-          </p>
-          <div className={styles.ledgerRows}>
-            {ledgerRows.map(({ icon: Icon, label, detail, tone }) => (
-              <div className={styles.ledgerRow} key={label}>
-                <span className={`${styles.stateIcon} ${styles[tone]}`}>
-                  <Icon size={15} aria-hidden="true" />
-                </span>
-                <div>
-                  <strong>{label}</strong>
-                  <span>{detail}</span>
-                </div>
-                <span className={`${styles.stateLabel} ${styles[tone]}`}>
-                  {tone === "unknown" ? "Missing" : tone}
-                </span>
-              </div>
-            ))}
-          </div>
-        </article>
+          ))}
+        </div>
       </section>
 
       <footer className={styles.footer}>
-        <Brand />
-        <p>Evidence over volume. Human judgment over automation.</p>
-        <p>Built for early conviction.</p>
+        <p>&copy; 2026 undr</p>
+        <div className={styles.footerLinks}>
+          <span>Privacy</span>
+          <span>Terms</span>
+          <span>Contact</span>
+        </div>
       </footer>
     </main>
   );

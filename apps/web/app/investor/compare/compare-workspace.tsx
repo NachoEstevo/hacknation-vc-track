@@ -2,69 +2,120 @@
 
 import type { Route } from "next";
 import { useEffect, useRef, useState } from "react";
+import clsx from "clsx";
 import {
   AlertCircle,
-  Check,
   GitCompareArrows,
+  Info,
+  MoveRight,
   Plus,
+  Scale,
   Search,
   Trash2,
+  TrendingUp,
   X,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { Button, ButtonLink } from "@/components/ui/button";
-import { Chip } from "@/components/ui/chip";
-import { StatusBadge, type StatusKind } from "@/components/ui/status";
+import {
+  Avatar,
+  Button,
+  ButtonLink,
+  ConfidenceBadge,
+  DataBadge,
+  FounderScore,
+  SectorTag,
+  StageBadge,
+  type EvidenceTone,
+} from "@/components/pencil";
 import { useWorkspace } from "@/components/workspace-provider";
 import { DEMO_OPPORTUNITIES } from "@/lib/demo";
 import type { ClaimState, OpportunityDetail } from "@/lib/domain";
 import {
   claimStateLabel,
+  findClaim,
   formatToken,
-  getClaimSummary,
+  getDiligenceAxes,
   getEvidenceCoverage,
   getUnknowns,
+  type DiligenceAxis,
+  type DiligenceAxisName,
 } from "../projects/_lib/diligence";
 import styles from "./compare.module.css";
 
-function claimStatus(state: ClaimState | "missing"): StatusKind {
-  const statuses: Record<ClaimState | "missing", StatusKind> = {
-    supported: "supported",
-    partially_supported: "partial",
-    unverified: "unconfirmed",
-    contradicted: "contradicted",
-    stale: "stale",
-    missing: "missing",
-  };
-  return statuses[state];
+type AxisStatus = DiligenceAxis["status"];
+
+const AXIS_RANK: Record<AxisStatus, number> = {
+  "Well evidenced": 3,
+  "Partial evidence": 2,
+  Open: 1,
+  Conflicted: 0,
+};
+
+const AXIS_TONE: Record<AxisStatus, EvidenceTone> = {
+  "Well evidenced": "verified",
+  "Partial evidence": "inference",
+  Open: "unknown",
+  Conflicted: "risk",
+};
+
+const CLAIM_TONE: Record<ClaimState | "missing", EvidenceTone> = {
+  supported: "verified",
+  partially_supported: "inference",
+  unverified: "unknown",
+  stale: "unknown",
+  contradicted: "risk",
+  missing: "unknown",
+};
+
+const CLAIM_RANK: Record<ClaimState | "missing", number> = {
+  supported: 3,
+  partially_supported: 2,
+  unverified: 1,
+  stale: 1,
+  contradicted: 0,
+  missing: 0,
+};
+
+const CONFIDENCE_RANK: Record<"low" | "medium" | "high", number> = {
+  low: 0,
+  medium: 1,
+  high: 2,
+};
+
+const AXIS_ROWS: { name: DiligenceAxisName; label: string }[] = [
+  { name: "Founder", label: "Founder" },
+  { name: "Market", label: "Market" },
+  { name: "Idea vs. market", label: "Idea vs. Market" },
+];
+
+function leaderFlags(ranks: Array<number | null>): boolean[] {
+  const valid = ranks.filter((rank): rank is number => rank !== null);
+  if (valid.length < 2) return ranks.map(() => false);
+  const max = Math.max(...valid);
+  if (valid.every((rank) => rank === max)) return ranks.map(() => false);
+  return ranks.map((rank) => rank !== null && rank === max);
 }
 
-function ClaimCell({
-  opportunity,
-  predicate,
-}: {
-  opportunity: OpportunityDetail;
-  predicate:
-    | "founder.technical"
-    | "project.working_demo"
-    | "project.traction"
-    | "project.institutional_funding"
-    | "project.raising";
-}) {
-  const summary = getClaimSummary(opportunity, predicate);
-  return (
-    <div className={styles.stateCell}>
-      <StatusBadge
-        status={claimStatus(summary.state)}
-        label={summary.state === "missing" ? "Unknown" : claimStateLabel(summary.state)}
-      />
-      <span>{summary.detail}</span>
-    </div>
+function axisRowData(opportunities: OpportunityDetail[], axisName: DiligenceAxisName) {
+  const axes = opportunities.map((opportunity) => {
+    const axis = getDiligenceAxes(opportunity).find((candidate) => candidate.name === axisName);
+    return axis!;
+  });
+  const leaders = leaderFlags(axes.map((axis) => AXIS_RANK[axis.status]));
+  return axes.map((axis, index) => ({ axis, leading: leaders[index]! }));
+}
+
+function shortPredicateLabel(predicate: string): string {
+  const [, field] = predicate.split(".");
+  return formatToken(field ?? predicate);
+}
+
+function Trend({ leading }: { leading: boolean }) {
+  return leading ? (
+    <TrendingUp aria-hidden="true" className={styles.trendUp} />
+  ) : (
+    <MoveRight aria-hidden="true" className={styles.trendNeutral} />
   );
-}
-
-function initials(name: string) {
-  return name.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
 }
 
 export function CompareWorkspace() {
@@ -134,17 +185,91 @@ export function CompareWorkspace() {
   const usingFallback = selected.length === 0;
   const opportunities = usingFallback ? [...DEMO_OPPORTUNITIES.slice(0, 3)] : selected.slice(0, 3);
 
+  const founderAxis = axisRowData(opportunities, "Founder");
+  const marketAxis = axisRowData(opportunities, "Market");
+  const ideaAxis = axisRowData(opportunities, "Idea vs. market");
+  const axisRows = [
+    { ...AXIS_ROWS[0]!, cells: founderAxis },
+    { ...AXIS_ROWS[1]!, cells: marketAxis },
+    { ...AXIS_ROWS[2]!, cells: ideaAxis },
+  ];
+
+  const tractionRows = opportunities.map((opportunity) => {
+    const claim = findClaim(opportunity, "project.traction");
+    const state: ClaimState | "missing" = claim?.state ?? "missing";
+    return { claim, state };
+  });
+  const tractionLeaders = leaderFlags(tractionRows.map((row) => CLAIM_RANK[row.state]));
+
+  const evidenceRows = opportunities.map((opportunity) => {
+    const coverage = getEvidenceCoverage(opportunity);
+    const tone: EvidenceTone = coverage.contradictedClaims > 0
+      ? "risk"
+      : coverage.percent >= 60
+        ? "verified"
+        : coverage.percent > 0
+          ? "inference"
+          : "unknown";
+    return { coverage, tone };
+  });
+  const evidenceLeaders = leaderFlags(evidenceRows.map((row) => row.coverage.percent));
+
+  const founderScoreLeaders = leaderFlags(
+    opportunities.map((opportunity) => opportunity.founderScore?.score ?? null),
+  );
+
+  const confidenceLeaders = leaderFlags(
+    opportunities.map((opportunity) => {
+      const confidence = opportunity.founderScore?.confidence;
+      return confidence ? CONFIDENCE_RANK[confidence] : null;
+    }),
+  );
+
+  const keyDifferences: string[] = [];
+  if (opportunities.length > 1) {
+    for (const group of [
+      { label: "founder evidence", cells: founderAxis },
+      { label: "market evidence", cells: marketAxis },
+      { label: "idea–market fit", cells: ideaAxis },
+    ]) {
+      const leaderIndex = group.cells.findIndex((cell) => cell.leading);
+      const leaderCount = group.cells.filter((cell) => cell.leading).length;
+      if (leaderIndex !== -1 && leaderCount === 1) {
+        keyDifferences.push(`${opportunities[leaderIndex]!.project.name} leads on ${group.label}.`);
+      }
+    }
+
+    for (const opportunity of opportunities) {
+      if (opportunity.contradictions.length > 0) {
+        keyDifferences.push(
+          `${opportunity.project.name} has ${opportunity.contradictions.length} open contradiction${opportunity.contradictions.length > 1 ? "s" : ""}.`,
+        );
+      }
+    }
+
+    const lowestIndex = evidenceRows.reduce(
+      (min, row, index) => (row.coverage.percent < evidenceRows[min]!.coverage.percent ? index : min),
+      0,
+    );
+    if (evidenceRows[lowestIndex]!.coverage.percent < 40) {
+      keyDifferences.push(
+        `${opportunities[lowestIndex]!.project.name}'s evidence coverage is low (${evidenceRows[lowestIndex]!.coverage.percent}%) — most claims are unverified.`,
+      );
+    }
+  }
+  const keyDifferenceNotes = keyDifferences.slice(0, 3);
+
   return (
     <AppShell
       eyebrow="Evidence review"
       title="Compare opportunities"
       actions={(
         <div className={styles.headerActions}>
-          <ButtonLink href="/investor/search" variant="ghost" size="sm" leadingIcon={<Search />}>
+          <ButtonLink href="/investor/search" variant="secondary" leadingIcon={<Search aria-hidden="true" />}>
             Find projects
           </ButtonLink>
           {!usingFallback ? (
-            <Button variant="quiet" size="sm" leadingIcon={<Trash2 />} onClick={clear}>
+            <Button variant="ghost" leadingIcon={<Trash2 aria-hidden="true" />} onClick={clear}>
               Clear comparison
             </Button>
           ) : null}
@@ -163,8 +288,8 @@ export function CompareWorkspace() {
 
         {usingFallback ? (
           <div className={styles.fallbackBanner}>
+            <span className={styles.fallbackTag}>Demo preview</span>
             <div>
-              <Chip tone="muted" size="sm">Demo preview</Chip>
               <strong>No projects are selected yet.</strong>
               <span>
                 Showing the first three synthetic opportunities as a visual fallback. Add one below
@@ -174,50 +299,54 @@ export function CompareWorkspace() {
           </div>
         ) : (
           <p className={styles.selectionNote}>
-            Comparing {opportunities.length} of 3 available slots. Add or remove projects from any project brief.
+            Comparing {opportunities.length} of 3 available slots. Highlighted cells mark where one
+            project clearly leads on that axis. Add or remove projects from any project brief.
           </p>
         )}
+
+        {keyDifferenceNotes.length > 0 ? (
+          <div className={styles.keyDifferences} role="note">
+            <Scale aria-hidden="true" />
+            <p>
+              <strong>What separates them:</strong> {keyDifferenceNotes.join(" ")}
+            </p>
+          </div>
+        ) : null}
 
         <section className={styles.tableCard} aria-labelledby="comparison-title">
           <div className={styles.tableIntro}>
             <div>
-              <span className={styles.eyebrow}>Side-by-side diligence</span>
-              <h2 id="comparison-title" ref={matrixTitleRef} tabIndex={-1}>Evidence matrix</h2>
+              <h2 id="comparison-title" ref={matrixTitleRef} tabIndex={-1}>
+                Comparing {opportunities.length} opportunit{opportunities.length === 1 ? "y" : "ies"}
+              </h2>
+              <p>Side-by-side reads on each axis. Founder, market, and idea–market fit are never averaged.</p>
             </div>
-            <span>{opportunities.length} projects · synthetic_demo</span>
+            <span className={styles.tableMeta}>{opportunities.length} projects · {opportunities[0]?.dataLabel ?? "synthetic_demo"}</span>
           </div>
 
           <div className={styles.tableScroll}>
-            <table className={styles.table}>
+            <table className={styles.table} style={{ minWidth: `${11 + opportunities.length * 15}rem` }}>
               <caption className="sr-only">
                 Evidence comparison across {opportunities.map((opportunity) => opportunity.project.name).join(", ")}
               </caption>
               <thead>
                 <tr>
-                  <th scope="col" className={styles.rowHeading}>Dimension</th>
+                  <th scope="col" className={styles.rowLabel} aria-hidden="true" />
                   {opportunities.map((opportunity) => {
                     const isSelected = compareIds.includes(opportunity.id);
                     return (
-                      <th key={opportunity.id} scope="col" className={styles.projectHeading}>
-                        <div className={styles.projectIdentity}>
-                          <span className={styles.projectMonogram} aria-hidden="true">{initials(opportunity.project.name)}</span>
-                          <div>
+                      <th key={opportunity.id} scope="col" className={styles.headerCell}>
+                        <div className={styles.identity}>
+                          <Avatar name={opportunity.project.name} />
+                          <div className={styles.identityText}>
                             <strong>{opportunity.project.name}</strong>
-                            <span>{opportunity.project.tagline}</span>
+                            <span>
+                              {opportunity.founders[0]?.name ?? "Founder unknown"} · {formatToken(opportunity.project.stage)}
+                            </span>
                           </div>
-                        </div>
-                        <div className={styles.projectActions}>
-                          <ButtonLink
-                            href={`/investor/projects/${opportunity.id}` as Route}
-                            variant="quiet"
-                            size="sm"
-                          >
-                            Open brief
-                          </ButtonLink>
                           {usingFallback && !isSelected ? (
                             <Button
                               variant="ghost"
-                              size="icon"
                               aria-label={`Add ${opportunity.project.name} to comparison`}
                               title="Add to comparison"
                               onClick={() => toggle(opportunity.id, opportunity.project.name)}
@@ -226,8 +355,7 @@ export function CompareWorkspace() {
                             </Button>
                           ) : (
                             <Button
-                              variant="quiet"
-                              size="icon"
+                              variant="ghost"
                               aria-label={`Remove ${opportunity.project.name} from comparison`}
                               title="Remove from comparison"
                               onClick={() => remove(opportunity.id, opportunity.project.name)}
@@ -236,6 +364,13 @@ export function CompareWorkspace() {
                             </Button>
                           )}
                         </div>
+                        <ButtonLink
+                          href={`/investor/projects/${opportunity.id}` as Route}
+                          variant="secondary"
+                          className={styles.openBriefLink}
+                        >
+                          Open brief
+                        </ButtonLink>
                       </th>
                     );
                   })}
@@ -243,140 +378,154 @@ export function CompareWorkspace() {
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row" className={styles.rowHeading}>Location</th>
-                  {opportunities.map((item) => <td key={item.id}>{item.company.city}, {item.company.countryCode}</td>)}
-                </tr>
-                <tr>
-                  <th scope="row" className={styles.rowHeading}>Stage</th>
-                  {opportunities.map((item) => <td key={item.id}><Chip tone="accent" size="sm">{formatToken(item.project.stage)}</Chip></td>)}
-                </tr>
-                <tr>
-                  <th scope="row" className={styles.rowHeading}>Sector</th>
+                  <th scope="row" className={styles.rowLabel}>Stage</th>
                   {opportunities.map((item) => (
-                    <td key={item.id}>
-                      <div className={styles.chipCell}>{item.project.sectorTags.map((tag) => <Chip key={tag} tone="neutral" size="sm">{formatToken(tag)}</Chip>)}</div>
+                    <td key={item.id} className={styles.cell}>
+                      <StageBadge label={formatToken(item.project.stage)} />
                     </td>
                   ))}
                 </tr>
                 <tr>
-                  <th scope="row" className={styles.rowHeading}>Team</th>
-                  {opportunities.map((item) => <td key={item.id}>{item.project.teamSize} people</td>)}
-                </tr>
-                <tr className={styles.sectionRow}>
-                  <th scope="row" className={styles.rowHeading}>Founder evidence</th>
+                  <th scope="row" className={styles.rowLabel}>Sector</th>
                   {opportunities.map((item) => (
-                    <td key={item.id}>
-                      {item.founderScore ? (
-                        <div className={styles.stateCell}>
-                          <strong>{item.founderScore.score ?? "Unknown"}{item.founderScore.score === null ? "" : "/100"}</strong>
-                          <span>{item.founderScore.evidenceCoverage}% factor coverage · {formatToken(item.founderScore.confidence)} confidence</span>
-                          <small>Evidence-strength score, not a success prediction.</small>
-                        </div>
-                      ) : <StatusBadge status="missing" label="No founder evidence" />}
+                    <td key={item.id} className={styles.cell}>
+                      <div className={styles.tagRow}>
+                        {item.project.sectorTags.map((tag) => (
+                          <SectorTag key={tag} label={formatToken(tag)} />
+                        ))}
+                      </div>
                     </td>
                   ))}
                 </tr>
-                <tr>
-                  <th scope="row" className={styles.rowHeading}>Technical founder</th>
-                  {opportunities.map((item) => <td key={item.id}><ClaimCell opportunity={item} predicate="founder.technical" /></td>)}
-                </tr>
+
                 <tr className={styles.sectionRow}>
-                  <th scope="row" className={styles.rowHeading}>Problem</th>
-                  {opportunities.map((item) => <td key={item.id} className={styles.longText}>{item.project.problem}</td>)}
-                </tr>
-                <tr>
-                  <th scope="row" className={styles.rowHeading}>Product</th>
-                  {opportunities.map((item) => <td key={item.id} className={styles.longText}>{item.project.product}</td>)}
-                </tr>
-                <tr>
-                  <th scope="row" className={styles.rowHeading}>Working product / demo</th>
-                  {opportunities.map((item) => <td key={item.id}><ClaimCell opportunity={item} predicate="project.working_demo" /></td>)}
-                </tr>
-                <tr>
-                  <th scope="row" className={styles.rowHeading}>Traction</th>
-                  {opportunities.map((item) => <td key={item.id}><ClaimCell opportunity={item} predicate="project.traction" /></td>)}
-                </tr>
-                <tr className={styles.sectionRow}>
-                  <th scope="row" className={styles.rowHeading}>Institutional funding</th>
-                  {opportunities.map((item) => <td key={item.id}><ClaimCell opportunity={item} predicate="project.institutional_funding" /></td>)}
-                </tr>
-                <tr>
-                  <th scope="row" className={styles.rowHeading}>Raising now</th>
-                  {opportunities.map((item) => <td key={item.id}><ClaimCell opportunity={item} predicate="project.raising" /></td>)}
-                </tr>
-                <tr className={styles.sectionRow}>
-                  <th scope="row" className={styles.rowHeading}>Evidence field coverage</th>
-                  {opportunities.map((item) => {
-                    const coverage = getEvidenceCoverage(item);
-                    return (
-                      <td key={item.id}>
-                        <div className={styles.coverageCell}>
-                          <strong>{coverage.coveredFields}/{coverage.expectedFields}</strong>
-                          <span>{coverage.percent}% of expected fields have linked evidence</span>
-                          <div className={styles.coverageTrack} aria-hidden="true"><span style={{ width: `${coverage.percent}%` }} /></div>
-                        </div>
-                      </td>
-                    );
-                  })}
-                </tr>
-                <tr>
-                  <th scope="row" className={styles.rowHeading}>Claim states</th>
-                  {opportunities.map((item) => {
-                    const coverage = getEvidenceCoverage(item);
-                    return (
-                      <td key={item.id}>
-                        <div className={styles.claimCounts}>
-                          <span><Check aria-hidden="true" /> {coverage.supportedClaims} supported</span>
-                          <span>{coverage.partialClaims} partial</span>
-                          <span>{coverage.unverifiedClaims} unverified</span>
-                          <span>{coverage.contradictedClaims} contradicted</span>
-                        </div>
-                      </td>
-                    );
-                  })}
-                </tr>
-                <tr>
-                  <th scope="row" className={styles.rowHeading}>Contradictions</th>
-                  {opportunities.map((item) => (
-                    <td key={item.id}>
-                      {item.contradictions.length ? (
-                        <div className={styles.conflictCell}>
-                          <StatusBadge status="conflict" label={`${item.contradictions.length} open`} />
-                          {item.contradictions.map((conflict) => <span key={conflict.id}>{conflict.summary}</span>)}
+                  <th scope="row" className={styles.rowLabel}>Founder Score</th>
+                  {opportunities.map((item, index) => (
+                    <td
+                      key={item.id}
+                      className={clsx(styles.cell, founderScoreLeaders[index] && styles.leadingCell)}
+                    >
+                      {item.founderScore && item.founderScore.score !== null ? (
+                        <div className={styles.scoreCell}>
+                          <FounderScore value={item.founderScore.score} />
+                          <span className={styles.caption}>
+                            {item.founderScore.evidenceCoverage}% factor coverage · {formatToken(item.founderScore.confidence)} confidence
+                          </span>
                         </div>
                       ) : (
-                        <div className={styles.stateCell}>
-                          <StatusBadge status="supported" label="None linked" />
-                          <span>The snapshot can still be incomplete.</span>
-                        </div>
+                        <DataBadge tone="unknown" label="No founder score yet" />
                       )}
                     </td>
                   ))}
                 </tr>
-                <tr>
-                  <th scope="row" className={styles.rowHeading}>Missing / unresolved</th>
-                  {opportunities.map((item) => {
-                    const unknowns = getUnknowns(item);
-                    return (
-                      <td key={item.id}>
-                        <div className={styles.missingCell}>
-                          <StatusBadge status="unknown" label={`${unknowns.length} open`} />
-                          <ul>
-                            {unknowns.slice(0, 4).map((unknown, index) => (
-                              <li key={`${unknown.predicate}-${index}`}>{unknown.label}</li>
-                            ))}
-                          </ul>
+
+                {axisRows.map(({ name, label, cells }) => (
+                  <tr key={name}>
+                    <th scope="row" className={styles.rowLabel}>{label}</th>
+                    {cells.map(({ axis, leading }, index) => (
+                      <td
+                        key={opportunities[index]!.id}
+                        className={clsx(styles.cell, leading && styles.leadingCell)}
+                      >
+                        <div className={styles.axisCell}>
+                          <DataBadge tone={AXIS_TONE[axis.status]} label={axis.status} />
+                          <Trend leading={leading} />
                         </div>
+                        <span className={styles.caption}>{axis.covered}/{axis.expected} fields evidenced</span>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+
+                <tr className={styles.sectionRow}>
+                  <th scope="row" className={styles.rowLabel}>Traction</th>
+                  {tractionRows.map(({ claim, state }, index) => (
+                    <td
+                      key={opportunities[index]!.id}
+                      className={clsx(styles.cell, tractionLeaders[index] && styles.leadingCell)}
+                    >
+                      <div className={styles.axisCell}>
+                        <DataBadge tone={CLAIM_TONE[state]} label={state === "missing" ? "Unknown" : claimStateLabel(state)} />
+                        <Trend leading={tractionLeaders[index]!} />
+                      </div>
+                      <span className={styles.caption}>
+                        {claim?.statement ?? "No traction claim captured. Absence of evidence is not treated as a negative signal."}
+                      </span>
+                    </td>
+                  ))}
+                </tr>
+
+                <tr>
+                  <th scope="row" className={styles.rowLabel}>Evidence coverage</th>
+                  {evidenceRows.map(({ coverage, tone }, index) => (
+                    <td
+                      key={opportunities[index]!.id}
+                      className={clsx(styles.cell, evidenceLeaders[index] && styles.leadingCell)}
+                    >
+                      <DataBadge tone={tone} label={`${coverage.supportedClaims} supported · ${coverage.contradictedClaims} contradicted`} />
+                      <span className={styles.caption}>{coverage.percent}% of expected fields have linked evidence</span>
+                    </td>
+                  ))}
+                </tr>
+
+                <tr className={styles.sectionRow}>
+                  <th scope="row" className={styles.rowLabel}>Top risk</th>
+                  {opportunities.map((item) => {
+                    const topContradiction = item.contradictions[0];
+                    return (
+                      <td key={item.id} className={styles.cell}>
+                        {topContradiction ? (
+                          <DataBadge tone="risk" label={topContradiction.summary} />
+                        ) : (
+                          <DataBadge tone="verified" label="No open contradictions" />
+                        )}
                       </td>
                     );
                   })}
                 </tr>
+
                 <tr>
-                  <th scope="row" className={styles.rowHeading}>Source artifacts</th>
-                  {opportunities.map((item) => <td key={item.id}>{item.evidence.length} excerpts across {new Set(item.evidence.map((source) => source.sourceName)).size} sources</td>)}
+                  <th scope="row" className={styles.rowLabel}>Missing info</th>
+                  {opportunities.map((item) => {
+                    const unknowns = getUnknowns(item);
+                    const preview = unknowns.slice(0, 2).map((unknown) => shortPredicateLabel(unknown.predicate)).join(", ");
+                    return (
+                      <td key={item.id} className={styles.cell}>
+                        {unknowns.length > 0 ? (
+                          <>
+                            <DataBadge tone="unknown" label={`${unknowns.length} unresolved field${unknowns.length > 1 ? "s" : ""}`} />
+                            {preview ? <span className={styles.caption}>{preview}</span> : null}
+                          </>
+                        ) : (
+                          <DataBadge tone="verified" label="Fully documented" />
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+
+                <tr className={styles.sectionRow}>
+                  <th scope="row" className={styles.rowLabel}>Confidence</th>
+                  {opportunities.map((item, index) => (
+                    <td
+                      key={item.id}
+                      className={clsx(styles.cell, confidenceLeaders[index] && styles.leadingCell)}
+                    >
+                      {item.founderScore ? (
+                        <ConfidenceBadge level={item.founderScore.confidence} />
+                      ) : (
+                        <DataBadge tone="unknown" label="No founder score" />
+                      )}
+                    </td>
+                  ))}
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <div className={styles.tableFoot}>
+            <Info aria-hidden="true" />
+            <span>Highlighted cells mark the clearest lead on that axis. Open a project brief to see its evidence.</span>
           </div>
         </section>
 

@@ -1,397 +1,313 @@
 .page {
-  position: relative;
   min-height: 100vh;
-  overflow: hidden;
-  color: #18211d;
   background:
-    radial-gradient(circle at 7% 18%, rgb(41 91 73 / 7%), transparent 23rem),
-    linear-gradient(135deg, #f7f5ef 0%, #f3f1ea 52%, #efeee8 100%);
-}
-
-.page::before,
-.page::after {
-  position: absolute;
-  z-index: 0;
-  pointer-events: none;
-  content: "";
-  border: 1px solid rgb(24 33 29 / 8%);
-  border-radius: 50%;
-}
-
-.page::before {
-  top: 178px;
-  right: -280px;
-  width: 560px;
-  height: 560px;
-}
-
-.page::after {
-  right: -182px;
-  bottom: -286px;
-  width: 420px;
-  height: 420px;
-}
-
-.header,
-.content,
-.footer {
-  position: relative;
-  z-index: 1;
-  width: min(calc(100% - 48px), 1260px);
-  margin-inline: auto;
+    linear-gradient(180deg, rgb(247 246 242 / 8%) 0%, rgb(247 246 242 / 25%) 32%, rgb(247 246 242 / 70%) 52%, var(--bg) 78%),
+    url("/backgrounds/hero-forest.png");
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .header {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  min-height: 90px;
-  border-bottom: 1px solid rgb(24 33 29 / 12%);
-}
-
-.header > :last-child {
-  justify-self: end;
-}
-
-.progress {
   display: flex;
-  gap: 10px;
   align-items: center;
-  color: #606760;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
+  justify-content: space-between;
+  padding: 22px 64px;
 }
 
-.progressLine {
-  position: relative;
-  display: block;
-  width: 72px;
-  height: 1px;
-  overflow: hidden;
-  background: #d2d0c8;
-}
-
-.progressLine i {
-  position: absolute;
-  inset: 0 50% 0 0;
-  background: var(--accent);
-}
-
-.content {
-  padding: 77px 5.5% 70px;
-}
-
-.intro {
-  max-width: 760px;
-  margin-inline: auto;
-  text-align: center;
-  animation: rise 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.eyebrow {
-  margin: 0 0 22px;
-  color: var(--accent);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.intro h1 {
+.stepNote {
   margin: 0;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(51px, 5.6vw, 78px);
-  font-weight: 420;
-  letter-spacing: -0.045em;
-  line-height: 0.98;
-}
-
-.intro h1 em {
-  color: var(--accent);
-  font-weight: 380;
-}
-
-.intro > p:last-child {
-  max-width: 590px;
-  margin: 24px auto 0;
-  color: #697069;
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.brief {
-  display: grid;
-  grid-template-columns: 42px 1fr auto;
-  gap: 15px;
-  align-items: center;
-  width: min(100%, 940px);
-  margin: 45px auto 0;
-  padding: 15px 18px;
-  background: rgb(255 255 252 / 76%);
-  border: 1px solid rgb(24 33 29 / 12%);
-  box-shadow: 0 14px 42px rgb(35 49 42 / 5%);
-  animation: rise 600ms 80ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.briefIcon {
-  display: grid;
-  width: 38px;
-  height: 38px;
-  color: var(--accent);
-  background: var(--accent-soft);
-  place-items: center;
-}
-
-.brief p,
-.brief blockquote {
-  margin: 0;
-}
-
-.brief p {
-  margin-bottom: 4px;
-  color: #606760;
-  font-size: 10px;
-  font-weight: 800;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.brief blockquote {
-  max-width: 690px;
-  overflow: hidden;
-  color: #2f3833;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 15px;
-  line-height: 1.35;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.brief > span {
-  color: #33705c;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.roles {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  width: min(100%, 940px);
-  margin: 22px auto 0;
-}
-
-.roleCard {
-  position: relative;
+.body {
   display: flex;
-  min-height: 455px;
-  padding: 28px;
-  overflow: hidden;
   flex-direction: column;
-  background: rgb(250 249 245 / 66%);
-  border: 1px solid rgb(24 33 29 / 13%);
-  animation: rise 620ms 150ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  align-items: center;
+  padding: 82px 5.5% 96px;
+  text-align: center;
 }
 
-.activeCard {
-  background: #fffcf5;
-  border-color: #3e6d5c;
-  box-shadow: 0 24px 70px rgb(35 49 42 / 9%);
+.title {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(34px, 4vw, 44px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
-.activeCard::before {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 84px;
-  height: 3px;
-  content: "";
-  background: var(--accent);
+.sub {
+  max-width: 560px;
+  margin: 14px 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.65;
 }
 
-.cardTopline {
+.brief {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  width: min(100%, 640px);
+  margin-top: 28px;
+  padding: 14px 18px;
+  gap: 14px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
-.roleIcon {
+.briefIcon {
   display: grid;
-  width: 45px;
-  height: 45px;
-  color: #315a4c;
-  background: #e7eee9;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border-radius: var(--radius-md);
   place-items: center;
 }
 
-.recommended,
-.planned {
-  padding: 6px 8px;
+.briefBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.briefLabel {
+  margin: 0 0 3px;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
   font-size: 10px;
-  font-weight: 850;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.recommended {
-  color: #255d49;
-  background: #e3eee8;
-}
-
-.planned {
-  color: #606760;
-  background: #ebe9e2;
-}
-
-.cardIndex {
-  margin: 31px 0 9px;
-  color: #626862;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 11px;
-  font-style: italic;
-}
-
-.roleCard h2 {
+.briefQuote {
   margin: 0;
+  overflow: hidden;
+  color: var(--ink);
   font-family: var(--font-display), Georgia, serif;
-  font-size: 36px;
-  font-weight: 440;
-  letter-spacing: -0.03em;
+  font-size: 14px;
+  font-style: italic;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.roleDescription {
-  min-height: 68px;
-  margin: 14px 0 0;
-  color: #687069;
-  font-size: 12px;
-  line-height: 1.62;
-}
-
-.capabilities {
-  display: grid;
-  gap: 10px;
-  margin: 24px 0 28px;
-  padding: 20px 0 0;
-  border-top: 1px solid rgb(24 33 29 / 10%);
-  list-style: none;
-}
-
-.capabilities li {
-  display: flex;
-  gap: 9px;
-  align-items: center;
-  color: #3f4943;
-  font-size: 11px;
-  font-weight: 620;
-}
-
-.capabilities svg {
-  flex: 0 0 auto;
-  color: var(--accent);
-}
-
-.roleCard > a {
-  margin-top: auto;
-}
-
-.founderNote {
-  margin: auto 0 0;
-  padding: 15px;
-  color: #606760;
-  background: #efede7;
+.briefTag {
+  flex: none;
+  padding: 4px 9px;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border-radius: 99px;
+  font-family: var(--font-body);
   font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 400px;
+  max-width: 100%;
+  padding: 30px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.cardSelectable {
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.cardSelectable:hover {
+  border-color: var(--border-strong);
+}
+
+.cardActive {
+  border: 2px solid var(--accent);
+  box-shadow: var(--shadow-md);
+}
+
+.cardDisabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: saturate(0.6);
+}
+
+.comingSoonTag {
+  padding: 4px 10px;
+  color: var(--text-secondary);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-strong);
+  border-radius: 99px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.iconWrap {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  color: var(--text-secondary);
+  background: var(--surface-subtle);
+  border-radius: var(--radius-md);
+  place-items: center;
+}
+
+.iconWrapActive {
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+}
+
+.radio {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  background: var(--surface);
+  border: 1.5px solid var(--border-strong);
+  border-radius: 50%;
+}
+
+.radioActive {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.radioActive::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  content: "";
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.card h2 {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.cardDesc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 14.5px;
   line-height: 1.55;
 }
 
-.footer {
+.benefits {
   display: flex;
-  gap: 18px;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.benefits li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.benefits svg {
+  flex: none;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.actionsRow {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  min-height: 78px;
-  color: #606760;
-  border-top: 1px solid rgb(24 33 29 / 10%);
-  font-size: 10px;
+  gap: 12px;
 }
 
-.footer span {
-  color: #35614f;
-  font-weight: 800;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-}
-
-.footer p {
+.signinNote {
   margin: 0;
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 13px;
 }
 
 @media (max-width: 760px) {
-  .header,
-  .content,
-  .footer {
-    width: min(calc(100% - 28px), 1260px);
-  }
-
   .header {
-    grid-template-columns: 1fr auto;
-    min-height: 76px;
+    padding: 18px 24px;
   }
 
-  .progress {
+  .stepNote {
     display: none;
   }
 
-  .content {
-    padding: 54px 0;
+  .body {
+    padding: 54px 24px 72px;
   }
 
-  .intro h1 {
-    font-size: clamp(49px, 15vw, 66px);
+  .cards {
+    margin-top: 26px;
+  }
+
+  .card {
+    width: 100%;
   }
 
   .brief {
-    grid-template-columns: 38px 1fr;
+    text-align: left;
   }
 
-  .brief > span {
-    display: none;
-  }
-
-  .brief blockquote {
+  .briefQuote {
     white-space: normal;
-  }
-
-  .roles {
-    grid-template-columns: 1fr;
-  }
-
-  .roleCard {
-    min-height: auto;
-    padding: 24px;
-  }
-
-  .roleDescription {
-    min-height: auto;
-  }
-
-  .footer {
-    align-items: flex-start;
-    padding: 24px 0;
-    flex-direction: column;
   }
 }

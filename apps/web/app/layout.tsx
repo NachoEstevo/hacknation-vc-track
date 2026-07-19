@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { WorkspaceProvider } from "@/components/workspace-provider";
-import { bodyFont, displayFont } from "@/lib/fonts";
+import { bodyFont, displayFont, monoFont } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${bodyFont.variable} ${displayFont.variable}`}
+      className={`${bodyFont.variable} ${displayFont.variable} ${monoFont.variable}`}
       data-scroll-behavior="smooth"
     >
       <body><WorkspaceProvider>{children}</WorkspaceProvider></body>

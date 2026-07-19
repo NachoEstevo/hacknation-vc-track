@@ -1,30 +1,42 @@
 :root {
   --bg: #f7f6f2;
   --surface: #ffffff;
-  --surface-subtle: #f0efe8;
+  --surface-subtle: #f1f0ea;
   --ink: #1b1a17;
-  --text: #5f5d55;
-  --muted: #77746b;
-  --border: #e2dfd4;
-  --border-strong: #ccc8ba;
+  --text-secondary: #5f5d55;
+  --text-tertiary: #8d8a80;
+  --border: #e5e3da;
+  --border-strong: #cfccc1;
+
   --accent: #1f5c4d;
   --accent-ink: #174538;
-  --accent-soft: #e5efe9;
+  --accent-soft: #e6f0eb;
+
   --verified: #25764f;
   --verified-soft: #e2f1e7;
-  --inference: #855b13;
+
+  --inference: #96691c;
   --inference-soft: #f7eeda;
-  --risk: #a73b33;
+
+  --risk: #ae3f36;
   --risk-soft: #f8e8e5;
-  --external: #35577f;
+
+  --external: #3c5c88;
   --external-soft: #e8edf5;
-  --founder: #5f51a0;
-  --founder-soft: #edeaf7;
+
+  --founder-provided: #5f51a0;
+  --founder-provided-soft: #edeaf7;
+
+  --unknown: #77746b;
+  --unknown-soft: #efeee8;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
   --shadow-sm: 0 1px 2px rgb(27 26 23 / 6%);
   --shadow-md: 0 16px 44px rgb(27 26 23 / 9%);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
+
   --max: 1240px;
 }
 
@@ -41,9 +53,7 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
-  background:
-    radial-gradient(circle at 78% 6%, rgb(31 92 77 / 5%), transparent 28rem),
-    var(--bg);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body), sans-serif;
   text-rendering: optimizeLegibility;
@@ -68,6 +78,8 @@ a {
 
 button {
   border: 0;
+  background: none;
+  cursor: pointer;
 }
 
 ::selection {

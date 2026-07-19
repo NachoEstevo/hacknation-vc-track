@@ -1,0 +1,80 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.claim {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.chevron {
+  width: 14px;
+  height: 14px;
+  color: var(--text-tertiary);
+  flex: none;
+}
+
+.quote {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-subtle);
+  border-left: 3px solid var(--border-strong);
+}
+
+.quoteText {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  color: var(--external);
+}
+
+.link svg {
+  width: 12px;
+  height: 12px;
+}
+
+.linkText {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+}

@@ -11,15 +11,21 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "4.0.16",
+    "@ai-sdk/openai": "4.0.16",
+    "@ai-sdk/react": "4.0.34",
     "@hacknation/data-core": "0.1.0",
     "@supabase/ssr": "^0.12.3",
     "@supabase/supabase-js": "^2.110.7",
+    "ai": "7.0.31",
     "clsx": "^2.1.1",
     "lucide-react": "^0.468.0",
     "next": "16.2.10",
     "react": "19.2.7",
     "react-dom": "19.2.7",
-    "zod": "^4.1.12"
+    "react-markdown": "10.1.0",
+    "remark-gfm": "4.0.1",
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

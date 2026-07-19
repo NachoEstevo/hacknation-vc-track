@@ -13,8 +13,10 @@ import {
 import {
   isActiveThesis,
   isSearchCriterion,
+  THESIS_SOURCE_SCOPES,
   type ActiveThesis,
   type SearchCriterion,
+  type ThesisSourceScope,
 } from "@/lib/domain";
 import { writeJsonAtomically } from "@/lib/browser/atomic-storage";
 import {
@@ -24,6 +26,35 @@ import {
   type NewSearchSession,
   type SearchSession,
 } from "@/lib/search";
+import { isSupabaseEnabled } from "@/lib/env";
+import {
+  loadActiveThesisAction,
+  saveActiveThesisAction,
+  setThesisSourceScopeAction,
+} from "@/lib/supabase/workspace-thesis.actions";
+import {
+  addPipelineItemAction,
+  loadPipelineItemsAction,
+  movePipelineItemAction,
+  removePipelineItemAction,
+  updatePipelineNoteAction,
+} from "@/lib/supabase/workspace-pipeline.actions";
+import {
+  loadSavedSearchesAction,
+  removeSavedSearchAction,
+  saveSearchAction,
+} from "@/lib/supabase/workspace-searches.actions";
+
+/**
+ * When Supabase is enabled, the thesis/pipeline/saved-searches slices of
+ * this provider are backed by real database rows (see
+ * `lib/supabase/workspace-*.actions.ts`) instead of `localStorage`. Compare
+ * and the sidebar preference remain browser-only in every mode — neither
+ * has a database table, and neither was in scope for this migration.
+ * Computed once per module load; `NEXT_PUBLIC_*` reads are inlined at build
+ * time, so this is not a runtime toggle a user can flip.
+ */
+const SUPABASE_ENABLED = isSupabaseEnabled();
 
 export const PIPELINE_STAGES = [
   "discovered",
@@ -86,23 +117,24 @@ export interface WorkspaceContextValue extends WorkspaceState {
     project:
       | string
       | { projectId: string; stage?: PipelineStage; note?: string },
-  ) => WorkspaceMutationResult;
-  removeFromPipeline: (projectId: string) => WorkspaceMutationResult;
-  movePipelineItem: (projectId: string, stage: PipelineStage) => WorkspaceMutationResult;
-  updatePipelineNote: (projectId: string, note: string) => WorkspaceMutationResult;
+  ) => Promise<WorkspaceMutationResult>;
+  removeFromPipeline: (projectId: string) => Promise<WorkspaceMutationResult>;
+  movePipelineItem: (projectId: string, stage: PipelineStage) => Promise<WorkspaceMutationResult>;
+  updatePipelineNote: (projectId: string, note: string) => Promise<WorkspaceMutationResult>;
   isInPipeline: (projectId: string) => boolean;
   toggleCompare: (projectId: string) => CompareToggleResult;
   addToCompare: (projectId: string) => WorkspaceMutationResult;
   removeFromCompare: (projectId: string) => WorkspaceMutationResult;
   clearCompare: () => WorkspaceMutationResult;
   isComparing: (projectId: string) => boolean;
-  saveSearch: (search: NewSavedSearch | string) => string;
-  saveActiveThesis: (thesis: ActiveThesis) => boolean;
+  saveSearch: (search: NewSavedSearch | string) => Promise<string>;
+  saveActiveThesis: (thesis: ActiveThesis) => Promise<boolean>;
+  setThesisSourceScope: (scope: ThesisSourceScope) => Promise<WorkspaceMutationResult>;
   savePendingBrief: (brief: string) => boolean;
   clearPendingBrief: () => void;
   startSearchSession: (session: NewSearchSession) => boolean;
   clearSearchSession: () => boolean;
-  removeSavedSearch: (searchId: string) => WorkspaceMutationResult;
+  removeSavedSearch: (searchId: string) => Promise<WorkspaceMutationResult>;
   setSidebarCollapsed: (collapsed: boolean) => WorkspaceMutationResult;
   toggleSidebarCollapsed: () => WorkspaceMutationResult;
   resetDemoState: () => boolean;
@@ -284,9 +316,41 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       setSearchSessionError(hydratedSearchSessionError);
       setStorageAvailable(hydrationStorageAvailable);
       setPersistenceError(hydrationError);
-      setHasHydrated(true);
+      // In Supabase mode, the account-backed slices below still need to load
+      // before this workspace is considered hydrated — otherwise pages that
+      // gate on `hasHydrated` would briefly render as if the account has no
+      // thesis, pipeline, or saved searches yet.
+      if (!SUPABASE_ENABLED) setHasHydrated(true);
     }, 0);
     return () => window.clearTimeout(timer);
+  }, []);
+
+  // Supabase mode: overlay the account-backed slices (thesis, pipeline,
+  // saved searches) on top of local state. `compareIds` and
+  // `sidebarCollapsed` have no database table and stay browser-only in
+  // every mode (see the hydration effect above).
+  useEffect(() => {
+    if (!SUPABASE_ENABLED) return;
+    let cancelled = false;
+
+    (async () => {
+      const [activeThesis, pipelineItems, savedSearches] = await Promise.all([
+        loadActiveThesisAction(),
+        loadPipelineItemsAction(),
+        loadSavedSearchesAction(),
+      ]);
+      if (cancelled) return;
+      setState((current) => {
+        const next: WorkspaceState = { ...current, activeThesis, pipelineItems, savedSearches };
+        stateRef.current = next;
+        return next;
+      });
+      setHasHydrated(true);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -354,10 +418,44 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     return "saved";
   }, [hasHydrated, persistenceError, storageAvailable]);
 
-  const addToPipeline = useCallback<WorkspaceContextValue["addToPipeline"]>((project) => {
+  /**
+   * Supabase-mode analogue of `commitWorkspaceState`: the database is
+   * already the durable store (the server action succeeded before this is
+   * called), so this only needs to reconcile the in-memory mirror — no
+   * localStorage write.
+   */
+  const applyLocalStateChange = useCallback((buildNext: (current: WorkspaceState) => WorkspaceState) => {
+    setState((current) => {
+      const next = buildNext(current);
+      stateRef.current = next;
+      return next;
+    });
+  }, []);
+
+  const addToPipeline = useCallback<WorkspaceContextValue["addToPipeline"]>(async (project) => {
     const input = typeof project === "string" ? { projectId: project } : project;
     const projectId = input.projectId.trim();
     if (!projectId) return "failed";
+
+    if (SUPABASE_ENABLED) {
+      const result = await addPipelineItemAction({ projectId, stage: input.stage, note: input.note });
+      if (result === "saved") {
+        const timestamp = new Date().toISOString();
+        applyLocalStateChange((current) => (current.pipelineItems.some((item) => item.projectId === projectId)
+          ? current
+          : {
+              ...current,
+              pipelineItems: [{
+                projectId,
+                stage: input.stage ?? "discovered",
+                note: input.note?.trim() || undefined,
+                addedAt: timestamp,
+                updatedAt: timestamp,
+              }, ...current.pipelineItems],
+            }));
+      }
+      return result;
+    }
 
     return commitWorkspaceState((current) => {
       if (current.pipelineItems.some((item) => item.projectId === projectId)) return current;
@@ -373,9 +471,20 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         }, ...current.pipelineItems],
       };
     }, "Browser storage could not add this project to the pipeline. Nothing was saved.");
-  }, [commitWorkspaceState]);
+  }, [applyLocalStateChange, commitWorkspaceState]);
 
-  const removeFromPipeline = useCallback((projectId: string) => {
+  const removeFromPipeline = useCallback(async (projectId: string) => {
+    if (SUPABASE_ENABLED) {
+      const result = await removePipelineItemAction(projectId);
+      if (result === "saved") {
+        applyLocalStateChange((current) => ({
+          ...current,
+          pipelineItems: current.pipelineItems.filter((item) => item.projectId !== projectId),
+        }));
+      }
+      return result;
+    }
+
     return commitWorkspaceState((current) => {
       if (!current.pipelineItems.some((item) => item.projectId === projectId)) return current;
       return {
@@ -383,10 +492,24 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         pipelineItems: current.pipelineItems.filter((item) => item.projectId !== projectId),
       };
     }, "Browser storage could not remove this project from the pipeline. Nothing changed.");
-  }, [commitWorkspaceState]);
+  }, [applyLocalStateChange, commitWorkspaceState]);
 
-  const movePipelineItem = useCallback((projectId: string, stage: PipelineStage) => {
+  const movePipelineItem = useCallback(async (projectId: string, stage: PipelineStage) => {
     if (!VALID_PIPELINE_STAGES.has(stage)) return "failed";
+
+    if (SUPABASE_ENABLED) {
+      const result = await movePipelineItemAction(projectId, stage);
+      if (result === "saved") {
+        applyLocalStateChange((current) => ({
+          ...current,
+          pipelineItems: current.pipelineItems.map((candidate) => candidate.projectId === projectId
+            ? { ...candidate, stage, updatedAt: new Date().toISOString() }
+            : candidate),
+        }));
+      }
+      return result;
+    }
+
     return commitWorkspaceState((current) => {
       const item = current.pipelineItems.find((candidate) => candidate.projectId === projectId);
       if (!item || item.stage === stage) return current;
@@ -397,10 +520,24 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
           : candidate),
       };
     }, "Browser storage could not move this pipeline item. Its previous stage was kept.");
-  }, [commitWorkspaceState]);
+  }, [applyLocalStateChange, commitWorkspaceState]);
 
-  const updatePipelineNote = useCallback((projectId: string, note: string) => {
+  const updatePipelineNote = useCallback(async (projectId: string, note: string) => {
     const normalizedNote = note.trim() || undefined;
+
+    if (SUPABASE_ENABLED) {
+      const result = await updatePipelineNoteAction(projectId, note);
+      if (result === "saved") {
+        applyLocalStateChange((current) => ({
+          ...current,
+          pipelineItems: current.pipelineItems.map((candidate) => candidate.projectId === projectId
+            ? { ...candidate, note: normalizedNote, updatedAt: new Date().toISOString() }
+            : candidate),
+        }));
+      }
+      return result;
+    }
+
     return commitWorkspaceState((current) => {
       const item = current.pipelineItems.find((candidate) => candidate.projectId === projectId);
       if (!item || item.note === normalizedNote) return current;
@@ -411,7 +548,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
           : candidate),
       };
     }, "Browser storage could not save this private note. The previous note was kept.");
-  }, [commitWorkspaceState]);
+  }, [applyLocalStateChange, commitWorkspaceState]);
 
   const isInPipeline = useCallback(
     (projectId: string) => state.pipelineItems.some((item) => item.projectId === projectId),
@@ -465,11 +602,20 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     [state.compareIds],
   );
 
-  const saveSearch = useCallback((search: NewSavedSearch | string) => {
+  const saveSearch = useCallback(async (search: NewSavedSearch | string) => {
     const input: NewSavedSearch = typeof search === "string" ? { query: search } : search;
     const query = input.query.trim();
     if (!query) return "";
     if (input.criteria !== undefined && !input.criteria.every(isSearchCriterion)) return "";
+
+    if (SUPABASE_ENABLED) {
+      const savedId = await saveSearchAction(input);
+      if (!savedId) return "";
+      const savedSearches = await loadSavedSearchesAction();
+      applyLocalStateChange((current) => ({ ...current, savedSearches }));
+      return savedId;
+    }
+
     const now = new Date().toISOString();
     const requestedId = input.id?.trim() || "";
     const currentState = stateRef.current;
@@ -497,9 +643,20 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     }), "Browser storage could not save this exploration. It was not recorded as a saved search.");
 
     return result === "saved" ? savedId : "";
-  }, [commitWorkspaceState]);
+  }, [applyLocalStateChange, commitWorkspaceState]);
 
-  const removeSavedSearch = useCallback((searchId: string) => {
+  const removeSavedSearch = useCallback(async (searchId: string) => {
+    if (SUPABASE_ENABLED) {
+      const result = await removeSavedSearchAction(searchId);
+      if (result === "saved") {
+        applyLocalStateChange((current) => ({
+          ...current,
+          savedSearches: current.savedSearches.filter((search) => search.id !== searchId),
+        }));
+      }
+      return result;
+    }
+
     return commitWorkspaceState((current) => {
       if (!current.savedSearches.some((search) => search.id === searchId)) return current;
       return {
@@ -507,15 +664,54 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         savedSearches: current.savedSearches.filter((search) => search.id !== searchId),
       };
     }, "Browser storage could not remove this saved search. Nothing changed.");
-  }, [commitWorkspaceState]);
+  }, [applyLocalStateChange, commitWorkspaceState]);
 
-  const saveActiveThesis = useCallback((thesis: ActiveThesis): boolean => {
+  const saveActiveThesis = useCallback(async (thesis: ActiveThesis): Promise<boolean> => {
     if (!isActiveThesis(thesis)) return false;
+
+    if (SUPABASE_ENABLED) {
+      const saved = await saveActiveThesisAction({
+        brief: thesis.brief,
+        sectors: thesis.sectors,
+        stages: thesis.stages,
+        geographies: thesis.geographies,
+        signals: thesis.signals,
+        exclusions: thesis.exclusions,
+        checkRange: thesis.checkRange,
+        riskPosture: thesis.riskPosture,
+        sourceScope: thesis.sourceScope,
+      });
+      if (!saved) return false;
+      applyLocalStateChange((current) => ({ ...current, activeThesis: saved }));
+      return true;
+    }
+
     return commitWorkspaceState(
       (current) => ({ ...current, activeThesis: thesis }),
       "Browser storage could not save this thesis. It was not recorded as your active sourcing lens.",
     ) === "saved";
-  }, [commitWorkspaceState]);
+  }, [applyLocalStateChange, commitWorkspaceState]);
+
+  const setThesisSourceScope = useCallback(async (scope: ThesisSourceScope): Promise<WorkspaceMutationResult> => {
+    if (!THESIS_SOURCE_SCOPES.includes(scope)) return "failed";
+    const current = stateRef.current.activeThesis;
+    if (!current) return "failed";
+    if (current.sourceScope === scope) return "no_change";
+
+    if (SUPABASE_ENABLED) {
+      const ok = await setThesisSourceScopeAction(scope);
+      if (!ok) return "failed";
+      applyLocalStateChange((state) => (state.activeThesis
+        ? { ...state, activeThesis: { ...state.activeThesis, sourceScope: scope } }
+        : state));
+      return "saved";
+    }
+
+    return commitWorkspaceState((state) => (state.activeThesis
+      ? { ...state, activeThesis: { ...state.activeThesis, sourceScope: scope } }
+      : state),
+    "Browser storage could not save the sourcing scope. Nothing changed.");
+  }, [applyLocalStateChange, commitWorkspaceState]);
 
   const savePendingBrief = useCallback((brief: string): boolean => {
     const normalized = brief.trim().replace(/\s+/g, " ").slice(0, 1000);
@@ -636,6 +832,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     isComparing,
     saveSearch,
     saveActiveThesis,
+    setThesisSourceScope,
     savePendingBrief,
     clearPendingBrief,
     startSearchSession,
@@ -665,6 +862,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     isComparing,
     saveSearch,
     saveActiveThesis,
+    setThesisSourceScope,
     savePendingBrief,
     clearPendingBrief,
     startSearchSession,

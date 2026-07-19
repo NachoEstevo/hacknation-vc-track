@@ -11,7 +11,6 @@ describe("private investor search routing", () => {
       "home-thesis.tsx",
       "search/page.tsx",
       "search/search-workspace.tsx",
-      "search/recent-searches.tsx",
       "saved-searches/saved-searches-workspace.tsx",
     ].map((file) => readFileSync(join(appRoot, file), "utf8")).join("\n");
 

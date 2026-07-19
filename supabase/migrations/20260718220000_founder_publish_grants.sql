@@ -1,0 +1,11 @@
+-- The row-level policy `projects_update_collaborator` already scopes project
+-- updates to the project's own collaborator (creator or claimed founder), and
+-- the table's CHECK constraints already enforce that `status`/`visibility`/
+-- `published_at` stay mutually consistent. The column-level grant for
+-- `public.projects` was missing these three lifecycle columns, so no
+-- authenticated founder could move their own project through
+-- draft -> ai_structured -> founder_review -> published, or unpublish it
+-- again, even though the row policy and CHECK constraints already allow it.
+-- This grants exactly the missing columns, matching the column-grant pattern
+-- already used for every other project field.
+grant update (status, visibility, published_at) on public.projects to authenticated;

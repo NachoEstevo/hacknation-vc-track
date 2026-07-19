@@ -11,21 +11,23 @@
 }
 
 .principleBar,
-.footerNote {
+.footerNote,
+.tableFoot {
   display: flex;
   gap: 0.65rem;
   align-items: flex-start;
   padding: 0.8rem 0.95rem;
-  border: 1px solid #d8d3c4;
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background: #eeece4;
-  color: #565249;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
   font-size: 0.76rem;
   line-height: 1.55;
 }
 
 .principleBar svg,
-.footerNote svg {
+.footerNote svg,
+.tableFoot svg {
   flex: 0 0 auto;
   width: 1rem;
   height: 1rem;
@@ -33,18 +35,50 @@
   color: var(--accent);
 }
 
+.tableFoot {
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  padding: 0.85rem 1.35rem;
+  font-size: 0.72rem;
+}
+
+.tableFoot svg {
+  width: 0.8rem;
+  height: 0.8rem;
+  color: var(--text-tertiary);
+}
+
 .fallbackBanner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: center;
   padding: 1rem 1.1rem;
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius-lg);
-  background: rgb(255 255 255 / 55%);
+  background: var(--surface);
 }
 
 .fallbackBanner > div {
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
-  gap: 0.7rem;
+  gap: 0.3rem;
+}
+
+.fallbackTag {
+  display: inline-flex;
   align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 99px;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .fallbackBanner strong {
@@ -53,13 +87,36 @@
 
 .fallbackBanner span:last-child,
 .selectionNote {
-  color: var(--text);
+  color: var(--text-secondary);
   font-size: 0.7rem;
   line-height: 1.5;
 }
 
 .selectionNote {
   margin: 0;
+}
+
+.keyDifferences {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding: 0.8rem 0.95rem;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.keyDifferences svg {
+  flex: 0 0 auto;
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-top: 0.2rem;
+}
+
+.keyDifferences p {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.55;
 }
 
 .tableCard {
@@ -79,25 +136,25 @@
   border-bottom: 1px solid var(--border);
 }
 
-.eyebrow {
-  display: block;
-  color: var(--text);
-  font-size: 0.6875rem;
-  font-weight: 800;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
-
 .tableIntro h2 {
-  margin: 0.25rem 0 0;
+  margin: 0;
   font-family: var(--font-display), serif;
   font-size: 1.35rem;
-  font-weight: 580;
+  font-weight: 500;
 }
 
-.tableIntro > span {
-  color: var(--text);
+.tableIntro p {
+  margin: 0.25rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.tableMeta {
+  flex: 0 0 auto;
+  color: var(--text-tertiary);
   font-size: 0.6875rem;
+  white-space: nowrap;
 }
 
 .tableScroll {
@@ -107,7 +164,6 @@
 
 .table {
   width: 100%;
-  min-width: 960px;
   border-collapse: separate;
   border-spacing: 0;
   table-layout: fixed;
@@ -115,11 +171,10 @@
 
 .table th,
 .table td {
-  width: 17rem;
-  padding: 0.9rem 1rem;
+  padding: 0.8rem 1rem;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  color: #403d37;
+  color: var(--ink);
   font-size: 0.73rem;
   line-height: 1.5;
   text-align: left;
@@ -134,164 +189,117 @@
   border-bottom: 0;
 }
 
-.rowHeading {
+.rowLabel {
   position: sticky;
   left: 0;
   z-index: 2;
-  width: 11rem !important;
-  background: #f5f3ed;
-  color: var(--text) !important;
+  width: 11rem;
+  background: var(--surface-subtle);
+  color: var(--text-tertiary) !important;
   font-size: 0.6875rem !important;
-  font-weight: 780;
+  font-weight: 700;
   letter-spacing: 0.045em;
   text-transform: uppercase;
 }
 
-thead .rowHeading {
+thead .rowLabel {
   z-index: 4;
 }
 
-.projectHeading {
+.headerCell {
   padding: 1rem !important;
-  background: #fbfaf7;
+  background: var(--surface);
+  vertical-align: top;
 }
 
-.projectIdentity {
+.identity {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 0.7rem;
-  align-items: start;
-}
-
-.projectMonogram {
-  display: grid;
-  width: 2.2rem;
-  height: 2.2rem;
-  place-items: center;
-  border-radius: 0.65rem;
-  background: var(--accent-soft);
-  color: var(--accent-ink);
-  font-family: var(--font-display), serif;
-  font-weight: 700;
-}
-
-.projectIdentity strong,
-.projectIdentity span {
-  display: block;
-}
-
-.projectIdentity strong {
-  color: var(--ink);
-  font-family: var(--font-display), serif;
-  font-size: 1rem;
-  font-weight: 620;
-}
-
-.projectIdentity span {
-  margin-top: 0.25rem;
-  color: var(--text);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  line-height: 1.45;
-}
-
-.projectActions {
-  display: flex;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.6rem;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.45rem;
-  margin-top: 0.8rem;
+}
+
+.identityText {
+  display: grid;
+  min-width: 0;
+  gap: 0.15rem;
+}
+
+.identityText strong {
+  overflow: hidden;
+  color: var(--ink);
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.86rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.identityText span {
+  overflow: hidden;
+  color: var(--text-tertiary);
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.openBriefLink {
+  margin-top: 0.7rem;
+  width: 100%;
+  font-size: 0.72rem !important;
+  padding: 0.45rem 0.7rem !important;
 }
 
 .sectionRow > * {
-  border-top: 0.35rem solid #f0eee7;
+  border-top: 0.35rem solid var(--surface-subtle);
 }
 
-.chipCell {
+.cell {
+  transition: background-color 0.15s ease;
+}
+
+.leadingCell {
+  background: var(--verified-soft);
+}
+
+.tagRow {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
 }
 
-.stateCell,
-.conflictCell,
-.missingCell,
-.coverageCell,
-.claimCounts {
+.scoreCell {
   display: grid;
+  gap: 0.4rem;
   justify-items: start;
-  gap: 0.45rem;
 }
 
-.stateCell > span:not([data-status]),
-.conflictCell > span:not([data-status]),
-.coverageCell > span,
-.stateCell small {
-  color: var(--text);
-  font-size: 0.6875rem;
-  line-height: 1.45;
-}
-
-.stateCell > strong,
-.coverageCell > strong {
-  color: var(--accent-ink);
-  font-family: var(--font-display), serif;
-  font-size: 1.08rem;
-}
-
-.longText {
-  font-family: var(--font-display), serif;
-  font-size: 0.84rem !important;
-  line-height: 1.55 !important;
-}
-
-.coverageTrack {
-  overflow: hidden;
-  width: 100%;
-  height: 0.28rem;
-  border-radius: 99px;
-  background: var(--surface-subtle);
-}
-
-.coverageTrack span {
+.caption {
   display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--accent);
-}
-
-.claimCounts span {
-  color: var(--text);
-  font-size: 0.6875rem;
-}
-
-.claimCounts span:first-child {
-  color: var(--verified);
-  font-weight: 700;
-}
-
-.claimCounts svg {
-  width: 0.75rem;
-  height: 0.75rem;
-  vertical-align: -0.12rem;
-}
-
-.conflictCell > span:not([data-status]) {
-  color: #73433e;
-}
-
-.missingCell ul {
-  display: grid;
-  gap: 0.35rem;
-  margin: 0;
-  padding-left: 1rem;
-  color: var(--text);
-  font-size: 0.6875rem;
+  margin-top: 0.4rem;
+  color: var(--text-secondary);
+  font-size: 0.68rem;
   line-height: 1.45;
 }
 
-.footerNote {
-  background: transparent;
+.axisCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trendUp {
+  flex: 0 0 auto;
+  width: 0.8rem;
+  height: 0.8rem;
+  color: var(--verified);
+}
+
+.trendNeutral {
+  flex: 0 0 auto;
+  width: 0.8rem;
+  height: 0.8rem;
+  color: var(--text-tertiary);
 }
 
 .loadingState {
@@ -300,7 +308,7 @@ thead .rowHeading {
   place-items: center;
   align-content: center;
   gap: 0.7rem;
-  color: var(--text);
+  color: var(--text-secondary);
   font-size: 0.8rem;
 }
 
@@ -311,7 +319,7 @@ thead .rowHeading {
 }
 
 @media (max-width: 700px) {
-  .fallbackBanner > div {
+  .fallbackBanner {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -321,7 +329,8 @@ thead .rowHeading {
   }
 
   .principleBar,
-  .footerNote {
+  .footerNote,
+  .keyDifferences {
     font-size: 0.7rem;
   }
 }

@@ -1,0 +1,43 @@
+.score {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.track {
+  position: relative;
+  width: 56px;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--surface-subtle);
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--accent);
+}
+
+.infoButton {
+  display: inline-flex;
+  color: var(--text-tertiary);
+}
+
+.infoButton svg {
+  width: 12px;
+  height: 12px;
+}
