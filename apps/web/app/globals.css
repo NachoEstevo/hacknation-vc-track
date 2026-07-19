@@ -114,3 +114,16 @@ button {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Print (PDF export): pages render as an A4 document on plain white. */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm;
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+}
