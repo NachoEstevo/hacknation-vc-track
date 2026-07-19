@@ -107,10 +107,10 @@ function HydratedInvestorThesisForm({
     saveActiveThesis,
     clearPendingBrief,
   } = useWorkspace();
-  // Starts empty for new investors — the example lives in the placeholder,
-  // never as pre-written text. Editing an existing thesis (or arriving with
-  // a brief typed on the landing) still prefills what THEY wrote.
-  const [query, setQuery] = useState(initialThesis?.brief || initialQuery || "");
+  // Always starts empty — the example lives in the placeholder, never as
+  // pre-written text. The only prefill is a brief the user typed themselves
+  // on the landing seconds ago; a previously saved thesis stays out of the box.
+  const [query, setQuery] = useState(initialQuery || "");
   const [isNavigating, setIsNavigating] = useState(false);
   const [completionError, setCompletionError] = useState("");
 
@@ -267,7 +267,7 @@ export function InvestorThesisForm({
   return (
     <HydratedInvestorThesisForm
       key={activeThesis?.updatedAt ?? "new-thesis"}
-      initialQuery={activeThesis ? "" : initialQuery || pendingBrief}
+      initialQuery={initialQuery || pendingBrief}
       initialThesis={activeThesis}
     />
   );
