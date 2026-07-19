@@ -147,12 +147,16 @@ function HydratedProfile({ slug }: { slug: string }) {
   const [cached, setCached] = useState<StoredDossier | null>(() => readStoredDossier(slug));
 
   const [transport] = useState(() => new DefaultChatTransport({ api: "/api/agent/profile" }));
+  const [emptyRun, setEmptyRun] = useState(false);
   const { messages, sendMessage, setMessages, status, error, stop } = useChat({
     id: `dossier-${slug}`,
     transport,
     onFinish: ({ message }) => {
       const markdown = dossierTextOf([message]);
-      if (!markdown) return;
+      if (!markdown) {
+        setEmptyRun(true);
+        return;
+      }
       const stored: StoredDossier = { markdown, generatedAt: new Date().toISOString() };
       try {
         sessionStorage.setItem(`${DOSSIER_STORAGE_PREFIX}${slug}`, JSON.stringify(stored));
@@ -174,6 +178,7 @@ function HydratedProfile({ slug }: { slug: string }) {
   function requestDossier() {
     if (!stub) return;
     requestedRef.current = true;
+    setEmptyRun(false);
     setMessages([]);
     void sendMessage(
       { text: `Research and write the dossier for ${stub.candidate.name}.` },
@@ -188,6 +193,18 @@ function HydratedProfile({ slug }: { slug: string }) {
     requestDossier();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // One silent retry when a run errors out or ends with no dossier text —
+  // transient upstream failures resolve on a second attempt far more often
+  // than a user finds the Retry button.
+  const autoRetriedRef = useRef(false);
+  useEffect(() => {
+    if ((!error && !emptyRun) || isBusy || autoRetriedRef.current || !stub) return;
+    autoRetriedRef.current = true;
+    const timer = setTimeout(() => requestDossier(), 1200);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error, emptyRun, isBusy]);
 
   useEffect(() => () => {
     void stop();
@@ -295,6 +312,13 @@ function HydratedProfile({ slug }: { slug: string }) {
         {error ? (
           <div className={styles.errorRow} role="alert">
             <p>{error.message || "The dossier writer hit an error."}</p>
+            <Button variant="secondary" onClick={refreshDossier}>Retry</Button>
+          </div>
+        ) : null}
+
+        {emptyRun && !error && !isBusy && !dossier ? (
+          <div className={styles.errorRow} role="alert">
+            <p>The research run ended before the dossier was written.</p>
             <Button variant="secondary" onClick={refreshDossier}>Retry</Button>
           </div>
         ) : null}
