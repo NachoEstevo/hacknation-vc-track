@@ -221,7 +221,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "No usable messages after sanitization." }, { status: 400 });
   }
 
-  const target = controls?.targetCandidates ?? 5;
+  // Must mirror DEFAULT_TARGET_CANDIDATES (lib/search) for clients that
+  // send no controls.
+  const target = controls?.targetCandidates ?? 2;
 
   // ---- Free-tier usage accounting (lib/usage) ----
   // Every user message consumes one chat_message from this chat's pool of
