@@ -33,6 +33,9 @@ import { searchProspects } from "@/lib/catalog/hack-nation-prospects.server";
 import { findHackNationPersonByName, searchHackNationPeople } from "@/lib/catalog/hack-nation-people.server";
 import { isTavilyEnabled, tavilyExtract, tavilySearch } from "@/lib/connectors/tavily/tavily.server";
 import { requireUserInProduction } from "@/lib/supabase/api-auth";
+import { USAGE_LIMITS, resetsInLabel } from "@/lib/usage/usage-limits";
+import { resolveUsageOwnerId } from "@/lib/usage/usage-identity.server";
+import { reserveUsage } from "@/lib/usage/usage-store.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -145,6 +148,16 @@ interface ChatRequestBody {
   messages?: unknown;
   thesis?: unknown;
   controls?: unknown;
+  chatId?: unknown;
+}
+
+function userTextOf(message: { parts?: unknown }): string {
+  const parts = (message as { parts?: { type?: string; text?: string }[] }).parts;
+  if (!Array.isArray(parts)) return "";
+  return parts
+    .filter((part) => part?.type === "text" && typeof part.text === "string")
+    .map((part) => part.text as string)
+    .join(" ");
 }
 
 /**
@@ -199,6 +212,55 @@ export async function POST(request: NextRequest) {
   }
 
   const target = controls?.targetCandidates ?? 5;
+
+  // ---- Free-tier usage accounting (lib/usage) ----
+  // The FIRST user message of a chat consumes one prospect_search; every
+  // user message consumes one chat_message from that chat's pool of 10.
+  // [auto] continuations are agent-driven and free (already step-capped).
+  // Idempotency keys derive from the turn number, so a client retry of the
+  // same message never double-charges.
+  const ownerId = await resolveUsageOwnerId();
+  const chatId = typeof body.chatId === "string" && body.chatId.trim()
+    ? body.chatId.trim().slice(0, 120)
+    : `${ownerId}:default`;
+  const userTurns = uiMessages.filter(
+    (message) => message.role === "user" && !userTextOf(message).trimStart().startsWith("[auto]"),
+  ).length;
+
+  if (userTurns > 0) {
+    if (userTurns === 1) {
+      const search = await reserveUsage({ ownerId, kind: "prospect_search", idempotencyKey: `search:${chatId}` });
+      if (!search.allowed) {
+        slot.release();
+        const resets = resetsInLabel(search.status.windowEndsAt);
+        return NextResponse.json(
+          {
+            message: `Free limit reached: ${USAGE_LIMITS.prospect_search} searches per 48 hours.${resets ? ` Resets in ${resets}.` : ""} Profiles you already researched stay available.`,
+            usage: search.status,
+          },
+          { status: 429 },
+        );
+      }
+    }
+
+    const chatMessage = await reserveUsage({
+      ownerId,
+      kind: "chat_message",
+      chatId,
+      idempotencyKey: `chat:${chatId}:turn:${userTurns}`,
+    });
+    if (!chatMessage.allowed) {
+      slot.release();
+      const resets = resetsInLabel(chatMessage.status.windowEndsAt);
+      return NextResponse.json(
+        {
+          message: `This chat reached its ${USAGE_LIMITS.chat_message}-message limit. Start a new search to keep going${resets ? ` — everything resets in ${resets}` : ""}.`,
+          usage: chatMessage.status,
+        },
+        { status: 429 },
+      );
+    }
+  }
 
   const anthropic = resolveAnthropic();
   const catalogRows = webSearchOnly ? [] : await listClayCatalogCompanies();

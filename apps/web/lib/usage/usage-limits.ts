@@ -50,6 +50,18 @@ export interface ReserveResult {
   status: UsageStatus;
 }
 
+/** "1d 8h", "7h 32m", "45m" — or null when no window is running. */
+export function resetsInLabel(windowEndsAt: string | null, now = Date.now()): string | null {
+  if (!windowEndsAt) return null;
+  const remaining = new Date(windowEndsAt).getTime() - now;
+  if (!Number.isFinite(remaining) || remaining <= 0) return null;
+  const minutes = Math.ceil(remaining / 60_000);
+  if (minutes < 60) return `${minutes}m`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ${minutes % 60}m`;
+  return `${Math.floor(hours / 24)}d ${hours % 24}h`;
+}
+
 export interface UsageStore {
   reserve(input: ReserveInput): Promise<ReserveResult>;
   refund(ownerId: string, idempotencyKey: string, now?: number): Promise<void>;
