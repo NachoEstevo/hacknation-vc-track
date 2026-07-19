@@ -260,6 +260,12 @@ function HydratedProfile({ slug }: { slug: string }) {
     void stop();
   }, [stop]);
 
+  // The moment the dossier stream starts, the profile reservation is
+  // charged — refresh the sidebar meter right away, not minutes later.
+  useEffect(() => {
+    if (status === "streaming" || status === "ready" || status === "error") announceUsageChange();
+  }, [status]);
+
   if (!stub) {
     return <MissingProfile slug={slug} />;
   }

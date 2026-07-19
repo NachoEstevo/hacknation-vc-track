@@ -42,7 +42,9 @@ export function UsageMeter() {
     const initial = window.setTimeout(() => void refresh(), 0);
     // Small delay so the server-side reservation lands before we re-read.
     const onChange = () => window.setTimeout(() => void refresh(), 900);
+    const onFocus = () => void refresh();
     window.addEventListener(USAGE_CHANGED_EVENT, onChange);
+    window.addEventListener("focus", onFocus);
     const interval = window.setInterval(() => {
       setTick((value) => value + 1);
       void refresh();
@@ -50,6 +52,7 @@ export function UsageMeter() {
     return () => {
       window.clearTimeout(initial);
       window.removeEventListener(USAGE_CHANGED_EVENT, onChange);
+      window.removeEventListener("focus", onFocus);
       window.clearInterval(interval);
     };
   }, [refresh]);

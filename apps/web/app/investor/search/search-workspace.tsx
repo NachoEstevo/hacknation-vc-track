@@ -2,6 +2,7 @@
 
 import type { Route } from "next";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import {
   ArrowUp,
@@ -439,6 +440,7 @@ function HydratedSearchWorkspace() {
     persistChatWidth(null);
   }
 
+  const router = useRouter();
   const thesisContext = useMemo(() => thesisContextFor(activeThesis), [activeThesis]);
   // Composer-selected data source and geography travel with every message of
   // the session so refinements keep the same constraints as the first brief.
@@ -455,6 +457,14 @@ function HydratedSearchWorkspace() {
   const isBusy = status === "submitted" || status === "streaming";
   const autoContinuesRef = useRef(0);
   const manualStopRef = useRef(false);
+
+  // An empty workspace (no session, no thread) has nothing to show — the
+  // composer home is the real entry point for a new search. Covers direct
+  // URL visits and the in-chat "new search" button alike.
+  useEffect(() => {
+    if (searchSession || messages.length > 0) return;
+    router.replace("/investor");
+  }, [searchSession, messages.length, router]);
 
   // A search session started from the home composer (or an example) opens
   // this workspace with a fresh brief: reset the thread and send it. Sessions
@@ -524,9 +534,11 @@ function HydratedSearchWorkspace() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
-  // Settled turns refresh the sidebar usage meter.
+  // Refresh the sidebar usage meter the moment a run starts streaming (the
+  // server has definitely charged the reservation by then) and when it
+  // settles — that's what makes the counters move in real time.
   useEffect(() => {
-    if (status === "ready" || status === "error") announceUsageChange();
+    if (status === "streaming" || status === "ready" || status === "error") announceUsageChange();
   }, [status]);
 
   // Persist the thread continuously (throttled while streaming) so a reload
