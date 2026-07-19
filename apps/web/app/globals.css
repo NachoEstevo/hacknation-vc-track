@@ -123,6 +123,7 @@ button {
 }
 
 @media print {
+  html,
   body {
     background: #fff;
   }
