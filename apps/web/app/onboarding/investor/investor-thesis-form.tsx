@@ -64,11 +64,11 @@ function DetectedProfile({ query }: { query: string }) {
 
   return (
     <div className={styles.detected} aria-live="polite">
-      <p className={styles.detectedTitle}>Your profile, as undr reads it</p>
+      <p className={styles.detectedTitle}>What undr understood — updates as you type</p>
       {groups.length === 0 ? (
         <p className={styles.detectedEmpty}>
-          Keep writing — sectors, stage, geography and signals will appear here
-          automatically and travel with every search you run.
+          Nothing yet — as you write, the sectors, stage and places you mention
+          will show up here so you can check undr got you right.
         </p>
       ) : (
         <div className={styles.detectedGroups}>
@@ -95,11 +95,9 @@ function DetectedProfile({ query }: { query: string }) {
 function HydratedInvestorThesisForm({
   initialQuery,
   initialThesis,
-  catalogCount,
 }: {
   initialQuery: string;
   initialThesis: ActiveThesis | null;
-  catalogCount: number;
 }) {
   const router = useRouter();
   const {
@@ -131,7 +129,7 @@ function HydratedInvestorThesisForm({
       setIsNavigating(false);
       setCompletionError(
         persistenceError
-        ?? "This browser could not persist the thesis, so it was not recorded as your active sourcing lens.",
+        ?? "This browser could not save your profile — nothing was recorded. Try again.",
       );
       return;
     }
@@ -150,17 +148,17 @@ function HydratedInvestorThesisForm({
     >
       <div className={styles.main}>
         <div className={styles.intro}>
-          <h1>Set your investment thesis</h1>
+          <h1>What do you invest in?</h1>
           <p>
-            Describe it in plain language. This becomes your active sourcing lens —
-            undr combines it with every search you run afterward to rank and explain
-            matches, so be specific. It extracts the sectors, stage, geography, and
-            signals automatically.
+            Tell undr in one or two plain sentences: the kind of founders you back,
+            the sectors you like, and how early. undr remembers it and uses it to
+            rank every search you run — and to explain why each person matches you.
+            You can change it anytime.
           </p>
         </div>
 
         <div className={styles.presets} role="group" aria-label="Investor archetype starting points">
-          <span className={styles.presetsLabel}>Start from an archetype</span>
+          <span className={styles.presetsLabel}>Not sure how to start? Tap one and make it yours:</span>
           {THESIS_PRESETS.map((preset) => (
             <button
               key={preset.label}
@@ -176,7 +174,7 @@ function HydratedInvestorThesisForm({
 
         <div className={styles.briefCard}>
           <label className={styles.briefLabel} htmlFor="thesis-query">
-            Describe or paste your thesis
+            In your own words
           </label>
           <textarea
             id="thesis-query"
@@ -192,7 +190,8 @@ function HydratedInvestorThesisForm({
           <div className={styles.helper}>
             <Sparkles size={12} aria-hidden="true" />
             <span>
-              Use “must” for required criteria; everything else remains a preference.
+              Tip: write “must” for anything non-negotiable — e.g. “must have a
+              working product”.
             </span>
           </div>
         </div>
@@ -200,8 +199,8 @@ function HydratedInvestorThesisForm({
         <DetectedProfile query={query} />
 
         <p className={styles.matchNote}>
-          {catalogCount} seed companies indexed — undr will score and explain every
-          match against this thesis once you finish setup.
+          That&rsquo;s the whole setup. From now on, every search result is scored
+          against this profile — and you&rsquo;ll always see why someone matches.
         </p>
 
         <div className={styles.footer}>
@@ -232,17 +231,17 @@ function HydratedInvestorThesisForm({
 
 export function InvestorThesisForm({
   initialQuery,
-  catalogCount,
 }: {
   initialQuery: string;
-  catalogCount: number;
+  /** Kept for call-site compatibility; the screen no longer surfaces the count. */
+  catalogCount?: number;
 }) {
   const { activeThesis, hasHydrated, pendingBrief } = useWorkspace();
 
   if (!hasHydrated) {
     return (
       <div className={styles.loadingState} role="status" aria-live="polite">
-        Loading the sourcing lens saved in this browser…
+        Loading your saved profile…
       </div>
     );
   }
@@ -252,7 +251,6 @@ export function InvestorThesisForm({
       key={activeThesis?.updatedAt ?? "new-thesis"}
       initialQuery={activeThesis ? "" : initialQuery || pendingBrief}
       initialThesis={activeThesis}
-      catalogCount={catalogCount}
     />
   );
 }
