@@ -13,8 +13,13 @@ function coverageAdjustedFit(evaluation: CompanyEvaluation): number {
   return evaluation.thesisFit === null ? -1 : evaluation.thesisFit * evaluation.evidenceCoverage / 100;
 }
 
+function recommendationPriority(evaluation: CompanyEvaluation): number {
+  return { investigate: 3, watch: 2, needs_evidence: 1, pass_for_thesis: 0 }[evaluation.recommendation];
+}
+
 function compareEvaluations(left: CompanyEvaluation, right: CompanyEvaluation): number {
-  return coverageAdjustedFit(right) - coverageAdjustedFit(left)
+  return recommendationPriority(right) - recommendationPriority(left)
+    || coverageAdjustedFit(right) - coverageAdjustedFit(left)
     || right.evidenceCoverage - left.evidenceCoverage
     || (right.thesisFit ?? -1) - (left.thesisFit ?? -1)
     || productExecutionScore(right) - productExecutionScore(left)

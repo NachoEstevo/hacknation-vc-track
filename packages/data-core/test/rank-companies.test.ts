@@ -88,4 +88,14 @@ describe("rankCompanies", () => {
 
     expect(evaluations.map((item) => item.companyId)).toEqual(["b", "a"]);
   });
+
+  it("never ranks a blocking thesis conflict above an investigable company", () => {
+    const blocked = { ...evaluation("blocked", 90, 90, 100), recommendation: "pass_for_thesis" as const };
+    const investigable = { ...evaluation("investigable", 70, 70, 50), recommendation: "investigate" as const };
+
+    expect(rankCompanies([blocked, investigable]).map(({ evaluation: item }) => item.companyId)).toEqual([
+      "investigable",
+      "blocked",
+    ]);
+  });
 });

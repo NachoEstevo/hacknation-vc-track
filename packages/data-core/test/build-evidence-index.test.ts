@@ -83,4 +83,16 @@ describe("buildEvidenceIndex", () => {
     expect(result[1]?.evidence.map((item) => item.sourceType)).toEqual(["clay_csv"]);
     expect(buildEvidenceIndex([company, missingDomainCompany], [enrichment])).toEqual(result);
   });
+
+  it("excludes public enrichment when both the resolved domain and profile identity mismatch", () => {
+    const mismatched = {
+      ...enrichment,
+      pages: [{ url: "https://other-product.test/", status: 200 }],
+      profile: { ...enrichment.profile!, name: "Other Product" },
+    };
+
+    expect(buildEvidenceIndex([company], [mismatched])[0]!.evidence.map(({ sourceType }) => sourceType)).toEqual([
+      "clay_csv",
+    ]);
+  });
 });

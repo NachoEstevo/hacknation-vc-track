@@ -1,6 +1,6 @@
 {
-  "status": "completed",
-  "generatedAt": "2026-07-19T00:17:19.695Z",
+  "status": "partial",
+  "generatedAt": "2026-07-19T00:34:58.756Z",
   "thesisGeneratedAt": "2026-07-18T23:52:52.458Z",
   "thesisId": "early-us-uk-b2b-software-under-10-visible-execution",
   "promptVersion": "briefs-v1",
@@ -12,49 +12,55 @@
     "evaluatedCompanies": 50,
     "rankedCompanies": 50,
     "requestedBriefs": 3,
-    "validBriefs": 3,
-    "failedBriefs": 0,
-    "totalFailures": 0
+    "validBriefs": 2,
+    "failedBriefs": 1,
+    "totalFailures": 1
   },
   "evidenceCounts": {
-    "companyWebsite": 38,
+    "companyWebsite": 35,
     "githubPublic": 1,
-    "publicVisibility": 39,
+    "publicVisibility": 36,
     "investorPrivateVisibility": 0
   },
   "topCompanies": [
     {
       "rank": 1,
-      "companyId": "29e95a94236c22e3dca09456",
-      "companyName": "Niya",
+      "companyId": "73c89d3320e06114f6241365",
+      "companyName": "Icon",
       "recommendation": "investigate",
-      "thesisFit": 84.375,
-      "evidenceCoverage": 69.56521739130434,
+      "thesisFit": 100,
+      "evidenceCoverage": 60.86956521739131,
       "briefGenerated": true,
-      "briefGeneratedAt": "2026-07-19T00:17:56.960Z"
+      "briefGeneratedAt": "2026-07-19T00:35:38.870Z"
     },
     {
       "rank": 2,
-      "companyId": "3a28f15ed47dfb22f0b79fae",
-      "companyName": "Tech On Toast",
+      "companyId": "de15bb5f896e8ceac7531ad7",
+      "companyName": "Steal These Thoughts!",
+      "recommendation": "investigate",
+      "thesisFit": 100,
+      "evidenceCoverage": 60.86956521739131,
+      "briefGenerated": false,
+      "briefGeneratedAt": null
+    },
+    {
+      "rank": 3,
+      "companyId": "64c6360c5f16108843e90885",
+      "companyName": "Zendr Business",
       "recommendation": "investigate",
       "thesisFit": 84.375,
       "evidenceCoverage": 69.56521739130434,
       "briefGenerated": true,
-      "briefGeneratedAt": "2026-07-19T00:17:57.967Z"
-    },
-    {
-      "rank": 3,
-      "companyId": "aa4a13ba232376416a1f8c39",
-      "companyName": "emailexpert",
-      "recommendation": "investigate",
-      "thesisFit": 82.14285714285714,
-      "evidenceCoverage": 60.86956521739131,
-      "briefGenerated": true,
-      "briefGeneratedAt": "2026-07-19T00:17:57.803Z"
+      "briefGeneratedAt": "2026-07-19T00:35:42.981Z"
     }
   ],
-  "failures": [],
+  "failures": [
+    {
+      "companyId": "de15bb5f896e8ceac7531ad7",
+      "stage": "draft_investment_brief",
+      "message": "Investment brief drafting failed"
+    }
+  ],
   "provenance": {
     "rankingSeed": "clay-us-uk-early-software.csv",
     "rankingSeedHandling": "owner_provided_internal_not_published",

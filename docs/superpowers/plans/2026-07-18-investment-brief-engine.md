@@ -553,7 +553,7 @@ git commit -m "feat(briefs): rank companies and build cited briefs"
 - [ ] **Step 1: Run thesis parse only**
 
 ```powershell
-npm run briefs:build -- --companies ../../data/source/clay-us-uk-early-software.csv --enrichment ../../data/enriched/company-web-profiles.json --thesis "Early US or UK B2B software companies with teams below 10 people and visible execution signals" --top 3 --output ../../data/briefs/demo-investment-briefs.json
+npm run briefs:build -- -- --companies ../../data/source/clay-us-uk-early-software.csv --enrichment ../../data/enriched/company-web-profiles.json --thesis "Early US or UK B2B software companies with teams below 10 people and visible execution signals" --top 3 --output ../../data/briefs/demo-investment-briefs.json
 ```
 
 Expected: no per-company calls; writes the proposed thesis file and exits with confirmation instructions.
@@ -565,7 +565,7 @@ Verify geography, software category, maximum team size, B2B preference, and exec
 - [ ] **Step 3: Run the live public-data analysis**
 
 ```powershell
-npm run briefs:build -- --companies ../../data/source/clay-us-uk-early-software.csv --enrichment ../../data/enriched/company-web-profiles.json --thesis-file ../../data/briefs/demo-investment-briefs.thesis.json --accept-parsed-thesis --top 3 --output ../../data/briefs/demo-investment-briefs.json
+npm run briefs:build -- -- --companies ../../data/source/clay-us-uk-early-software.csv --enrichment ../../data/enriched/company-web-profiles.json --thesis-file ../../data/briefs/demo-investment-briefs.thesis.json --accept-parsed-thesis --top 3 --output ../../data/briefs/demo-investment-briefs.json
 ```
 
 Expected: 50 evaluations, deterministic ranking, three citation-valid briefs, and no private Rely data.

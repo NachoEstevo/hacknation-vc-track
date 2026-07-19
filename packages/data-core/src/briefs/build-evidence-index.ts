@@ -92,6 +92,31 @@ function githubPayload(github: GitHubEvidence): Record<string, unknown> {
   };
 }
 
+function hostname(value: string): string | null {
+  try {
+    return new URL(value.includes("://") ? value : `https://${value}`).hostname.replace(/^www\./iu, "").toLocaleLowerCase("en-US");
+  } catch {
+    return null;
+  }
+}
+
+function identityTokens(value: string): Set<string> {
+  return new Set(value.normalize("NFKD").toLocaleLowerCase("en-US").match(/[\p{L}\d]+/gu)
+    ?.filter((token) => token.length >= 3 && !["company", "business", "limited", "group"].includes(token)) ?? []);
+}
+
+function publicIdentityMatches(company: StableCompanySeed, enrichment: CompanyEnrichmentResult): boolean {
+  if (!company.domain || !enrichment.profile || !enrichment.pages[0]?.url) return true;
+  const expectedHost = hostname(company.domain);
+  const resolvedHost = hostname(enrichment.pages[0].url);
+  const domainMatches = expectedHost !== null && resolvedHost !== null
+    && (expectedHost === resolvedHost || expectedHost.endsWith(`.${resolvedHost}`) || resolvedHost.endsWith(`.${expectedHost}`));
+  const companyTokens = identityTokens(company.name);
+  const nameMatches = enrichment.profile.name !== null
+    && [...identityTokens(enrichment.profile.name)].some((token) => companyTokens.has(token));
+  return domainMatches || nameMatches;
+}
+
 export function buildEvidenceIndex(
   companies: StableCompanySeed[],
   enrichments: CompanyEnrichmentResult[],
@@ -100,6 +125,7 @@ export function buildEvidenceIndex(
 
   return companies.map((company) => {
     const enrichment = enrichmentByCompanyId.get(company.stableId);
+    const publicEnrichment = enrichment && publicIdentityMatches(company, enrichment) ? enrichment : undefined;
     const capturedAt = enrichment?.capturedAt ?? UNKNOWN_CAPTURE_TIME;
     const evidence: EvidenceRecord[] = [createEvidence(
       company.stableId,
@@ -111,29 +137,29 @@ export function buildEvidenceIndex(
       "unverified",
       "investor_private",
     )];
-    const profilePayload = enrichment ? websitePayload(enrichment) : null;
+    const profilePayload = publicEnrichment ? websitePayload(publicEnrichment) : null;
 
-    if (enrichment?.profile && profilePayload) {
+    if (publicEnrichment?.profile && profilePayload) {
       evidence.push(createEvidence(
         company.stableId,
         "company_website",
-        enrichment.pages[0]?.url ?? null,
-        enrichment.capturedAt,
-        enrichment.profile.description,
+        publicEnrichment.pages[0]?.url ?? null,
+        publicEnrichment.capturedAt,
+        publicEnrichment.profile.description,
         profilePayload,
         "candidate_only",
         "public",
       ));
     }
 
-    if (enrichment) {
-      for (const github of enrichment.github) {
+    if (publicEnrichment) {
+      for (const github of publicEnrichment.github) {
         if (github.status !== "ok") continue;
         evidence.push(createEvidence(
           company.stableId,
           "github_public",
           github.sourceUrl,
-          enrichment.capturedAt,
+          publicEnrichment.capturedAt,
           github.note,
           githubPayload(github),
           "verified",

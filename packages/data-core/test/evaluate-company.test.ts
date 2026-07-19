@@ -91,11 +91,94 @@ describe("evaluateCompany", () => {
       normalizedCompany: {
         ...bundle.normalizedCompany,
         name: "Zendr Business",
+        description: "Zendr helps businesses manage sales with a mobile-first ERP suite.",
         primaryIndustry: "Mobile Computing Software Products",
       },
+      evidence: [{
+        ...bundle.evidence[0]!,
+        excerpt: "Zendr helps businesses manage sales with a mobile-first ERP suite.",
+      }, bundle.evidence[1]!],
     }, [claim("industry-1-b2b", true)]);
 
     expect(result.criteria.map(({ state }) => state)).toEqual(["match", "match"]);
+  });
+
+  it("conflicts Tech On Toast software despite a positive model claim", () => {
+    const description = "We are a hospitality technology marketplace and community. We're not a tech company; we recommend partner tools.";
+    const result = evaluateCompany(thesis([
+      criterion({ criterionId: "industry-1-software", category: "industry", label: "Software product", expectedValue: true }),
+    ]), {
+      ...bundle,
+      companyName: "Tech On Toast",
+      normalizedCompany: { ...bundle.normalizedCompany, name: "Tech On Toast", description, primaryIndustry: "Hospitality" },
+      evidence: [{ ...bundle.evidence[0]!, excerpt: description }],
+    }, [claim("industry-1-software", true)]);
+
+    expect(result.criteria[0]!.state).toBe("conflict");
+  });
+
+  it.each([
+    "We develop and operate a SaaS platform for finance teams.",
+    "Our API product lets businesses automate settlement workflows.",
+  ])("matches explicit proprietary software evidence: %s", (description) => {
+    const result = evaluateCompany(thesis([
+      criterion({ criterionId: "industry-1-software", category: "industry", label: "Software product", expectedValue: true }),
+    ]), {
+      ...bundle,
+      normalizedCompany: { ...bundle.normalizedCompany, description, primaryIndustry: "Technology" },
+      evidence: [{ ...bundle.evidence[0]!, excerpt: description }],
+    }, []);
+
+    expect(result.criteria[0]!.state).toBe("match");
+  });
+
+  it("does not let a model software claim bypass explicit product grounding", () => {
+    const description = "A community and training service for technology leaders.";
+    const result = evaluateCompany(thesis([
+      criterion({ criterionId: "industry-1-software", category: "industry", label: "Software product", expectedValue: true }),
+    ]), {
+      ...bundle,
+      normalizedCompany: { ...bundle.normalizedCompany, description, primaryIndustry: "Software" },
+      evidence: [{ ...bundle.evidence[0]!, excerpt: description }],
+    }, [claim("industry-1-software", true)]);
+
+    expect(result.criteria[0]!.state).toBe("missing");
+  });
+
+  it("treats a marketplace/community without proprietary product evidence as missing", () => {
+    const description = "A marketplace and community connecting buyers with a third-party software product and partner vendors.";
+    const result = evaluateCompany(thesis([
+      criterion({ criterionId: "industry-1-software", category: "industry", label: "Software product", expectedValue: true }),
+    ]), {
+      ...bundle,
+      normalizedCompany: { ...bundle.normalizedCompany, description, primaryIndustry: "Technology" },
+      evidence: [{ ...bundle.evidence[0]!, excerpt: description }],
+    }, []);
+
+    expect(result.criteria[0]!.state).toBe("missing");
+  });
+
+  it("requires a concrete product, pricing, changelog, or GitHub signal for visible execution", () => {
+    const executionCriterion = criterion({
+      criterionId: "traction-1", category: "traction", label: "Visible execution signals", operator: "exists", expectedValue: true,
+    });
+    const websiteEvidence = {
+      ...bundle.evidence[1]!, sourceType: "company_website" as const, visibility: "public" as const,
+      payload: { description: "An official company homepage.", signalLinks: { pricing: [], changelog: [], product: [] } },
+    };
+    const withoutSignal = evaluateCompany(thesis([executionCriterion]), {
+      ...bundle, evidence: [bundle.evidence[0]!, websiteEvidence],
+    }, [{ ...claim("traction-1", true), evidenceIds: [websiteEvidence.evidenceId] }]);
+    const withPricing = evaluateCompany(thesis([executionCriterion]), {
+      ...bundle,
+      evidence: [bundle.evidence[0]!, {
+        ...websiteEvidence,
+        payload: { description: "An official company homepage.", signalLinks: { pricing: ["https://acme.test/pricing"], changelog: [], product: [] } },
+      }],
+    }, []);
+
+    expect(withoutSignal.criteria[0]!.state).toBe("missing");
+    expect(withPricing.criteria[0]!.state).toBe("match");
   });
 
   it("treats a non-software taxonomy as unknown without supported negative evidence", () => {
@@ -110,7 +193,7 @@ describe("evaluateCompany", () => {
   });
 
   it.each(["Julian Jewel's AI Bot", "Steal These Thoughts!"])(
-    "requires supported negative evidence before conflicting %s with B2B/software",
+    "does not treat a model-only negative as software conflict for %s",
     (companyName) => {
       const result = evaluateCompany(thesis([
         criterion({ criterionId: "industry-1-b2b", category: "market", label: "B2B business model", expectedValue: true }),
@@ -121,7 +204,7 @@ describe("evaluateCompany", () => {
         normalizedCompany: { ...bundle.normalizedCompany, name: companyName, primaryIndustry: "Education" },
       }, [claim("industry-1-b2b", false), claim("industry-1-software", false)]);
 
-      expect(result.criteria.map(({ state }) => state)).toEqual(["conflict", "conflict"]);
+      expect(result.criteria.map(({ state }) => state)).toEqual(["conflict", "missing"]);
     },
   );
 

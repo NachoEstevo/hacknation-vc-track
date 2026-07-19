@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   BriefCliUsageError,
   createStructuredTasks,
+  parseBriefCliArgs,
   runBriefCli,
   type BriefCliRuntime,
 } from "../scripts/build-investment-briefs.js";
@@ -77,6 +78,15 @@ function setupRuntime(csv = validCsv): {
 }
 
 describe("investment brief CLI filesystem safety", () => {
+  it("accepts npm 11's forwarded separator before CLI flags", () => {
+    expect(parseBriefCliArgs(["--", ...baseArgs])).toMatchObject({
+      companies: "companies.csv",
+      enrichment: "enrichment.json",
+      thesis: thesis.originalQuery,
+      output: "briefs.json",
+    });
+  });
+
   it.each([
     { label: "companies", args: [...baseArgs.slice(0, -1), "COMPANIES.CSV"] },
     { label: "normalized companies path", args: [...baseArgs.slice(0, -1), "nested/../companies.csv"] },

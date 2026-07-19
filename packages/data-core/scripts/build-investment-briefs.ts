@@ -58,7 +58,7 @@ export function parseBriefCliArgs(argv: string[]): BriefCliArgs {
   const values = new Map<string, string>();
   let acceptParsedThesis = false;
 
-  for (let index = 0; index < argv.length; index += 1) {
+  for (let index = argv[0] === "--" ? 1 : 0; index < argv.length; index += 1) {
     const flag = argv[index]!;
     if (flag === "--accept-parsed-thesis") {
       if (acceptParsedThesis) throw new BriefCliUsageError(`Duplicate flag: ${flag}`);
