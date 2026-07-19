@@ -15,6 +15,39 @@ const fallbackQuery =
 const DEFAULT_CHECK_RANGE = { currency: "USD" as const, min: 100_000, max: 750_000 };
 
 /**
+ * Real investor archetypes, written in the vocabulary the thesis extractor
+ * understands (stage, geography, signals, exclusions) so picking one lights
+ * up the profile chips immediately. Each is a starting point to edit, not a
+ * form to submit as-is.
+ */
+const THESIS_PRESETS: readonly { label: string; text: string }[] = [
+  {
+    label: "Dev tools & infra",
+    text: "Technical founders building developer tools and infrastructure with a working demo and an active GitHub, at pre-seed, without institutional funding.",
+  },
+  {
+    label: "Applied AI",
+    text: "AI-native products with real users and early traction at seed stage, built by technical founders who ship fast and publish their work.",
+  },
+  {
+    label: "Fintech · emerging markets",
+    text: "Fintech infrastructure for Latin America at pre-seed, founded by technical operators who understand regulated markets, with a working product.",
+  },
+  {
+    label: "Vertical SaaS",
+    text: "Capital-efficient vertical SaaS for overlooked industries with early revenue and a working product, at seed, excluding crypto and web3.",
+  },
+  {
+    label: "Climate & hard tech",
+    text: "Scientific and technical founders building climate or hard tech with deep IP at pre-seed, patient horizons, without institutional funding.",
+  },
+  {
+    label: "Open source first",
+    text: "Commercial open-source projects with real community traction and active GitHub repositories, technical founders, before institutional seed.",
+  },
+];
+
+/**
  * Live mirror of what undr understands from the investor's own words: the
  * same extractor that builds the saved thesis runs on every keystroke, so
  * the chips below the textarea always reflect the current profile.
@@ -124,6 +157,21 @@ function HydratedInvestorThesisForm({
             matches, so be specific. It extracts the sectors, stage, geography, and
             signals automatically.
           </p>
+        </div>
+
+        <div className={styles.presets} role="group" aria-label="Investor archetype starting points">
+          <span className={styles.presetsLabel}>Start from an archetype</span>
+          {THESIS_PRESETS.map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              className={styles.presetChip}
+              data-active={query === preset.text ? "true" : undefined}
+              onClick={() => setQuery(preset.text)}
+            >
+              {preset.label}
+            </button>
+          ))}
         </div>
 
         <div className={styles.briefCard}>
