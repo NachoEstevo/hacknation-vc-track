@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Route } from "next";
-import { ArrowUpRight, Crosshair, Database, Github, Globe, HelpCircle, UserCheck } from "lucide-react";
+import { ArrowUpRight, Crosshair, Database, Github, Globe, HelpCircle, UserCheck, Users } from "lucide-react";
 import type { ReactNode } from "react";
 import styles from "./person-card.module.css";
 import { Avatar } from "./avatar";
@@ -17,6 +17,7 @@ const SOURCE_BADGE: Record<
   registered: { icon: <UserCheck aria-hidden="true" />, color: "#25764F", background: "#E2F1E7", label: "Registered" },
   internal_base: { icon: <Database aria-hidden="true" />, color: "#77746B", background: "#EFEEE8", label: "Internal base" },
   prospect_base: { icon: <Database aria-hidden="true" />, color: "#25764F", background: "#E2F1E7", label: "undr base" },
+  hack_nation: { icon: <Users aria-hidden="true" />, color: "#5F51A0", background: "#EDEAF7", label: "HackNation" },
 };
 
 function hostnameOf(url: string): string {

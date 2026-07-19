@@ -19,6 +19,7 @@ import {
   SquarePen,
   UserCheck,
   UserPlus,
+  Users,
 } from "lucide-react";
 import {
   useEffect,
@@ -158,6 +159,7 @@ function candidatesFromMessages(messages: UIMessage[]): CandidateReport[] {
 
 const TOOL_ACTIVITY: Record<string, { icon: ReactNode; label: string; inputKey: string }> = {
   "tool-search_prospect_base": { icon: <Database aria-hidden="true" />, label: "undr base", inputKey: "query" },
+  "tool-search_hack_nation": { icon: <Users aria-hidden="true" />, label: "HackNation base", inputKey: "query" },
   "tool-web_search": { icon: <Globe aria-hidden="true" />, label: "Web search", inputKey: "query" },
   "tool-tavily_search": { icon: <Radar aria-hidden="true" />, label: "Deep search", inputKey: "query" },
   "tool-read_page": { icon: <BookOpen aria-hidden="true" />, label: "Reading page", inputKey: "urls" },
@@ -477,6 +479,10 @@ function HydratedSearchWorkspace() {
   useEffect(() => {
     if (status !== "ready") return;
     if (manualStopRef.current) return;
+    // HackNation mode sources from a fixed base: when the agent concludes
+    // under target it already told the user the base ran dry — nudging again
+    // cannot conjure more records.
+    if (searchSession?.dataSource === "hack_nation") return;
     if (autoContinuesRef.current >= Math.min(3, Math.max(2, Math.ceil(targetCandidates / 3)))) return;
     if (candidates.length >= targetCandidates) return;
     const last = messages[messages.length - 1];
@@ -604,6 +610,7 @@ function HydratedSearchWorkspace() {
   }
 
   const prospectCount = candidates.filter((candidate) => candidate.sourceKind === "prospect_base").length;
+  const hackNationCount = candidates.filter((candidate) => candidate.sourceKind === "hack_nation").length;
   const webCount = candidates.filter((candidate) => candidate.sourceKind === "web" || candidate.sourceKind === "github").length;
   const internalCount = candidates.filter((candidate) => candidate.sourceKind === "internal_base").length;
   const registeredCount = candidates.filter((candidate) => candidate.sourceKind === "registered").length;
@@ -764,6 +771,11 @@ function HydratedSearchWorkspace() {
           <span className={styles.summaryPill} data-tone="registered">
             <Database aria-hidden="true" /> undr base {prospectCount}
           </span>
+          {hackNationCount > 0 ? (
+            <span className={styles.summaryPill} data-tone="hack_nation">
+              <Users aria-hidden="true" /> HackNation {hackNationCount}
+            </span>
+          ) : null}
           <span className={styles.summaryPill} data-tone="external_unconfirmed">
             <Globe aria-hidden="true" /> Web {webCount}
           </span>

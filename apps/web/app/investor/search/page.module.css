@@ -652,6 +652,11 @@
   background: #e8edf5;
 }
 
+.summaryPill[data-tone="hack_nation"] {
+  color: #5f51a0;
+  background: #edeaf7;
+}
+
 .summarySpacer {
   flex: 1 1 auto;
 }
