@@ -154,9 +154,9 @@ function HydratedInvestorThesisForm({
         <div className={styles.intro}>
           <h1>What do you invest in?</h1>
           <p>
-            Tell undr in one or two plain sentences: the kind of founders you back,
+            Tell undr in one or two plain sentences what kind of founders you back,
             the sectors you like, and how early. undr remembers it and uses it to
-            rank every search you run — and to explain why each person matches you.
+            rank every search you run and to explain why each person matches you.
             You can change it anytime.
           </p>
         </div>
