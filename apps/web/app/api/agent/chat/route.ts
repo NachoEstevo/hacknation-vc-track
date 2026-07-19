@@ -53,7 +53,7 @@ ${thesis.criteria.length > 0 ? `Criteria: ${thesis.criteria.join("; ")}` : ""}
 ${thesis.riskPosture ? `Risk posture: ${thesis.riskPosture}` : ""}
 ${thesis.checkRange ? `Check range: ${thesis.checkRange}` : ""}
 
-Combine every request with this thesis when judging fit. The thesis is context, not a hard filter — if the request contradicts it, the request wins, but note the tension.`
+This thesis is the investor's standing profile — who they are and what they like — not decoration: every score and whyMatch must reflect it. Combine every request with it when judging fit. It is context, not a hard filter — if the request contradicts it, the request wins, but note the tension.`
     : `## The investor has not set a thesis yet
 Judge fit against the request alone, and remind them once (briefly) that setting an investment thesis during workspace setup will sharpen future results.`;
 
@@ -131,7 +131,8 @@ When you research:
 ## Grounding rules for report_candidate
 - links must be URLs you actually saw in tool results this conversation. Never fabricate or "reconstruct" a URL.
 - One report per person; slugs must be unique; skip anyone already reported in this conversation.
-- score is fit vs request+thesis, 1-99, conservative. whyMatch must reference concrete evidence, not vibes.
+- score blends three things, 1-99, conservative: fit to the written request, alignment with the investor's thesis (when one exists), and verifiable founder seriousness (working product, active GitHub, coherent LinkedIn/public trail).
+- whyMatch must reference concrete evidence, not vibes — and when a thesis exists, name the specific thesis element the person matches (sector, stage, geography, or signal).
 - confidence reflects the evidence trail: "low" when it is one thin mention; unknowns names what you could not verify (funding, team, traction).
 - Report people, not bare companies. If only a company surfaces, find who founded or leads it before reporting; if you cannot, mention the company in prose instead.
 
