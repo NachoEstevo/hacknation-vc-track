@@ -15,6 +15,11 @@ export function createInvestmentBriefSummary(
   const failedBriefs = artifact.failures.filter(({ stage }) =>
     stage === "draft_investment_brief" || stage === "validate_brief_citations").length;
   const briefsByCompany = new Map(artifact.briefs.map((brief) => [brief.companyId, brief]));
+  const tokenUsage = artifact.generationMetadata.reduce((total, record) => ({
+    inputTokens: total.inputTokens + (record.tokenUsage?.inputTokens ?? 0),
+    outputTokens: total.outputTokens + (record.tokenUsage?.outputTokens ?? 0),
+    totalTokens: total.totalTokens + (record.tokenUsage?.totalTokens ?? 0),
+  }), { inputTokens: 0, outputTokens: 0, totalTokens: 0 });
   return {
     status: artifact.status,
     generatedAt: artifact.generatedAt,
@@ -38,6 +43,12 @@ export function createInvestmentBriefSummary(
       githubPublic: evidence.filter(({ sourceType }) => sourceType === "github_public").length,
       publicVisibility: evidence.filter(({ visibility }) => visibility === "public").length,
       investorPrivateVisibility: evidence.filter(({ visibility }) => visibility === "investor_private").length,
+    },
+    generationMetadata: {
+      count: artifact.generationMetadata.length,
+      responseIdsPresent: artifact.generationMetadata.filter(({ responseId }) => responseId !== null).length,
+      tokenUsage,
+      records: artifact.generationMetadata,
     },
     topCompanies: artifact.ranking.slice(0, input.requestedBriefs).map(({ rank, evaluation }) => {
       const brief = briefsByCompany.get(evaluation.companyId);

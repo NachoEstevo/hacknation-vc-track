@@ -6,6 +6,7 @@ import {
   buildImportBatch,
   buildInvestmentBriefs,
   createInvestmentBriefSummary,
+  createGenerationMetadataCollector,
   createOpenAIResponse,
   draftInvestmentBrief,
   extractClaimCandidates,
@@ -248,10 +249,15 @@ export function createStructuredTasks(
   injectedCreateResponse?: OpenAIStructuredTaskDependencies["createResponse"],
 ): BuildInvestmentBriefsDependencies {
   let tasks: OpenAIStructuredTaskDependencies | undefined;
+  const metadata = createGenerationMetadataCollector();
   function configuredTasks(): OpenAIStructuredTaskDependencies {
     if (!tasks) {
       const config = loadOpenAIConfig(env);
-      tasks = { config, createResponse: injectedCreateResponse ?? createOpenAIResponse(config) };
+      tasks = {
+        config,
+        createResponse: injectedCreateResponse ?? createOpenAIResponse(config),
+        metadataSink: metadata.sink,
+      };
     }
     return tasks;
   }
@@ -259,6 +265,7 @@ export function createStructuredTasks(
     parseThesis: (query) => parseThesis(query, configuredTasks()),
     extractClaimCandidates: (bundle, thesis) => extractClaimCandidates(bundle, configuredTasks(), thesis),
     draftInvestmentBrief: (input) => draftInvestmentBrief(input, configuredTasks()),
+    getGenerationMetadata: metadata.snapshot,
   };
 }
 

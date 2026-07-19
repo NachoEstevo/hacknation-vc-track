@@ -25,7 +25,7 @@ function evaluation(
 }
 
 describe("rankCompanies", () => {
-  it("ranks by coverage-adjusted thesis fit, coverage, Product/Execution score, then stable company ID", () => {
+  it("uses the exact approved raw-fit, coverage, Product/Execution, stable-ID comparator", () => {
     const result = rankCompanies([
       evaluation("missing-fit", null, 100, 100),
       evaluation("lower-fit", 80, 100, 100),
@@ -36,36 +36,36 @@ describe("rankCompanies", () => {
     ]);
 
     expect(result.map(({ rank, evaluation: item }) => [rank, item.companyId])).toEqual([
-      [1, "lower-fit"],
-      [2, "company-a"],
-      [3, "company-b"],
-      [4, "lower-product"],
-      [5, "low-coverage"],
+      [1, "company-a"],
+      [2, "company-b"],
+      [3, "lower-product"],
+      [4, "low-coverage"],
+      [5, "lower-fit"],
       [6, "missing-fit"],
     ]);
   });
 
-  it("does not let perfect known fit with low coverage outrank stronger total support", () => {
+  it("ranks higher raw thesis fit first even when its coverage is lower", () => {
     const result = rankCompanies([
       evaluation("perfect-low-coverage", 100, 43.47826086956522, 100),
       evaluation("supported", 84.375, 69.56521739130434, 80),
     ]);
 
     expect(result.map(({ evaluation: item }) => item.companyId)).toEqual([
-      "supported",
       "perfect-low-coverage",
+      "supported",
     ]);
   });
 
-  it("prefers coverage when adjusted fit is equal", () => {
+  it("does not replace raw fit with coverage-adjusted fit", () => {
     const result = rankCompanies([
       evaluation("higher-fit", 100, 50, 100),
       evaluation("higher-coverage", 50, 100, 0),
     ]);
 
     expect(result.map(({ evaluation: item }) => item.companyId)).toEqual([
-      "higher-coverage",
       "higher-fit",
+      "higher-coverage",
     ]);
   });
 
@@ -89,13 +89,13 @@ describe("rankCompanies", () => {
     expect(evaluations.map((item) => item.companyId)).toEqual(["b", "a"]);
   });
 
-  it("never ranks a blocking thesis conflict above an investigable company", () => {
+  it("does not use recommendation tier as a hidden ranking input", () => {
     const blocked = { ...evaluation("blocked", 90, 90, 100), recommendation: "pass_for_thesis" as const };
     const investigable = { ...evaluation("investigable", 70, 70, 50), recommendation: "investigate" as const };
 
     expect(rankCompanies([blocked, investigable]).map(({ evaluation: item }) => item.companyId)).toEqual([
-      "investigable",
       "blocked",
+      "investigable",
     ]);
   });
 });

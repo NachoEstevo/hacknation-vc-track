@@ -3,6 +3,7 @@ import type { StableCompanySeed } from "../types.js";
 import { buildEvidenceIndex } from "./build-evidence-index.js";
 import { canonicalizeFundThesis } from "./canonicalize-thesis.js";
 import { evaluateCompany } from "./evaluate-company.js";
+import type { GenerationMetadataRecord } from "./generation-metadata.js";
 import { rankCompanies, type RankedCompany } from "./rank-companies.js";
 import type {
   ClaimCandidate,
@@ -35,6 +36,7 @@ export interface BuildInvestmentBriefsDependencies {
     evaluation: CompanyEvaluation;
   }): Promise<InvestmentBrief>;
   now?: () => Date;
+  getGenerationMetadata?: () => GenerationMetadataRecord[];
 }
 
 export interface InvestmentBriefFailure {
@@ -52,6 +54,7 @@ export interface InvestmentBriefRun {
   ranking: RankedCompany[];
   briefs: InvestmentBrief[];
   failures: InvestmentBriefFailure[];
+  generationMetadata: GenerationMetadataRecord[];
 }
 
 export class InvestmentBriefInputError extends Error {
@@ -129,6 +132,7 @@ export async function buildInvestmentBriefs(
       ranking: [],
       briefs: [],
       failures: [],
+      generationMetadata: dependencies.getGenerationMetadata?.() ?? [],
     };
   }
 
@@ -204,5 +208,6 @@ export async function buildInvestmentBriefs(
     ranking,
     briefs: briefs.filter((brief): brief is InvestmentBrief => brief !== undefined),
     failures,
+    generationMetadata: dependencies.getGenerationMetadata?.() ?? [],
   };
 }

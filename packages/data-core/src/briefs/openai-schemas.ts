@@ -43,9 +43,6 @@ export const claimCandidatesSchema = objectSchema({
       unit: { type: ["string", "null"] },
       claimKind: { type: "string", enum: ["observed_fact", "first_party_claim", "analysis"] },
       evidenceIndexes,
-      directness: { type: "string", enum: ["direct_measurement", "primary_document", "first_party_statement", "proxy_signal", "inference_only"] },
-      independentSupportingEvidenceIndexes: { type: "array", items: { type: "integer", minimum: 0 } },
-      hasConflict: { type: "boolean" },
     }),
   },
 });

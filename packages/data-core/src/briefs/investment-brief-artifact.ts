@@ -7,6 +7,7 @@ import type {
   InvestmentBrief,
 } from "./types.js";
 import type { RankedCompany } from "./rank-companies.js";
+import type { GenerationMetadataRecord } from "./generation-metadata.js";
 
 export interface ArtifactEvidenceBundle {
   companyId: string;
@@ -23,6 +24,7 @@ export interface InvestmentBriefArtifact {
   ranking: RankedCompany[];
   briefs: InvestmentBrief[];
   failures: InvestmentBriefFailure[];
+  generationMetadata: GenerationMetadataRecord[];
 }
 
 function artifactEvidence(record: EvidenceRecord): EvidenceRecord {
@@ -108,5 +110,6 @@ export function toInvestmentBriefArtifact(run: InvestmentBriefRun): InvestmentBr
       stage: failure.stage,
       message: safeFailureMessage(failure),
     })),
+    generationMetadata: run.generationMetadata.map((record) => structuredClone(record)),
   };
 }

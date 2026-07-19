@@ -173,16 +173,28 @@ describe("investment brief CLI confirmed run", () => {
     ].join("\n");
     let responseCalls = 0;
     const structuredTasks = createStructuredTasks(
-      { OPENAI_API_KEY: apiKeySentinel },
+      {
+        OPENAI_API_KEY: apiKeySentinel,
+        OPENAI_EXTRACTION_MODEL: "extract-live",
+        OPENAI_BRIEF_MODEL: "brief-live",
+      },
       async (request) => {
         responseCalls += 1;
         const format = request.text?.format;
         const name = format && "name" in format ? format.name : undefined;
-        if (name === "claim_candidates") return { output_text: JSON.stringify({ candidates: [] }) };
+        if (name === "claim_candidates") return {
+          id: `resp-${responseCalls}`,
+          model: "actual-extract-live",
+          usage: { input_tokens: 10, output_tokens: 2, total_tokens: 12 },
+          output_text: JSON.stringify({ candidates: [] }),
+        };
         if (name === "investment_brief" && String(request.input).includes("Beta")) {
           throw new Error(`provider failed with ${apiKeySentinel}`);
         }
         return {
+          id: `resp-${responseCalls}`,
+          model: "actual-brief-live",
+          usage: { input_tokens: 20, output_tokens: 5, total_tokens: 25 },
           output_text: JSON.stringify({
             summary: [], strengths: [], risks: [], evidenceGaps: [], diligenceQuestions: [],
           }),
@@ -235,6 +247,11 @@ describe("investment brief CLI confirmed run", () => {
     expect(serialized).not.toContain(rawCsvSentinel);
     expect(persisted).toMatchObject({
       status: "partial",
+      generationMetadata: [
+        { task: "extract_claim_candidates", requestedModel: "extract-live", model: "actual-extract-live" },
+        { task: "extract_claim_candidates", requestedModel: "extract-live", model: "actual-extract-live" },
+        { task: "draft_investment_brief", requestedModel: "brief-live", model: "actual-brief-live" },
+      ],
       failures: [{
         stage: "draft_investment_brief",
         message: "Investment brief drafting failed",
@@ -247,6 +264,11 @@ describe("investment brief CLI confirmed run", () => {
       evidenceCounts: { publicVisibility: 0, investorPrivateVisibility: 0 },
       failures: [{ stage: "draft_investment_brief" }],
       provenance: { rankingSeed: "companies.csv", publishedEvidence: "enrichment.json" },
+      generationMetadata: {
+        count: 3,
+        responseIdsPresent: 3,
+        tokenUsage: { inputTokens: 40, outputTokens: 9, totalTokens: 49 },
+      },
     });
     expect(summary.generatedAt).toBe(persisted.generatedAt);
     expect(summary.topCompanies).toHaveLength(2);

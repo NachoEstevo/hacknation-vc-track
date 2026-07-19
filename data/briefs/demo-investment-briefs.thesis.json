@@ -15,20 +15,11 @@
       ]
     },
     {
-      "criterionId": "industry-1-b2b",
-      "category": "market",
-      "label": "B2B business model",
-      "requirement": "required",
-      "weight": 3,
-      "operator": "equals",
-      "expectedValue": true
-    },
-    {
-      "criterionId": "industry-1-software",
+      "criterionId": "industry-1",
       "category": "industry",
-      "label": "Software product",
+      "label": "B2B software",
       "requirement": "required",
-      "weight": 2,
+      "weight": 5,
       "operator": "equals",
       "expectedValue": true
     },
@@ -60,6 +51,6 @@
       "expectedValue": true
     }
   ],
-  "generatedAt": "2026-07-18T23:52:52.458Z",
+  "generatedAt": "2026-07-19T01:19:51.176Z",
   "promptVersion": "briefs-v1"
 }

@@ -315,4 +315,28 @@ describe("evaluateCompany", () => {
 
     expect(result.criteria.map((item) => item.state)).toEqual(["match", "match", "match", "match", "match", "match"]);
   });
+
+  it.each([
+    ["We build B2B software for finance teams.", "match"],
+    ["We build a software platform for finance workflows.", "partial"],
+    ["We are a consumer service and do not build software.", "conflict"],
+    ["We provide finance advisory services.", "missing"],
+  ] as const)("executes a composite B2B software criterion from grounded evidence: %s", (excerpt, state) => {
+    const composite = criterion({
+      criterionId: "b2b-software",
+      category: "industry",
+      label: "B2B software",
+      weight: 1,
+      operator: "equals",
+      expectedValue: true,
+    });
+    const result = evaluateCompany(thesis([composite]), {
+      ...bundle,
+      normalizedCompany: { ...bundle.normalizedCompany, description: excerpt, primaryIndustry: "Technology" },
+      evidence: [{ ...bundle.evidence[0]!, evidenceId: "website", sourceType: "company_website", excerpt, visibility: "public" }],
+    }, []);
+
+    expect(result.criteria[0]).toMatchObject({ state, weight: 1 });
+    expect(result.evidenceCoverage).toBe(state === "missing" ? 0 : 100);
+  });
 });

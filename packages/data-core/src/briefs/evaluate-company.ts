@@ -1,5 +1,7 @@
 import { assessCompany } from "./assess-company.js";
+import { evaluateCompositeB2BSoftware, isCompositeB2BSoftwareCriterion } from "./evaluate-composite-criterion.js";
 import { recommendCompany } from "./recommend-company.js";
+import { softwareProductSignals } from "./software-product-evidence.js";
 import type { ClaimCandidate, CompanyEvaluation, CompanyEvidenceBundle, CriterionEvaluation, FundThesis, ThesisCriterion } from "./types.js";
 
 interface CandidateValue {
@@ -45,45 +47,8 @@ function isVisibleExecutionCriterion(criterion: ThesisCriterion): boolean {
     && /\bvisible execution\b/iu.test(criterion.label);
 }
 
-const SOFTWARE_OWNERSHIP_EVIDENCE = [
-  /\b(?:we|the company)\s+(?:develops?|builds?|owns?|offers?|provides?|operates?|creates?)\b.{0,80}\b(?:saas|software|api|app|application|erp)\b/iu,
-  /\bour\s+(?:[\p{L}\d-]+\s+){0,3}(?:saas|software|api|app|application|erp)\b/iu,
-];
-const SOFTWARE_PRODUCT_EVIDENCE = [
-  /\b(?:saas|software)\s+(?:product|platform|application|app|suite|tool|solution|system)\b/iu,
-  /\b(?:mobile[- ]first\s+)?erp\s+(?:suite|platform|system|product)\b/iu,
-  /\bapi\s+(?:product|platform|service|solution|access)\b/iu,
-  /\b(?:white[- ]label|developer|public)\s+api\b/iu,
-  /\b(?:mobile|web|desktop)\s+app(?:lication)?\b/iu,
-];
-const SOFTWARE_NEGATIVE_EVIDENCE = [
-  /\bnot\s+(?:a|an)\s+(?:tech|technology|software)\s+company\b/iu,
-  /\bdo(?:es)?\s+not\s+(?:develop|build|own|offer|provide|sell)\s+(?:any\s+)?(?:proprietary\s+)?(?:software|saas|api|app|application|erp)\b/iu,
-  /\bno\s+(?:proprietary|in[- ]house|owned)\s+(?:software|product|platform|api|app|application|erp)\b/iu,
-];
-
-function stringValues(value: unknown): string[] {
-  if (typeof value === "string") return [value];
-  if (Array.isArray(value)) return value.flatMap(stringValues);
-  if (value && typeof value === "object") return Object.values(value as Record<string, unknown>).flatMap(stringValues);
-  return [];
-}
-
 function softwareProductValues(bundle: CompanyEvidenceBundle): CandidateValue[] {
-  const positiveEvidenceIds: string[] = [];
-  const negativeEvidenceIds: string[] = [];
-  for (const evidence of bundle.evidence) {
-    const text = [evidence.excerpt ?? "", ...stringValues(evidence.payload)].join(" ");
-    if (SOFTWARE_NEGATIVE_EVIDENCE.some((pattern) => pattern.test(text))) negativeEvidenceIds.push(evidence.evidenceId);
-    else {
-      const ownershipEvidence = SOFTWARE_OWNERSHIP_EVIDENCE.some((pattern) => pattern.test(text));
-      const thirdPartyMarketplace = /\b(?:marketplace|community|directory)\b/iu.test(text)
-        && /\b(?:third[- ]party|partner|vendor)\b/iu.test(text);
-      if (ownershipEvidence || (!thirdPartyMarketplace && SOFTWARE_PRODUCT_EVIDENCE.some((pattern) => pattern.test(text)))) {
-        positiveEvidenceIds.push(evidence.evidenceId);
-      }
-    }
-  }
+  const { positiveEvidenceIds, negativeEvidenceIds } = softwareProductSignals(bundle);
   if (negativeEvidenceIds.length > 0) return [{ value: false, evidenceIds: negativeEvidenceIds }];
   return positiveEvidenceIds.length > 0 ? [{ value: true, evidenceIds: positiveEvidenceIds }] : [];
 }
@@ -165,6 +130,7 @@ function comparable(operator: ThesisCriterion["operator"], expectedValue: Thesis
 }
 
 function evaluateCriterion(bundle: CompanyEvidenceBundle, criterion: ThesisCriterion, claims: ClaimCandidate[]): CriterionEvaluation {
+  if (isCompositeB2BSoftwareCriterion(criterion)) return evaluateCompositeB2BSoftware(bundle, criterion);
   const sizeEvaluation = companySizeEvaluation(bundle, criterion);
   if (sizeEvaluation) return sizeEvaluation;
   const normalizedCandidates = fieldValues(bundle, criterion);

@@ -121,7 +121,7 @@ describe("structured OpenAI tasks", () => {
     expect(result.criteria[0]!.expectedValue).toEqual(["US", "GB"]);
   });
 
-  it("decomposes composite B2B software intent into executable claim criteria", async () => {
+  it("preserves a composite B2B software criterion as one executable criterion", async () => {
     const rawThesis = {
       ...thesis,
       criteria: [{
@@ -137,22 +137,160 @@ describe("structured OpenAI tasks", () => {
 
     const result = await parseThesis(rawThesis.originalQuery, fake);
 
-    expect(result.criteria).toMatchObject([
-      { criterionId: "industry-1-b2b", category: "market", operator: "equals", expectedValue: true, weight: 3 },
-      { criterionId: "industry-1-software", category: "industry", operator: "equals", expectedValue: true, weight: 2 },
-    ]);
+    expect(result.criteria).toEqual([expect.objectContaining({
+      criterionId: "industry-1",
+      category: "industry",
+      operator: "equals",
+      expectedValue: true,
+      weight: 5,
+    })]);
   });
 
-  it("derives claim support from evidence rather than model hasConflict", async () => {
-    const fake = dependencies([JSON.stringify({ candidates: [{
-      claimId: "claim-1", subject: "Acme", predicate: "industry-1-b2b", value: true, unit: null,
-      claimKind: "observed_fact", evidenceIndexes: [0], directness: "direct_measurement",
-      independentSupportingEvidenceIndexes: [], hasConflict: true,
+  it("preserves weight one and total criterion weight when canonicalizing a composite", async () => {
+    const rawThesis = {
+      ...thesis,
+      criteria: [{ ...thesis.criteria[0]!, criterionId: "composite", label: "B2B software", weight: 1, expectedValue: "B2B software" }],
+    };
+    const fake = dependencies([JSON.stringify(rawThesis)]);
+
+    const result = await parseThesis(rawThesis.originalQuery, fake);
+
+    expect(result.criteria).toHaveLength(1);
+    expect(result.criteria.reduce((total, criterion) => total + criterion.weight, 0)).toBe(1);
+  });
+
+  it("stamps a generic model label as the executable B2B software composite", async () => {
+    const rawThesis = {
+      ...thesis,
+      criteria: [{
+        ...thesis.criteria[0]!,
+        criterionId: "composite",
+        label: "Business model and sector",
+        expectedValue: "B2B software",
+      }],
+    };
+    const fake = dependencies([JSON.stringify(rawThesis)]);
+
+    const result = await parseThesis(rawThesis.originalQuery, fake);
+
+    expect(result.criteria[0]).toMatchObject({
+      criterionId: "composite",
+      label: "B2B software",
+      expectedValue: true,
+    });
+  });
+
+  it("ignores model-authored trust controls for the same grounded evidence", async () => {
+    const candidate = {
+      claimId: "claim-1", subject: "Acme", predicate: "active teams", value: 10, unit: null,
+      claimKind: "observed_fact", evidenceIndexes: [0],
+    };
+    const aggressive = dependencies([JSON.stringify({ candidates: [{
+      ...candidate, directness: "direct_measurement", independentSupportingEvidenceIndexes: [0], hasConflict: false,
+    }] })]);
+    const conservative = dependencies([JSON.stringify({ candidates: [{
+      ...candidate, directness: "inference_only", independentSupportingEvidenceIndexes: [], hasConflict: true,
     }] })]);
 
-    const claims = await extractClaimCandidates(bundle, fake, thesis);
+    const [first, second] = await Promise.all([
+      extractClaimCandidates(bundle, aggressive, thesis),
+      extractClaimCandidates(bundle, conservative, thesis),
+    ]);
 
-    expect(claims[0]).toMatchObject({ value: true, state: "supported", trust: { state: "supported" } });
+    expect(first).toEqual(second);
+    expect(first[0]).toMatchObject({
+      evidenceIds: ["evidence-website"],
+      trust: { directness: 18, corroboration: 0, state: "unverified" },
+      state: "unverified",
+    });
+  });
+
+  it("does not retain unrelated cited evidence as claim grounding", async () => {
+    const fake = dependencies([JSON.stringify({ candidates: [{
+      claimId: "claim-1", subject: "Acme", predicate: "annual revenue", value: 5000000, unit: "USD",
+      claimKind: "observed_fact", evidenceIndexes: [0], directness: "direct_measurement",
+      independentSupportingEvidenceIndexes: [0], hasConflict: false,
+    }] })]);
+
+    await expect(extractClaimCandidates(bundle, fake, thesis)).resolves.toEqual([]);
+  });
+
+  it("resolves an opaque criterion ID through the trusted thesis before grounding", async () => {
+    const fake = dependencies([JSON.stringify({ candidates: [{
+      claimId: "claim-1", subject: "Acme", predicate: "industry", value: true, unit: null,
+      claimKind: "observed_fact", evidenceIndexes: [0],
+    }] })]);
+
+    await expect(extractClaimCandidates(bundle, fake, thesis)).resolves.toEqual([]);
+  });
+
+  it("uses trusted current time instead of the newest evidence timestamp for recency", async () => {
+    const staleBundle = {
+      ...bundle,
+      evidence: [{ ...bundle.evidence[0]!, capturedAt: "2024-01-01T00:00:00.000Z" }],
+    };
+    const fake = dependencies([JSON.stringify({ candidates: [{
+      claimId: "claim-1", subject: "Acme", predicate: "active teams", value: 10, unit: null,
+      claimKind: "observed_fact", evidenceIndexes: [0], directness: "direct_measurement",
+      independentSupportingEvidenceIndexes: [], hasConflict: false,
+    }] })]);
+
+    const claims = await extractClaimCandidates(staleBundle, fake, thesis);
+
+    expect(claims[0]!.trust.recency).toBe(0);
+  });
+
+  it("emits safe provider generation metadata without changing the task return value", async () => {
+    const records: unknown[] = [];
+    const fake = dependencies([]);
+    fake.config = loadOpenAIConfig({
+      OPENAI_API_KEY: "test",
+      OPENAI_EXTRACTION_MODEL: "requested-extract-model",
+    });
+    fake.metadataSink = (record) => { records.push(record); };
+    fake.createResponse = async (request) => {
+      fake.requests.push(request);
+      return {
+        id: "resp_claim_123",
+        model: "actual-extract-model-2026-07-18",
+        usage: { input_tokens: 120, output_tokens: 30, total_tokens: 150 },
+        output_text: JSON.stringify({ candidates: [] }),
+      };
+    };
+
+    await expect(extractClaimCandidates(bundle, fake, thesis)).resolves.toEqual([]);
+    expect(records).toEqual([{
+      task: "extract_claim_candidates",
+      companyId: "acme",
+      thesisId: "thesis-1",
+      model: "actual-extract-model-2026-07-18",
+      requestedModel: "requested-extract-model",
+      responseId: "resp_claim_123",
+      tokenUsage: { inputTokens: 120, outputTokens: 30, totalTokens: 150 },
+      promptVersion: "briefs-v1",
+      generatedAt: "2026-07-18T00:00:00.000Z",
+    }]);
+    expect(JSON.stringify(records)).not.toContain("test");
+    expect(JSON.stringify(records)).not.toContain("PROMPT_VERSION:");
+  });
+
+  it("derives contradiction from grounded positive and negative evidence, not model hasConflict", async () => {
+    const conflictedBundle = {
+      ...bundle,
+      evidence: [
+        { ...bundle.evidence[0]!, excerpt: "Acme is B2B software for finance teams." },
+        { ...bundle.evidence[0]!, evidenceId: "evidence-negative", sourceUrl: "https://acme.test/about", excerpt: "Acme is not B2B software." },
+      ],
+    };
+    const fake = dependencies([JSON.stringify({ candidates: [{
+      claimId: "claim-1", subject: "Acme", predicate: "B2B software", value: true, unit: null,
+      claimKind: "observed_fact", evidenceIndexes: [0], directness: "inference_only",
+      independentSupportingEvidenceIndexes: [], hasConflict: false,
+    }] })]);
+
+    const claims = await extractClaimCandidates(conflictedBundle, fake, thesis);
+
+    expect(claims[0]).toMatchObject({ state: "conflicted", trust: { state: "conflicted" } });
   });
 
   it("treats the thesis query as source text without evidence-index instructions", async () => {
@@ -170,14 +308,13 @@ describe("structured OpenAI tasks", () => {
     const fake = dependencies([
       "{not json}",
       JSON.stringify({ candidates: [{ claimId: "claim-1", subject: "Acme", predicate: "active teams", value: 10, unit: null,
-        claimKind: "observed_fact", evidenceIndexes: [0], directness: "direct_measurement",
-        independentSupportingEvidenceIndexes: [], hasConflict: false }] }),
+        claimKind: "observed_fact", evidenceIndexes: [0] }] }),
     ]);
 
     const claims = await extractClaimCandidates(bundle, fake);
 
     expect(fake.requests).toHaveLength(2);
-    expect(claims).toMatchObject([{ evidenceIds: ["evidence-website"], trust: { total: 70, state: "supported" }, state: "supported" }]);
+    expect(claims).toMatchObject([{ evidenceIds: ["evidence-website"], trust: { total: 63, state: "unverified" }, state: "unverified" }]);
   });
 
   it("requests claim candidates through a strict root object schema", async () => {
@@ -193,6 +330,17 @@ describe("structured OpenAI tasks", () => {
         properties: { candidates: { type: "array" } },
       } } },
     });
+  });
+
+  it("does not ask the model for trust, independence, or conflict controls", async () => {
+    const fake = dependencies([JSON.stringify({ candidates: [] })]);
+
+    await extractClaimCandidates(bundle, fake);
+    const schema = JSON.stringify((fake.requests[0] as { text: { format: { schema: unknown } } }).text.format.schema);
+
+    expect(schema).not.toContain("directness");
+    expect(schema).not.toContain("independentSupportingEvidenceIndexes");
+    expect(schema).not.toContain("hasConflict");
   });
 
   it("validates the strict claim root before unwrapping candidates", async () => {

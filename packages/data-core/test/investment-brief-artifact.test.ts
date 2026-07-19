@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { toInvestmentBriefArtifact } from "../src/briefs/investment-brief-artifact.js";
+import { createInvestmentBriefSummary } from "../src/briefs/investment-brief-summary.js";
 import { buildInvestmentBriefs } from "../src/briefs/build-investment-briefs.js";
 import type { FundThesis } from "../src/briefs/types.js";
 import type { StableCompanySeed } from "../src/types.js";
@@ -110,6 +111,45 @@ describe("toInvestmentBriefArtifact", () => {
     }];
 
     expect(() => toInvestmentBriefArtifact(run)).toThrow("private or unknown evidence");
+  });
+
+  it("persists generation metadata in the public artifact and mechanical summary", async () => {
+    const metadata = [{
+      task: "draft_investment_brief" as const,
+      companyId: "company-00",
+      thesisId: thesis.thesisId,
+      model: "actual-brief-model",
+      requestedModel: "configured-brief-model",
+      responseId: "resp_brief_123",
+      tokenUsage: { inputTokens: 50, outputTokens: 20, totalTokens: 70 },
+      promptVersion: "briefs-v1",
+      generatedAt,
+    }];
+    const run = await buildInvestmentBriefs({
+      companies: [company], enrichments: [], thesis, thesisConfirmed: true, top: 1,
+    }, {
+      now: () => new Date(generatedAt),
+      parseThesis: async () => thesis,
+      extractClaimCandidates: async () => [],
+      draftInvestmentBrief: async ({ bundle, evaluation }) => briefFor(bundle.companyId, evaluation),
+      getGenerationMetadata: () => metadata,
+    });
+
+    const artifact = toInvestmentBriefArtifact(run);
+    const summary = createInvestmentBriefSummary(artifact, {
+      modelNames: { extraction: "configured-extract-model", brief: "configured-brief-model" },
+      requestedBriefs: 1,
+      rankingSeed: "companies.csv",
+      publishedEvidence: "enrichment.json",
+    });
+
+    expect(artifact.generationMetadata).toEqual(metadata);
+    expect(summary.generationMetadata).toMatchObject({
+      count: 1,
+      responseIdsPresent: 1,
+      tokenUsage: { inputTokens: 50, outputTokens: 20, totalTokens: 70 },
+      records: metadata,
+    });
   });
 });
 

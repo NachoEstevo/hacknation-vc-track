@@ -24,10 +24,10 @@ The reviewed machine-readable thesis for the live demo. The proposed thesis was 
 
 ## `briefs/demo-investment-briefs.json`
 
-The 2026-07-18 live analysis of the exact 50-company source snapshot and public-web enrichment. It contains 50 deterministic evaluations and rankings plus two model-drafted, mechanically citation-valid briefs; one top-three draft failure remains explicit. The published artifact contains only public website/GitHub evidence and sanitized evidence references. It contains no Clay evidence payloads, raw CSV rows, Rely data, founder-private evidence, or payment evidence.
+The live analysis generated at `2026-07-19T01:20:12.171Z` from the exact 50-company source snapshot and public-web enrichment. It contains 50 deterministic evaluations and rankings plus two model-drafted, mechanically citation-valid briefs; one top-three draft failure remains explicit. Ranking uses raw Thesis Fit, Evidence Coverage, Product/Execution score, and stable company ID. The artifact also stores 53 safe provider metadata records. It contains only public website/GitHub evidence and sanitized evidence references: no Clay payloads, raw CSV rows, Rely data, founder-private evidence, payment evidence, API key, or raw prompt.
 
 ## `briefs/demo-investment-briefs-summary.json`
 
-A CLI-generated summary from the same run with actual model names, timestamps, counts, selected company identities, failures, and provenance. The 50 committed Clay discovery records are used internally for normalization and ranking but never published; the artifact exposes 35 website records and one GitHub record: 36 public records and 0 private records.
+A CLI-generated summary from the same run with actual model names, trusted timestamps, counts, selected company identities, failures, provenance, response-ID completeness, and aggregate token usage. The 50 committed Clay discovery records are used internally for normalization and ranking but never published; the artifact exposes 35 website records and one GitHub record: 36 public records and 0 private records.
 
 See `docs/investment-brief-engine.md` for commands, scoring, retry behavior, and interpretation limits.

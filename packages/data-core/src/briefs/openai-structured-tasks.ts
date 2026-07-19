@@ -1,10 +1,12 @@
 import OpenAI from "openai";
 import type { ResponseCreateParamsNonStreaming } from "openai/resources/responses/responses.js";
-import { calculateClaimTrust, type ClaimDirectness } from "./calculate-claim-trust.js";
 import { containsEvaluationMetadata } from "./brief-prose-policy.js";
 import { canonicalizeFundThesis } from "./canonicalize-thesis.js";
+import type { GenerationMetadataSink } from "./generation-metadata.js";
 import type { OpenAIConfig } from "./openai-config.js";
 import { claimCandidatesSchema, fundThesisSchema, investmentBriefSchema } from "./openai-schemas.js";
+import { recordGenerationMetadata } from "./record-generation-metadata.js";
+import { parseClaimCandidates } from "./parse-claim-candidates.js";
 import { validateBriefCitations } from "./validate-brief-citations.js";
 import { validateFundThesis } from "./validate-thesis.js";
 import type {
@@ -20,6 +22,9 @@ const PROMPT_VERSION = "briefs-v1";
 const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504]);
 
 export interface OpenAIResponseResult {
+  id?: string;
+  model?: string;
+  usage?: { input_tokens?: number; output_tokens?: number; total_tokens?: number };
   output_text: string;
   output?: Array<{ type?: string; content?: Array<{ type?: string }> }>;
 }
@@ -28,6 +33,7 @@ export interface OpenAIStructuredTaskDependencies {
   config: OpenAIConfig;
   createResponse(request: ResponseCreateParamsNonStreaming): Promise<OpenAIResponseResult>;
   now?: () => Date;
+  metadataSink?: GenerationMetadataSink;
 }
 
 export type OpenAIClientFactory = (options: { apiKey: string; maxRetries: 0 }) => {
@@ -98,6 +104,7 @@ async function requestStructured<T>(
   request: ResponseCreateParamsNonStreaming,
   dependencies: OpenAIStructuredTaskDependencies,
   parse: (value: unknown) => T,
+  context: { companyId: string | null; thesisId: string | null },
 ): Promise<T> {
   let schemaFailures = 0;
   let transientFailures = 0;
@@ -115,6 +122,16 @@ async function requestStructured<T>(
       }
       throw new OpenAIStructuredTaskError(task, "request_failed", error);
     }
+
+    recordGenerationMetadata(
+      dependencies.metadataSink,
+      task,
+      request,
+      response,
+      context,
+      (dependencies.now ?? (() => new Date()))().toISOString(),
+      PROMPT_VERSION,
+    );
 
     if (hasRefusal(response)) throw new OpenAIStructuredTaskError(task, "refusal");
     try {
@@ -147,10 +164,6 @@ function assertBundleIdentity(bundle: CompanyEvidenceBundle, task: OpenAIStructu
   }
 }
 
-function evaluationTime(bundle: CompanyEvidenceBundle): string {
-  return bundle.evidence.reduce((latest, record) => Date.parse(record.capturedAt) > Date.parse(latest) ? record.capturedAt : latest, "1970-01-01T00:00:00.000Z");
-}
-
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -160,39 +173,6 @@ function validIndexes(value: unknown, records: CompanyEvidenceBundle["evidence"]
     throw new Error("Invalid evidence indexes");
   }
   return [...new Set(value as number[])];
-}
-
-function claimCandidates(value: unknown, bundle: CompanyEvidenceBundle): ClaimCandidate[] {
-  if (!isRecord(value) || Object.keys(value).length !== 1 || !Array.isArray(value.candidates)) {
-    throw new Error("Claim candidates must be a strict object containing candidates");
-  }
-  const ids = new Set<string>();
-  return value.candidates.map((candidate) => {
-    if (!isRecord(candidate) || typeof candidate.claimId !== "string" || candidate.claimId.trim() === "" || ids.has(candidate.claimId)
-      || typeof candidate.subject !== "string" || typeof candidate.predicate !== "string"
-      || !["string", "number", "boolean"].includes(typeof candidate.value)
-      || (candidate.unit !== null && typeof candidate.unit !== "string")
-      || !["observed_fact", "first_party_claim", "analysis"].includes(candidate.claimKind as string)
-      || !["direct_measurement", "primary_document", "first_party_statement", "proxy_signal", "inference_only"].includes(candidate.directness as string)
-      || typeof candidate.hasConflict !== "boolean") throw new Error("Invalid claim candidate");
-    ids.add(candidate.claimId);
-    const indexes = validIndexes(candidate.evidenceIndexes, bundle.evidence);
-    if (indexes.length === 0) throw new Error("Claims require evidence");
-    const supportingIndexes = validIndexes(candidate.independentSupportingEvidenceIndexes, bundle.evidence);
-    const evidence = indexes.map((index) => bundle.evidence[index]!);
-    const trust = calculateClaimTrust({
-      evidence,
-      directness: candidate.directness as ClaimDirectness,
-      independentSupportingEvidenceIds: supportingIndexes.map((index) => bundle.evidence[index]!.evidenceId),
-      evaluatedAt: evaluationTime(bundle),
-      hasConflict: false,
-    });
-    return {
-      claimId: candidate.claimId, companyId: bundle.companyId, subject: candidate.subject, predicate: candidate.predicate,
-      value: candidate.value as string | number | boolean, unit: candidate.unit as string | null,
-      claimKind: candidate.claimKind as ClaimCandidate["claimKind"], evidenceIds: indexes.map((index) => bundle.evidence[index]!.evidenceId), trust, state: trust.state,
-    };
-  });
 }
 
 function citedStatements(value: unknown, bundle: CompanyEvidenceBundle): CitedStatement[] {
@@ -240,7 +220,7 @@ export async function parseThesis(query: string, dependencies: OpenAIStructuredT
     reasoning: { effort: dependencies.config.extractionReasoning },
     input: `${thesisInstructions()}\n\nQUERY:\n${query}`,
     text: { format: { type: "json_schema", name: "fund_thesis", strict: true, schema: fundThesisSchema } },
-  }, dependencies, validateFundThesis));
+  }, dependencies, validateFundThesis, { companyId: null, thesisId: null }));
   return {
     ...thesis,
     generatedAt: (dependencies.now ?? (() => new Date()))().toISOString(),
@@ -250,12 +230,16 @@ export async function parseThesis(query: string, dependencies: OpenAIStructuredT
 
 export async function extractClaimCandidates(bundle: CompanyEvidenceBundle, dependencies: OpenAIStructuredTaskDependencies, thesis?: FundThesis): Promise<ClaimCandidate[]> {
   assertBundleIdentity(bundle, "extract_claim_candidates");
+  const evaluatedAt = (dependencies.now ?? (() => new Date()))().toISOString();
   return requestStructured("extract_claim_candidates", {
     model: dependencies.config.extractionModel,
     reasoning: { effort: dependencies.config.extractionReasoning },
     input: `${stableInstructions("Extract evidence-backed claim candidates for one company.")}\nFor criterion-backed claims, predicate must exactly equal a supplied criterionId.\n\nCRITERIA:\n${JSON.stringify(thesis?.criteria ?? [])}\n\nEVIDENCE:\n${JSON.stringify(evidenceInput(bundle))}`,
     text: { format: { type: "json_schema", name: "claim_candidates", strict: true, schema: claimCandidatesSchema } },
-  }, dependencies, (value) => claimCandidates(value, bundle));
+  }, dependencies, (value) => parseClaimCandidates(value, bundle, evaluatedAt, thesis), {
+    companyId: bundle.companyId,
+    thesisId: thesis?.thesisId ?? null,
+  });
 }
 
 export async function draftInvestmentBrief(input: DraftInvestmentBriefInput, dependencies: OpenAIStructuredTaskDependencies): Promise<InvestmentBrief> {
@@ -268,7 +252,10 @@ export async function draftInvestmentBrief(input: DraftInvestmentBriefInput, dep
     reasoning: { effort: dependencies.config.briefReasoning },
     input: `${stableInstructions("Draft a concise investment brief without changing the deterministic evaluation.")}\n\nTHESIS:\n${JSON.stringify(input.thesis)}\n\nEVALUATION:\n${JSON.stringify(input.evaluation)}\n\nEVIDENCE:\n${JSON.stringify(evidenceInput(input.bundle))}`,
     text: { format: { type: "json_schema", name: "investment_brief", strict: true, schema: investmentBriefSchema } },
-  }, dependencies, (value) => briefDraft(value, input.bundle));
+  }, dependencies, (value) => briefDraft(value, input.bundle), {
+    companyId: input.bundle.companyId,
+    thesisId: input.thesis.thesisId,
+  });
   const brief: InvestmentBrief = {
     companyId: input.evaluation.companyId, thesisId: input.thesis.thesisId, recommendation: input.evaluation.recommendation,
     thesisFit: input.evaluation.thesisFit, evidenceCoverage: input.evaluation.evidenceCoverage, axes: input.evaluation.axes,

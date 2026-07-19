@@ -249,6 +249,25 @@ describe("buildInvestmentBriefs", () => {
     expect(result.thesis).toEqual(thesis);
     expect(calls.parsed).toBe(0);
   });
+
+  it("mechanically carries collected generation metadata into the run", async () => {
+    const { input, dependencies } = setup(1);
+    dependencies.getGenerationMetadata = () => [{
+      task: "extract_claim_candidates",
+      companyId: "company-00",
+      thesisId: thesis.thesisId,
+      model: "actual-extract-model",
+      requestedModel: "configured-extract-model",
+      responseId: "resp_123",
+      tokenUsage: { inputTokens: 10, outputTokens: 2, totalTokens: 12 },
+      promptVersion: "briefs-v1",
+      generatedAt,
+    }];
+
+    const result = await buildInvestmentBriefs(input, dependencies);
+
+    expect(result.generationMetadata).toEqual(dependencies.getGenerationMetadata());
+  });
 });
 
 describe("investment brief CLI", () => {

@@ -27,3 +27,5 @@ export * from "./briefs/rank-companies.js";
 export * from "./briefs/build-investment-briefs.js";
 export * from "./briefs/investment-brief-artifact.js";
 export * from "./briefs/investment-brief-summary.js";
+export * from "./briefs/generation-metadata.js";
+export * from "./briefs/ground-claim-evidence.js";
