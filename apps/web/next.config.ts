@@ -16,8 +16,12 @@ const nextConfig: NextConfig = {
     "/api/agent/chat": [
       "../../data/source/clay-companies.csv",
       "../../data/source/hack-nation-founder-research.json",
+      "../../data/source/hack-nation-startup-research-candidates.json",
     ],
-    "/api/agent/profile": ["../../data/source/hack-nation-founder-research.json"],
+    "/api/agent/profile": [
+      "../../data/source/hack-nation-founder-research.json",
+      "../../data/source/hack-nation-startup-research-candidates.json",
+    ],
   },
   transpilePackages: ["@hacknation/data-core"],
   typedRoutes: true,

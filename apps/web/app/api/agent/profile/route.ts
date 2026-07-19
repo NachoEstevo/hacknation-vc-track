@@ -13,6 +13,7 @@ import {
 import { CandidateReportSchema, ThesisContextSchema } from "@/lib/ai/sourcing-schema";
 import { searchGitHubRepositories } from "@/lib/connectors/github/github-search.server";
 import { findProspectByName } from "@/lib/catalog/hack-nation-prospects.server";
+import { findHackNationPersonByName } from "@/lib/catalog/hack-nation-people.server";
 import { isTavilyEnabled, tavilyExtract, tavilySearch } from "@/lib/connectors/tavily/tavily.server";
 import { requireUserInProduction } from "@/lib/supabase/api-auth";
 
@@ -23,7 +24,7 @@ export const maxDuration = 300;
 const PROFILE_SYSTEM = `You are undr's diligence writer. You produce a grounded dossier on ONE person for an investor, researching them live on the web. You never invent facts or URLs; everything you state is either cited from a tool result this conversation, provided in the candidate seed, or explicitly labeled as unverified.
 
 Procedure:
-1. Research first, silently: if the candidate seed's sourceKind is "prospect_base", call lookup_prospect FIRST and treat the returned record (tier, outreach score, evidence status, validation summary, traction, risks) as your base evidence — then research the web only for what the record lacks or leaves unverified. Otherwise run several focused web searches on the person (name + company, name + role, funding announcements, talks/podcasts, GitHub/LinkedIn presence). Use search_github when they are technical. Follow the evidence links given in the seed. Do not narrate the searching.
+1. Research first, silently: if the candidate seed's sourceKind is "prospect_base" or "hack_nation", call lookup_prospect FIRST and treat the returned record as your base evidence — then research the web only for what the record lacks or leaves unverified. Otherwise run several focused web searches on the person (name + company, name + role, funding announcements, talks/podcasts, GitHub/LinkedIn presence). Use search_github when they are technical. Follow the evidence links given in the seed. Do not narrate the searching.
 2. Then write the dossier as one clean markdown document, in the structure below. Reply in the language of the investor's original request; keep proper nouns as-is.
 
 Structure (use exactly these ### headings, translated to the reply language):
@@ -96,11 +97,14 @@ export async function POST(request: NextRequest) {
   const tools: Record<string, unknown> = {
     lookup_prospect: defineTool({
       description:
-        "Fetch this person's full record from undr's curated prospect base (tier, outreach score, evidence status, profiles). Call it FIRST when the candidate seed's sourceKind is 'prospect_base'.",
+        "Fetch this person's full record from undr's bases (curated prospect base and the scraped HackNation founder base). Call it FIRST when the candidate seed's sourceKind is 'prospect_base' or 'hack_nation'.",
       inputSchema: z.object({ name: z.string().describe("The person's full name") }),
       execute: async ({ name }: { name: string }) => {
         const record = await findProspectByName(name);
-        return record ? { found: true, record } : { found: false, note: "No base record under that name." };
+        if (record) return { found: true, base: "prospect_base", record };
+        const person = await findHackNationPersonByName(name);
+        if (person) return { found: true, base: "hack_nation", record: person };
+        return { found: false, note: "No base record under that name." };
       },
     }),
     search_github: defineTool({
