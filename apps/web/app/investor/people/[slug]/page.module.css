@@ -342,3 +342,59 @@
     align-items: flex-start;
   }
 }
+
+/* Print (Export PDF): the profile flattens into a clean ink-on-white
+   document — cards lose their boxes, buttons and live-research chrome
+   disappear, and page breaks avoid splitting headings from their text. */
+
+@media print {
+  .page {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    gap: 14px;
+  }
+
+  .topBar,
+  .activityList,
+  .errorRow,
+  .generating {
+    display: none;
+  }
+
+  .hero {
+    padding: 0 0 16px;
+    border: 0;
+    border-bottom: 2px solid var(--ink);
+    border-radius: 0;
+    background: none;
+  }
+
+  .hero > :first-child {
+    display: none;
+  }
+
+  .dossier {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+
+  .dossier .dossierBody h3 {
+    break-after: avoid;
+  }
+
+  .dossier .dossierBody li {
+    break-inside: avoid;
+  }
+
+  .dossier .dossierBody p {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .evidenceChip {
+    border-color: var(--border-strong);
+  }
+}
