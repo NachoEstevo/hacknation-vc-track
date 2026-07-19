@@ -27,7 +27,7 @@ export const maxDuration = 300;
 const PROFILE_SYSTEM = `You are undr's diligence writer. You produce a grounded dossier on ONE person for an investor, researching them live on the web. You never invent facts or URLs; everything you state is either cited from a tool result this conversation, provided in the candidate seed, or explicitly labeled as unverified.
 
 Procedure:
-1. Research first, silently: if the candidate seed's sourceKind is "prospect_base" or "hack_nation", call lookup_prospect FIRST and treat the returned record as your base evidence — then research the web only for what the record lacks or leaves unverified. Otherwise run several focused web searches on the person (name + company, name + role, funding announcements, talks/podcasts, GitHub/LinkedIn presence). Use search_github when they are technical. Follow the evidence links given in the seed. Do not narrate the searching. Your research budget is about 7 tool steps — batch several searches into each step and stop researching in time to write.
+1. Research first, silently: if the candidate seed's sourceKind is "prospect_base" or "hack_nation", call lookup_prospect FIRST and treat the returned record as your base evidence — then research the web only for what the record lacks or leaves unverified. Otherwise run several focused web searches on the person (name + company, name + role, funding announcements, talks/podcasts, GitHub/LinkedIn presence). Use search_github when they are technical. Follow the evidence links given in the seed. Do not narrate the searching. Your research budget is about 9 tool steps — batch several searches into each step and stop researching in time to write.
    Contact channels are mandatory research: if the seed lacks the person's LinkedIn (or another direct channel — GitHub, X, personal site), run one dedicated search for it ("«name» «company» linkedin"). A dossier the investor cannot act on is incomplete.
 2. Then write the dossier as one clean markdown document, in the structure below. Reply in the language of the investor's original request; keep proper nouns as-is. Output NOTHING before the first heading: no title line, no preamble, no "let me compile" — your very first characters are "### Overview".
 
@@ -160,15 +160,15 @@ export async function POST(request: NextRequest) {
   };
   if (anthropic) {
     // With Tavily on, Claude's built-in search is a metered backstop only.
-    tools.web_search = anthropic.tools.webSearch_20250305({ maxUses: isTavilyEnabled() ? 3 : 8 });
+    tools.web_search = anthropic.tools.webSearch_20250305({ maxUses: isTavilyEnabled() ? 4 : 8 });
   }
 
   const tavilyEnabled = isTavilyEnabled();
   if (tavilyEnabled) {
     // Metered per run — see lib/connectors/tavily/tavily.server.ts. Matches
     // web_search's budget so every angle can run on both engines.
-    let tavilySearchesLeft = 10;
-    let pageReadsLeft = 4;
+    let tavilySearchesLeft = 14;
+    let pageReadsLeft = 6;
 
     tools.tavily_search = defineTool({
       description:
@@ -227,13 +227,13 @@ Research this person now and write the dossier.`;
     // are cut off, so a run can never end as searches-with-no-dossier when
     // the step ceiling hits (the failure mode was a blank profile page).
     prepareStep: ({ stepNumber }: { stepNumber: number }) => {
-      if (stepNumber < 7) return {};
+      if (stepNumber < 9) return {};
       return {
         toolChoice: "none" as const,
         system: `${PROFILE_SYSTEM}\n\n${AGENT_SECURITY_PROMPT}\n\nResearch is over for this run — tools are disabled. Write the complete dossier NOW from the evidence already gathered, following the exact structure. Do not apologize for unfinished research; fold gaps into Risks & unknowns.`,
       };
     },
-    stopWhen: stepCountIs(10),
+    stopWhen: stepCountIs(12),
     maxOutputTokens: 6000,
     abortSignal: agentAbortSignal(request),
     experimental_transform: smoothStream(),
