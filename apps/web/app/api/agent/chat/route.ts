@@ -30,6 +30,7 @@ import { listClayCatalogCompanies } from "@/lib/catalog/index.server";
 import { searchClayCatalogRows } from "@/lib/catalog/search-catalog";
 import { searchGitHubRepositories } from "@/lib/connectors/github/github-search.server";
 import { searchProspects } from "@/lib/catalog/hack-nation-prospects.server";
+import { searchHackNationPeople } from "@/lib/catalog/hack-nation-people.server";
 import { isTavilyEnabled, tavilyExtract, tavilySearch } from "@/lib/connectors/tavily/tavily.server";
 import { requireUserInProduction } from "@/lib/supabase/api-auth";
 
@@ -66,17 +67,25 @@ This search is restricted to ${geography.label}${geography.kind === "region" ? "
     : "";
 
   const undrEngine = !controls?.dataSource || controls.dataSource === "undr_engine";
+  const hackNation = controls?.dataSource === "hack_nation";
   const dataSourceBlock = controls?.dataSource === "web_search"
     ? `## Data source (set by the investor in the composer)
 This search runs on web search only — undr's internal bases are not enabled for it. Do not mention unavailable sources; just research the open web well.`
-    : undrEngine
-      ? `## Data source: undr engine (the default)
+    : hackNation
+      ? `## Data source: HackNation base (set by the investor in the composer)
+This search sources candidates EXCLUSIVELY from the HackNation base: every person scraped from hack-nation.ai and flagged with founder signals. Some are deeply researched (priority tier, outreach score, verified evidence); others are still queued with profile data only.
+- FIRST and main move: call search_hack_nation with 2-3 keyword variants of the request. The bench comes from these results and nowhere else.
+- Report each match via report_candidate with sourceKind "hack_nation" and links from the record (Hack-Nation profile, LinkedIn, GitHub, company site — never invented). Queued people with thin data get confidence "low" and honest unknowns.
+- Web tools may ONLY verify or complete a HackNation person's gaps. NEVER report a person sourced from the web in this mode.
+- The candidate target may be unreachable if the base lacks matches — that is fine and expected. Report the genuine fits you found (even zero), then say plainly in the investor's language that the HackNation base has no more matches for this brief, and suggest switching the composer data source to "undr engine" or "Web search", or broadening the brief. Never pad the bench with weak matches to hit the number.`
+      : undrEngine
+        ? `## Data source: undr engine (the default)
 Your PRIMARY source is undr's curated prospect base: researched founders with priority tiers, outreach scores, evidence status and public profiles, assembled by undr's own research.
 - FIRST move of every research run: call search_prospect_base with 2-3 keyword variants of the request (sector, product, technology, geography). Build the bench from matching records before anything else.
 - Report each matching base person via report_candidate with sourceKind "prospect_base", links taken from the record (LinkedIn, GitHub, company site, Hack-Nation profile — never invented), and a score informed by the record's outreach score, tier, and fit to the request. Reflect weak evidence status as lower confidence.
 - Base records have gaps ("No encontrado" fields). Use the web tools to VERIFY and COMPLETE gaps on base candidates — the base stays the backbone, the web fills holes.
 - Only when the base cannot fill the target (too few matching records) do you source the remaining slots from the open web as usual, reporting those with their true sourceKind.`
-      : "";
+        : "";
 
   return `You are undr's sourcing agent: an evidence-first venture scout that finds real people (founders, technical builders, operators) matching what an investor is looking for. You never invent a person, company, fact, or URL. Every claim you make traces back to a tool result.
 
@@ -99,9 +108,10 @@ The investor asked for ${target} candidate card${target === 1 ? "" : "s"}. That 
 When you research:
 1. Open with one line: **Plan:** followed by the angles you will take.
 2. Use your tools iteratively, most-promising first:${undrEngine ? `
-   - search_prospect_base — the FIRST call of every research run (see the Data source section above).` : ""}
-   - ${tavilyEnabled ? `tavily_search and web_search — two independent engines that index the web differently; together they are your main ${undrEngine ? "gap-filling and verification instrument" : "instrument"}. OPEN every research angle with tavily_search, then run web_search on the same angle (same query or a locally-adapted one — translate to the local language where useful). Never run an angle on one engine only.` : "web_search — your main instrument."} Compose focused, people-centric queries (e.g. "fintech infrastructure founders Mexico pre-seed 2025", "site:linkedin.com/in CTO payments São Paulo", accelerator/demo-day batch lists, funding announcements). Run several distinct angles, not one broad query.${tavilyEnabled ? `
-   - read_page — fetches the full content of up to 3 specific URLs from earlier results. Use it before reporting a candidate whose evidence is thin (verify identity, role, and company on the primary source) and to pull details a snippet cut off. Do not read pages unrelated to a candidate at hand.` : ""}${controls?.dataSource === "web_search" ? "" : `
+   - search_prospect_base — the FIRST call of every research run (see the Data source section above).` : ""}${hackNation ? `
+   - search_hack_nation — the FIRST call of every research run and the ONLY source of candidates (see the Data source section above).` : ""}
+   - ${tavilyEnabled ? `tavily_search and web_search — two independent engines that index the web differently; together they are your main ${undrEngine || hackNation ? "gap-filling and verification instrument" : "instrument"}. ${hackNation ? "In this mode they only verify or complete HackNation people — never source from them." : "OPEN every research angle with tavily_search, then run web_search on the same angle (same query or a locally-adapted one — translate to the local language where useful). Never run an angle on one engine only."}` : "web_search — your main instrument."} Compose focused, people-centric queries (e.g. "fintech infrastructure founders Mexico pre-seed 2025", "site:linkedin.com/in CTO payments São Paulo", accelerator/demo-day batch lists, funding announcements). Run several distinct angles, not one broad query.${tavilyEnabled ? `
+   - read_page — fetches the full content of up to 3 specific URLs from earlier results. Use it before reporting a candidate whose evidence is thin (verify identity, role, and company on the primary source) and to pull details a snippet cut off. Do not read pages unrelated to a candidate at hand.` : ""}${controls?.dataSource === "web_search" || hackNation ? "" : `
    - search_registered_founders and search_internal_catalog — undr's own bases; call each once with the best keyword.
    - search_github — when the profile sought is technical; active repos often name real builders.`}
 3. The cards panel is the deliverable: a person you mention in prose but never pass to report_candidate does not exist for the investor. THE MOMENT a search result names a specific founder/CTO/builder with at least one evidence URL, call report_candidate for them right away — low confidence is fine, batching for later is not. Your goal is exactly ${target} reported candidate${target === 1 ? "" : "s"}; stop reporting once you reach it.
@@ -232,6 +242,29 @@ export async function POST(request: NextRequest) {
     }),
   };
 
+  // HackNation mode: the scraped hack-nation.ai founder base is the ONLY
+  // candidate source; web tools stay registered for verification only.
+  const hackNationMode = controls?.dataSource === "hack_nation";
+  if (hackNationMode) {
+    tools.search_hack_nation = defineTool({
+      description:
+        "Search the HackNation base: every person scraped from hack-nation.ai with founder signals (some deeply researched, some queued with profile data only). The ONLY candidate source in this mode — call it with 2-3 keyword variants before anything else.",
+      inputSchema: z.object({
+        query: z.string().describe("Keywords: sector, product, technology, geography — one angle per call"),
+      }),
+      execute: async ({ query }: { query: string }) => {
+        const results = await searchHackNationPeople(query, 12);
+        return {
+          count: results.length,
+          people: results.map(({ person, matchScore }) => ({ ...person, matchScore })),
+          note: results.length === 0
+            ? "No HackNation records matched this angle. Try different keywords; if nothing matches, tell the investor and suggest switching data source."
+            : undefined,
+        };
+      },
+    });
+  }
+
   // undr engine mode (the default): the curated prospect base is the primary
   // source; the tool only exists when the prompt advertises it.
   const undrEngineMode = !controls?.dataSource || controls.dataSource === "undr_engine";
@@ -253,8 +286,8 @@ export async function POST(request: NextRequest) {
   }
 
   // The system prompt only advertises these when the composer has not
-  // restricted the search to web-only, so registration must match it.
-  if (!webSearchOnly) {
+  // restricted the search (web-only and HackNation modes withhold them).
+  if (!webSearchOnly && !hackNationMode) {
     tools.search_registered_founders = defineTool({
       description: "Search undr's own registered-founder database (published profiles only) for a keyword.",
       inputSchema: z.object({ keyword: z.string().describe("A single sector/technology/geography keyword") }),
