@@ -35,7 +35,7 @@ import { isTavilyEnabled, tavilyExtract, tavilySearch } from "@/lib/connectors/t
 import { requireUserInProduction } from "@/lib/supabase/api-auth";
 import { USAGE_LIMITS, resetsInLabel } from "@/lib/usage/usage-limits";
 import { resolveUsageOwnerId } from "@/lib/usage/usage-identity.server";
-import { reserveUsage } from "@/lib/usage/usage-store.server";
+import { reserveUsage, usageStatusFor } from "@/lib/usage/usage-store.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -214,11 +214,11 @@ export async function POST(request: NextRequest) {
   const target = controls?.targetCandidates ?? 5;
 
   // ---- Free-tier usage accounting (lib/usage) ----
-  // The FIRST user message of a chat consumes one prospect_search; every
-  // user message consumes one chat_message from that chat's pool of 10.
-  // [auto] continuations are agent-driven and free (already step-capped).
-  // Idempotency keys derive from the turn number, so a client retry of the
-  // same message never double-charges.
+  // Every user message consumes one chat_message from this chat's pool of
+  // 10; [auto] continuations are agent-driven and free (already step-capped).
+  // The metered "search" unit is the CANDIDATE CARD, charged per person in
+  // report_candidate below. Idempotency keys derive from turn/slug, so a
+  // retry of the same message or card never double-charges.
   const ownerId = await resolveUsageOwnerId();
   const chatId = typeof body.chatId === "string" && body.chatId.trim()
     ? body.chatId.trim().slice(0, 120)
@@ -228,21 +228,6 @@ export async function POST(request: NextRequest) {
   ).length;
 
   if (userTurns > 0) {
-    if (userTurns === 1) {
-      const search = await reserveUsage({ ownerId, kind: "prospect_search", idempotencyKey: `search:${chatId}` });
-      if (!search.allowed) {
-        slot.release();
-        const resets = resetsInLabel(search.status.windowEndsAt);
-        return NextResponse.json(
-          {
-            message: `Free limit reached: ${USAGE_LIMITS.prospect_search} searches per 48 hours.${resets ? ` Resets in ${resets}.` : ""} Profiles you already researched stay available.`,
-            usage: search.status,
-          },
-          { status: 429 },
-        );
-      }
-    }
-
     const chatMessage = await reserveUsage({
       ownerId,
       kind: "chat_message",
@@ -275,6 +260,31 @@ export async function POST(request: NextRequest) {
       if (part.output?.recorded === false) continue;
       if (typeof part.input?.slug === "string") reportedSlugs.add(part.input.slug);
     }
+  }
+
+  // Each card is one prospect_search. Reconcile earlier turns' cards now
+  // (idempotent replay — the client also charges them live via
+  // /api/usage/reconcile), then compute how many cards this run may still
+  // deliver. report_candidate enforces that budget below, so a run can never
+  // put more people on the board than the free tier has left.
+  for (const slug of reportedSlugs) {
+    await reserveUsage({ ownerId, kind: "prospect_search", idempotencyKey: `card:${chatId}:${slug}` });
+  }
+  const usageAtStart = await usageStatusFor(ownerId, chatId);
+  let cardBudget = Math.max(0, USAGE_LIMITS.prospect_search - usageAtStart.searchesUsed);
+  if (cardBudget <= 0 && userTurns === 1) {
+    // A brand-new search that cannot deliver a single card is pointless —
+    // bounce it before spending model tokens. Follow-ups in existing chats
+    // still run (discussing people already found needs no new cards).
+    slot.release();
+    const resets = resetsInLabel(usageAtStart.windowEndsAt);
+    return NextResponse.json(
+      {
+        message: `Free limit reached: ${USAGE_LIMITS.prospect_search} candidate cards per 48 hours.${resets ? ` Resets in ${resets}.` : ""} Dossiers for people already found stay available.`,
+        usage: usageAtStart,
+      },
+      { status: 429 },
+    );
   }
 
   // Plain Record + erased call signatures: TypeScript's inference over
@@ -315,6 +325,18 @@ export async function POST(request: NextRequest) {
             progress: `${reportedSlugs.size} of ${target} reported — target reached, stop reporting and write the Summary`,
           };
         }
+        if (cardBudget <= 0) {
+          return {
+            recorded: false,
+            reason: "usage_limit",
+            instruction: `The investor's free candidate limit (${USAGE_LIMITS.prospect_search} cards per 48 hours) is used up. Stop searching NOW: tell them plainly the free limit is reached and when it resets, then write the Summary from what is already on the board.`,
+          };
+        }
+        cardBudget -= 1;
+        // Durable charge where the backend supports mid-stream writes
+        // (Supabase RPC); on the cookie ledger this persists via the
+        // client's live reconcile and the next turn's replay above.
+        void reserveUsage({ ownerId, kind: "prospect_search", idempotencyKey: `card:${chatId}:${input.slug}` });
         reportedSlugs.add(input.slug);
         const count = reportedSlugs.size;
         return {
