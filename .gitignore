@@ -27,3 +27,6 @@ output/
 Thumbs.db
 .idea/
 .vscode/
+
+# Pencil design files stay local
+*.pen
