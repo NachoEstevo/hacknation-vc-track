@@ -13,7 +13,8 @@ import { createClient } from "@/lib/supabase/server";
 const COOKIE_NAME = "undr_usage_id";
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 
-function signingSecret(): string {
+/** Shared by the identity cookie and the signed usage-state cookie. */
+export function usageSigningSecret(): string {
   return (
     process.env.USAGE_SIGNING_SECRET?.trim()
     || process.env.SUPABASE_SECRET_KEY?.trim()
@@ -21,6 +22,8 @@ function signingSecret(): string {
     || "undr-demo-usage-signing"
   );
 }
+
+const signingSecret = usageSigningSecret;
 
 function sign(id: string): string {
   return createHmac("sha256", signingSecret()).update(id).digest("base64url");

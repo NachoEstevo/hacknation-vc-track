@@ -1,5 +1,6 @@
 import { createClient as createServiceClient, type SupabaseClient } from "@supabase/supabase-js";
 import { getSupabasePublicConfig } from "@/lib/env";
+import { cookieUsageStore } from "./usage-cookie-store.server";
 import {
   InMemoryUsageStore,
   USAGE_LIMITS,
@@ -10,12 +11,14 @@ import {
 } from "./usage-limits";
 
 /**
- * Storage backend selection. With Supabase configured AND a secret key, the
- * atomic SECURITY DEFINER RPCs from the usage-limits migration are the
- * source of truth (durable, shared across instances). Otherwise — demo mode,
- * local dev — a per-process in-memory store applies the same rules. Backend
- * errors fall back to the memory store: a broken usage ledger must degrade
- * to demo limits, never take the product down.
+ * Storage backend selection, in order:
+ *  1. Supabase RPCs (configured + secret key): durable, shared, refundable.
+ *  2. Signed-cookie ledger: stateless, so it works identically on Vercel
+ *     lambdas, dev workers, and reloads — no shared memory required.
+ *  3. Per-process memory: last resort when no cookie jar exists (background
+ *     callbacks after the response closed).
+ * Failures degrade down the list — a broken usage ledger must never take
+ * the product down.
  */
 
 // Survives Next dev hot reloads so counters don't reset on every recompile.
@@ -89,40 +92,39 @@ class SupabaseUsageStore implements UsageStore {
   }
 }
 
-function pickStore(): UsageStore {
+function supabaseStore(): SupabaseUsageStore | null {
   const client = serviceClient();
-  return client ? new SupabaseUsageStore(client) : memoryStore;
+  return client ? new SupabaseUsageStore(client) : null;
+}
+
+async function withFallbacks<T>(
+  operation: string,
+  run: (store: UsageStore) => Promise<T>,
+): Promise<T> {
+  const durable = supabaseStore();
+  if (durable) {
+    try {
+      return await run(durable);
+    } catch (error) {
+      console.warn(`[usage] Supabase ${operation} failed; falling back to cookie ledger`, error);
+    }
+  }
+  try {
+    return await run(cookieUsageStore);
+  } catch (error) {
+    console.warn(`[usage] cookie ${operation} unavailable; using in-memory limits`, error);
+    return run(memoryStore);
+  }
 }
 
 export async function reserveUsage(input: ReserveInput): Promise<ReserveResult> {
-  const store = pickStore();
-  if (store === memoryStore) return memoryStore.reserve(input);
-  try {
-    return await store.reserve(input);
-  } catch (error) {
-    console.warn("[usage] Supabase reserve failed; using in-memory limits", error);
-    return memoryStore.reserve(input);
-  }
+  return withFallbacks("reserve", (store) => store.reserve(input));
 }
 
 export async function refundUsage(ownerId: string, idempotencyKey: string): Promise<void> {
-  const store = pickStore();
-  if (store === memoryStore) return memoryStore.refund(ownerId, idempotencyKey);
-  try {
-    await store.refund(ownerId, idempotencyKey);
-  } catch (error) {
-    console.warn("[usage] Supabase refund failed; refunding in-memory", error);
-    await memoryStore.refund(ownerId, idempotencyKey);
-  }
+  return withFallbacks("refund", (store) => store.refund(ownerId, idempotencyKey));
 }
 
 export async function usageStatusFor(ownerId: string, chatId?: string): Promise<UsageStatus> {
-  const store = pickStore();
-  if (store === memoryStore) return memoryStore.statusFor(ownerId, chatId);
-  try {
-    return await store.statusFor(ownerId, chatId);
-  } catch (error) {
-    console.warn("[usage] Supabase status failed; using in-memory counters", error);
-    return memoryStore.statusFor(ownerId, chatId);
-  }
+  return withFallbacks("status", (store) => store.statusFor(ownerId, chatId));
 }
