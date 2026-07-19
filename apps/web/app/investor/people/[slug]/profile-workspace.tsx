@@ -9,9 +9,11 @@ import {
   FileDown,
   Github,
   Globe,
+  Linkedin,
   LoaderCircle,
   Radar,
   RefreshCw,
+  Twitter,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
@@ -20,6 +22,7 @@ import { Avatar, Button, ButtonLink, ConfidenceBadge, FounderScore, SectorTag, S
 import { Markdown } from "@/components/markdown";
 import { useWorkspace } from "@/components/workspace-provider";
 import { isCandidateReport, thesisContextFor, type CandidateReport } from "@/lib/ai/sourcing-schema";
+import { mergePersonLinks, type PersonLink } from "@/lib/search/contact-links";
 import styles from "./page.module.css";
 
 const CANDIDATES_STORAGE_KEY = "undr.sourcing-candidates.v1";
@@ -112,6 +115,13 @@ function hostnameOf(url: string): string {
   } catch {
     return url;
   }
+}
+
+function LinkIcon({ link }: { link: PersonLink }) {
+  if (link.network === "linkedin") return <Linkedin aria-hidden="true" />;
+  if (link.network === "x") return <Twitter aria-hidden="true" />;
+  if (link.network === "github" || hostnameOf(link.url) === "github.com") return <Github aria-hidden="true" />;
+  return <Globe aria-hidden="true" />;
 }
 
 function MissingProfile({ slug }: { slug: string }) {
@@ -299,9 +309,9 @@ function HydratedProfile({ slug }: { slug: string }) {
       </header>
 
       <div className={styles.evidenceRow}>
-        {candidate.links.map((link) => (
+        {mergePersonLinks(candidate.links, dossier).map((link) => (
           <a key={link.url} href={link.url} target="_blank" rel="noreferrer noopener" className={styles.evidenceChip}>
-            {hostnameOf(link.url) === "github.com" ? <Github aria-hidden="true" /> : <Globe aria-hidden="true" />}
+            <LinkIcon link={link} />
             <span>{link.title || hostnameOf(link.url)}</span>
             <ArrowUpRight aria-hidden="true" />
           </a>
