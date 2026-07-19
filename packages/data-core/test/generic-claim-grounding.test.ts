@@ -100,6 +100,66 @@ describe("generic claim grounding", () => {
     expect(direct).toMatchObject({ known: true, points: 4, evidenceIds: ["clay", "website"] });
   });
 
+  it.each([
+    {
+      label: "customers signing in",
+      clay: "Customers signed in to manage tasks.",
+      website: "Customers signed in to manage project tasks.",
+    },
+    {
+      label: "password-reset requests",
+      clay: "Customers signed into the portal after requesting password resets.",
+      website: "Customers requested password resets, then signed into the portal.",
+    },
+    {
+      label: "cryptographically signed API requests",
+      clay: "Customer-signed API requests are verified cryptographically.",
+      website: "Cryptographic signed requests from customers protect the API.",
+    },
+  ])("does not treat $label as market demand across independent sources", async ({ clay, website }) => {
+    const company = bundle([
+      evidence("clay", "clay_csv", "https://app.clay.com/tables/acme", clay),
+      evidence("website", "company_website", "https://acme.test/docs", website),
+    ]);
+
+    const claims = await extractGenericClaim(company);
+    const market = assessCompany(company, claims).find(({ axis }) => axis === "market")!;
+    const direct = market.dimensions.find(({ dimensionId }) => dimensionId === "direct_market_evidence")!;
+
+    expect(claims).toEqual([]);
+    expect(direct).toMatchObject({ known: false, points: 0, evidenceIds: [] });
+  });
+
+  it.each([
+    {
+      label: "signed contracts",
+      clay: "Enterprise customers signed annual contracts for the service.",
+      website: "Three buyers signed pilot agreements after procurement review.",
+    },
+    {
+      label: "requested demos and trials",
+      clay: "Customers requested product demos during the launch month.",
+      website: "Enterprise buyers requested trials before procurement review.",
+    },
+    {
+      label: "paid customers",
+      clay: "The company reports twelve paid customers.",
+      website: "Paid customers renewed their subscriptions this quarter.",
+    },
+  ])("keeps explicit $label as direct market evidence", async ({ clay, website }) => {
+    const company = bundle([
+      evidence("clay", "clay_csv", "https://app.clay.com/tables/acme", clay),
+      evidence("website", "company_website", "https://acme.test/customers", website),
+    ]);
+
+    const claims = await extractGenericClaim(company);
+    const market = assessCompany(company, claims).find(({ axis }) => axis === "market")!;
+    const direct = market.dimensions.find(({ dimensionId }) => dimensionId === "direct_market_evidence")!;
+
+    expect(claims).toMatchObject([{ predicate: "market", state: "supported" }]);
+    expect(direct).toMatchObject({ known: true, points: 4, evidenceIds: ["clay", "website"] });
+  });
+
   it.each(["industry", "product", "traction", "stage"])(
     "does not ground the generic-only %s predicate without an explicit rule",
     async (predicate) => {

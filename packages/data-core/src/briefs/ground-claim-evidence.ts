@@ -67,8 +67,12 @@ type Relation = "support" | "contradict" | "unrelated";
 const MARKET_DEMAND_PATTERNS = [
   /\bcustomer demand\b/iu,
   /\bmarket demand\b/iu,
-  /\b(?:customers?|buyers?)\b.{0,50}\b(?:signed|paid|requested|purchased|contracted|pilots?)\b/iu,
-  /\b(?:signed|paid|requested|purchased|contracts?|pilots?)\b.{0,50}\b(?:customers?|buyers?)\b/iu,
+  /\b(?:customers?|buyers?)\b.{0,50}\bsigned\b.{0,30}\b(?:contracts?|agreements?|deals?|orders?|pilots?)\b/iu,
+  /\bsigned\b.{0,30}\b(?:contracts?|agreements?|deals?|orders?|pilots?)\b.{0,50}\b(?:customers?|buyers?)\b/iu,
+  /\b(?:customers?|buyers?)\b.{0,50}\brequested\b.{0,30}\b(?:demos?|trials?|quotes?|proposals?|pilots?|product access)\b/iu,
+  /\brequested\b.{0,30}\b(?:demos?|trials?|quotes?|proposals?|pilots?|product access)\b.{0,50}\b(?:customers?|buyers?)\b/iu,
+  /\b(?:customers?|buyers?)\b.{0,50}\b(?:paid\b.{0,20}\bpilots?|purchased\b.{0,20}\b(?:products?|subscriptions?|orders?))\b/iu,
+  /\b(?:paid (?:pilots?|purchases?|customers?)|customer purchases?|buyer purchases?)\b/iu,
 ];
 
 const NEGATED_MARKET_DEMAND_PATTERNS = [
