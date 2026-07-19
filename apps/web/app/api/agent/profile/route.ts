@@ -16,6 +16,9 @@ import { findProspectByName } from "@/lib/catalog/hack-nation-prospects.server";
 import { findHackNationPersonByName } from "@/lib/catalog/hack-nation-people.server";
 import { isTavilyEnabled, tavilyExtract, tavilySearch } from "@/lib/connectors/tavily/tavily.server";
 import { requireUserInProduction } from "@/lib/supabase/api-auth";
+import { USAGE_LIMITS, resetsInLabel } from "@/lib/usage/usage-limits";
+import { resolveUsageOwnerId } from "@/lib/usage/usage-identity.server";
+import { refundUsage, reserveUsage } from "@/lib/usage/usage-store.server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -49,6 +52,7 @@ interface ProfileRequestBody {
   candidate?: unknown;
   thesis?: unknown;
   query?: unknown;
+  usageKey?: unknown;
 }
 
 /**
@@ -88,6 +92,28 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { message: "Too many concurrent agent runs right now. Wait for one to finish and retry." },
       { status: 429, headers: { "Retry-After": "20" } },
+    );
+  }
+
+  // ---- Free-tier usage accounting (lib/usage) ----
+  // Generating or refreshing a dossier consumes one profile_completion;
+  // opening a cached dossier never calls this route. The client sends a
+  // stable usageKey per generation attempt, so its silent auto-retry (and a
+  // double click) replays the same reservation instead of paying twice.
+  // Failed runs are refunded in the stream error handler below.
+  const ownerId = await resolveUsageOwnerId();
+  const usageKeyRaw = typeof body?.usageKey === "string" ? body.usageKey.trim() : "";
+  const usageKey = `profile:${(usageKeyRaw || candidate.slug).slice(0, 140)}`;
+  const reservation = await reserveUsage({ ownerId, kind: "profile_completion", idempotencyKey: usageKey });
+  if (!reservation.allowed) {
+    slot.release();
+    const resets = resetsInLabel(reservation.status.windowEndsAt);
+    return NextResponse.json(
+      {
+        message: `Free limit reached: ${USAGE_LIMITS.profile_completion} researched profiles per 48 hours.${resets ? ` Resets in ${resets}.` : ""} Already-researched dossiers stay readable.`,
+        usage: reservation.status,
+      },
+      { status: 429 },
     );
   }
 
@@ -213,13 +239,20 @@ Research this person now and write the dossier.`;
     experimental_transform: smoothStream(),
     onEnd: () => slot.release(),
     onAbort: () => slot.release(),
-    onError: () => slot.release(),
+    onError: () => {
+      slot.release();
+      // A run that died didn't deliver a dossier — give the reservation
+      // back. Refunds are idempotent, and the client's retry re-reserves
+      // the same key, so the net charge stays exactly one per dossier.
+      void refundUsage(ownerId, usageKey);
+    },
   });
 
   return result.toUIMessageStreamResponse({
     sendSources: true,
     onError: (error: unknown) => {
       slot.release();
+      void refundUsage(ownerId, usageKey);
       console.error("[agent/profile]", error);
       return "The dossier writer hit an upstream error. Refresh to retry.";
     },

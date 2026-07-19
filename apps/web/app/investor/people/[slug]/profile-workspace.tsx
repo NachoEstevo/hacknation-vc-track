@@ -27,6 +27,32 @@ import styles from "./page.module.css";
 
 const CANDIDATES_STORAGE_KEY = "undr.sourcing-candidates.v1";
 const DOSSIER_STORAGE_PREFIX = "undr.dossier.v1.";
+const USAGE_KEY_PREFIX = "undr.dossier-usage.v1.";
+
+/**
+ * One usage key per generation attempt: first open mints it, silent
+ * auto-retries reuse it (the server replays the reservation for free), and
+ * only a manual Refresh rotates it — which is what makes a refresh cost one
+ * profile_completion while retries never double-charge.
+ */
+function usageKeyFor(slug: string, rotate = false): string {
+  try {
+    const storageKey = `${USAGE_KEY_PREFIX}${slug}`;
+    if (!rotate) {
+      const existing = sessionStorage.getItem(storageKey);
+      if (existing) return existing;
+    }
+    const fresh = `${slug}:${crypto.randomUUID()}`;
+    sessionStorage.setItem(storageKey, fresh);
+    return fresh;
+  } catch {
+    return slug;
+  }
+}
+
+function announceUsageChange(): void {
+  window.dispatchEvent(new CustomEvent("undr:usage-changed"));
+}
 
 type AnyPart = { type: string } & Record<string, unknown>;
 
@@ -175,6 +201,7 @@ function HydratedProfile({ slug }: { slug: string }) {
     id: `dossier-${slug}`,
     transport,
     onFinish: ({ message }) => {
+      announceUsageChange();
       const markdown = dossierTextOf([message]);
       if (!markdown) {
         setEmptyRun(true);
@@ -206,8 +233,9 @@ function HydratedProfile({ slug }: { slug: string }) {
     setMessages([]);
     void sendMessage(
       { text: `Research and write the dossier for ${stub.candidate.name}.` },
-      { body: { candidate: stub.candidate, thesis: thesisContext, query: stub.query } },
+      { body: { candidate: stub.candidate, thesis: thesisContext, query: stub.query, usageKey: usageKeyFor(slug) } },
     );
+    announceUsageChange();
   }
 
   // Generate on first open; afterwards the cached dossier renders instantly.
@@ -247,6 +275,7 @@ function HydratedProfile({ slug }: { slug: string }) {
     } catch {
       // Ignore: regenerating overwrites it anyway.
     }
+    usageKeyFor(slug, true);
     setCached(null);
     requestDossier();
   }
