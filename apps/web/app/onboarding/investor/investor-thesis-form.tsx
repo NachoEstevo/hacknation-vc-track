@@ -107,9 +107,18 @@ function HydratedInvestorThesisForm({
     saveActiveThesis,
     clearPendingBrief,
   } = useWorkspace();
-  const [query, setQuery] = useState(initialThesis?.brief || initialQuery || fallbackQuery);
+  // Starts empty for new investors — the example lives in the placeholder,
+  // never as pre-written text. Editing an existing thesis (or arriving with
+  // a brief typed on the landing) still prefills what THEY wrote.
+  const [query, setQuery] = useState(initialThesis?.brief || initialQuery || "");
   const [isNavigating, setIsNavigating] = useState(false);
   const [completionError, setCompletionError] = useState("");
+
+  function skipSetup() {
+    setIsNavigating(true);
+    clearPendingBrief();
+    router.push("/investor");
+  }
 
   async function completeOnboarding() {
     setCompletionError("");
@@ -182,9 +191,8 @@ function HydratedInvestorThesisForm({
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             rows={5}
-            minLength={12}
             maxLength={1000}
-            required
+            placeholder={`e.g. “${fallbackQuery}”`}
             autoFocus
           />
           <div className={styles.helper}>
@@ -217,7 +225,17 @@ function HydratedInvestorThesisForm({
           >
             {isNavigating ? "Finishing setup…" : "Finish setup"}
           </Button>
-          <p className={styles.autosaveNote}>Saved automatically</p>
+          <Button
+            variant="secondary"
+            onClick={skipSetup}
+            disabled={isNavigating}
+            aria-label="Skip this step and enter the workspace without a profile"
+          >
+            Skip for now
+          </Button>
+          <p className={styles.autosaveNote}>
+            {query.trim() ? "Saved automatically" : "Optional — you can add it later from My thesis"}
+          </p>
         </div>
         {completionError || persistenceError ? (
           <p className={styles.completionError} role="alert" aria-live="assertive">
