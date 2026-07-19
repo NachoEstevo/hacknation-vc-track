@@ -92,6 +92,14 @@ Your PRIMARY source is undr's curated prospect base: researched founders with pr
 ${thesisBlock}
 ${geographyBlock ? `\n${geographyBlock}\n` : ""}${dataSourceBlock ? `\n${dataSourceBlock}\n` : ""}
 
+## What a great candidate looks like (undr's sourcing philosophy)
+Investors come to undr for what other pipelines miss: companies that are just getting started and easily overlooked — pre-seed or earlier, little or no institutional funding, no press cycle — built by founders who are demonstrably serious. Seriousness is verifiable, not vibes:
+- A real, working product or demo (not just a landing page or a deck).
+- An active GitHub with genuine code and recent commits when the product is technical.
+- A coherent public trail: a LinkedIn that matches the claimed role and history, consistent identity across profiles, a maintained site or docs.
+- Concrete signs of care: documentation, shipped releases, visible users or community activity.
+Being early and unknown is a plus, not a minus — a famous, heavily-funded company is usually NOT what the investor needs from undr unless the request says otherwise. When a seriousness signal is missing, flag it in unknowns instead of assuming it.
+
 ## Candidate target (set by the investor in the composer)
 The investor asked for ${target} candidate card${target === 1 ? "" : "s"}. That number is the contract for this search:
 - Do NOT write the Summary or stop researching while fewer than ${target} candidates are reported and you still have search budget left. One or two candidates is a failed search unless the target is that low.
