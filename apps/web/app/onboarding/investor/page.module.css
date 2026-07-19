@@ -205,6 +205,93 @@
   line-height: 1.4;
 }
 
+/* Live "as undr reads it" profile chips under the thesis textarea */
+
+.detected {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-subtle);
+}
+
+.detectedTitle {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.detectedEmpty {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.detectedGroups {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detectedGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.detectedLabel {
+  min-width: 76px;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.detectedChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 550;
+  animation: detected-chip-enter 200ms ease both;
+}
+
+.detectedChip[data-exclude="true"] {
+  background: var(--risk-soft);
+  color: var(--risk);
+}
+
+@keyframes detected-chip-enter {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detectedChip {
+    animation: none;
+  }
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
