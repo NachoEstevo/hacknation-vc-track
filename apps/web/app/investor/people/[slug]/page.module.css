@@ -330,7 +330,7 @@
 
 @media (max-width: 760px) {
   .page {
-    padding: 16px 20px 56px;
+    padding: 16px 16px 56px;
   }
 
   .hero {
@@ -340,6 +340,20 @@
 
   .heroScore {
     align-items: flex-start;
+  }
+
+  .dossier {
+    padding: 24px 20px 28px;
+  }
+
+  .topBar {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .evidenceChip {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 }
 

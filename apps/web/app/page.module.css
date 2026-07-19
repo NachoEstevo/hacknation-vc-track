@@ -350,6 +350,10 @@
     height: 100%;
   }
 
+  .heroBg {
+    transform: none;
+  }
+
   .header {
     padding: 18px 20px;
   }

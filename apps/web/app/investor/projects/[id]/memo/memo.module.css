@@ -425,3 +425,69 @@
 .toneExternal {
   color: var(--external);
 }
+
+@media (max-width: 620px) {
+  .page,
+  .column,
+  .doc,
+  .section,
+  .snapshot,
+  .snapshotRow,
+  .snapshotCell {
+    min-width: 0;
+  }
+
+  .page {
+    padding-top: 4px;
+  }
+
+  .bar {
+    align-items: flex-start;
+  }
+
+  .barSpacer {
+    display: none;
+  }
+
+  .barActions {
+    width: 100%;
+  }
+
+  .doc {
+    gap: 22px;
+    padding: 24px 16px;
+  }
+
+  .snapshotRow {
+    flex-direction: column;
+    border-bottom: 0;
+  }
+
+  .snapshotCell,
+  .snapshotCell:first-child {
+    border-top: 1px solid var(--border);
+    border-left: 0;
+  }
+
+  .snapshotRow:first-child .snapshotCell:first-child {
+    border-top: 0;
+  }
+
+  .sectionHead {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .sectionSpacer {
+    display: none;
+  }
+
+  .swotCard,
+  .cmCard {
+    min-width: 0;
+  }
+
+  .step {
+    align-items: flex-start;
+  }
+}

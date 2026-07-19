@@ -494,10 +494,51 @@
 }
 
 @media (max-width: 620px) {
+  .page,
+  .profileCard,
+  .profileInner,
+  .identityRow,
+  .identityCopy,
+  .signalsList,
+  .signalRow,
+  .workspaceGrid,
+  .actionsCard,
+  .evidencePanel {
+    min-width: 0;
+  }
+
+  .profileBand {
+    align-items: flex-start;
+    padding: 10px 16px;
+  }
+
+  .profileInner,
+  .actionsCard {
+    padding: 1rem;
+  }
+
   .identityRow,
   .copyDraft {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .identityNameRow,
+  .identitySub,
+  .signalRow {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .signalMeta {
+    width: 100%;
+    padding-left: 0;
+  }
+
+  .profileLink {
+    width: 100%;
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
 
   .copyDraft > button {

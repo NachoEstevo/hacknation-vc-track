@@ -250,3 +250,34 @@
     position: static;
   }
 }
+
+@media (max-width: 620px) {
+  .wrap,
+  .columns,
+  .list,
+  .rowWrap,
+  .detail,
+  .sourceBox {
+    min-width: 0;
+  }
+
+  .tab {
+    min-height: 40px;
+    padding-inline: 11px;
+    white-space: normal;
+  }
+
+  .detail {
+    padding: 1rem;
+  }
+
+  .detailClaim,
+  .sourceBoxQuote {
+    overflow-wrap: anywhere;
+  }
+
+  .openSourceButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

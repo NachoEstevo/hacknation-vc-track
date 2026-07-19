@@ -64,3 +64,13 @@
   font-family: var(--font-body), sans-serif;
   font-size: 12.5px;
 }
+
+@media (max-width: 640px) {
+  .page {
+    padding: 24px 16px 64px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+}

@@ -380,7 +380,7 @@ export function CompareWorkspace() {
                 <tr>
                   <th scope="row" className={styles.rowLabel}>Stage</th>
                   {opportunities.map((item) => (
-                    <td key={item.id} className={styles.cell}>
+                    <td key={item.id} className={styles.cell} data-project={item.project.name}>
                       <StageBadge label={formatToken(item.project.stage)} />
                     </td>
                   ))}
@@ -388,7 +388,7 @@ export function CompareWorkspace() {
                 <tr>
                   <th scope="row" className={styles.rowLabel}>Sector</th>
                   {opportunities.map((item) => (
-                    <td key={item.id} className={styles.cell}>
+                    <td key={item.id} className={styles.cell} data-project={item.project.name}>
                       <div className={styles.tagRow}>
                         {item.project.sectorTags.map((tag) => (
                           <SectorTag key={tag} label={formatToken(tag)} />
@@ -404,6 +404,7 @@ export function CompareWorkspace() {
                     <td
                       key={item.id}
                       className={clsx(styles.cell, founderScoreLeaders[index] && styles.leadingCell)}
+                      data-project={item.project.name}
                     >
                       {item.founderScore && item.founderScore.score !== null ? (
                         <div className={styles.scoreCell}>
@@ -426,6 +427,7 @@ export function CompareWorkspace() {
                       <td
                         key={opportunities[index]!.id}
                         className={clsx(styles.cell, leading && styles.leadingCell)}
+                        data-project={opportunities[index]!.project.name}
                       >
                         <div className={styles.axisCell}>
                           <DataBadge tone={AXIS_TONE[axis.status]} label={axis.status} />
@@ -443,6 +445,7 @@ export function CompareWorkspace() {
                     <td
                       key={opportunities[index]!.id}
                       className={clsx(styles.cell, tractionLeaders[index] && styles.leadingCell)}
+                      data-project={opportunities[index]!.project.name}
                     >
                       <div className={styles.axisCell}>
                         <DataBadge tone={CLAIM_TONE[state]} label={state === "missing" ? "Unknown" : claimStateLabel(state)} />
@@ -461,6 +464,7 @@ export function CompareWorkspace() {
                     <td
                       key={opportunities[index]!.id}
                       className={clsx(styles.cell, evidenceLeaders[index] && styles.leadingCell)}
+                      data-project={opportunities[index]!.project.name}
                     >
                       <DataBadge tone={tone} label={`${coverage.supportedClaims} supported · ${coverage.contradictedClaims} contradicted`} />
                       <span className={styles.caption}>{coverage.percent}% of expected fields have linked evidence</span>
@@ -473,7 +477,7 @@ export function CompareWorkspace() {
                   {opportunities.map((item) => {
                     const topContradiction = item.contradictions[0];
                     return (
-                      <td key={item.id} className={styles.cell}>
+                      <td key={item.id} className={styles.cell} data-project={item.project.name}>
                         {topContradiction ? (
                           <DataBadge tone="risk" label={topContradiction.summary} />
                         ) : (
@@ -490,7 +494,7 @@ export function CompareWorkspace() {
                     const unknowns = getUnknowns(item);
                     const preview = unknowns.slice(0, 2).map((unknown) => shortPredicateLabel(unknown.predicate)).join(", ");
                     return (
-                      <td key={item.id} className={styles.cell}>
+                      <td key={item.id} className={styles.cell} data-project={item.project.name}>
                         {unknowns.length > 0 ? (
                           <>
                             <DataBadge tone="unknown" label={`${unknowns.length} unresolved field${unknowns.length > 1 ? "s" : ""}`} />
@@ -510,6 +514,7 @@ export function CompareWorkspace() {
                     <td
                       key={item.id}
                       className={clsx(styles.cell, confidenceLeaders[index] && styles.leadingCell)}
+                      data-project={item.project.name}
                     >
                       {item.founderScore ? (
                         <ConfidenceBadge level={item.founderScore.confidence} />

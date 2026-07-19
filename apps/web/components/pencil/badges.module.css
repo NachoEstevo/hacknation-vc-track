@@ -130,3 +130,42 @@
   font-size: 11px;
   color: var(--text-tertiary);
 }
+
+@media (max-width: 620px) {
+  .sectorTag,
+  .stageBadge,
+  .dataBadge,
+  .confidenceBadge,
+  .trendIndicator,
+  .sourceChip {
+    max-width: 100%;
+  }
+
+  .sectorTagLabel,
+  .stageLabel,
+  .dataBadge,
+  .confidenceLabel,
+  .trendLabel,
+  .sourceChipLabel {
+    white-space: normal;
+  }
+
+  .dataBadgeLabel,
+  .sourceChipLabel {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (min-width: 960px) and (max-width: 1199px), (min-width: 1920px) {
+  .sourceChip {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .sourceChipLabel {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+}

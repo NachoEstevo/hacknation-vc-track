@@ -186,7 +186,7 @@
   }
 }
 
-@media (min-width: 960px) {
+@media (min-width: 1200px) {
   .desktopSidebar {
     display: block;
   }
@@ -205,11 +205,27 @@
   }
 }
 
+@media (min-width: 1920px) {
+  .main {
+    width: min(calc(100% - 232px), 1920px);
+    margin-left: calc(232px + max(0px, (100vw - 232px - 1920px) / 2));
+  }
+
+  .shellCollapsed .main {
+    width: min(calc(100% - 64px), 1920px);
+    margin-left: calc(64px + max(0px, (100vw - 64px - 1920px) / 2));
+  }
+}
+
 @media (max-width: 640px) {
+  .mobileHeader {
+    padding-inline: 16px;
+  }
+
   .pageHeader {
     min-height: 0;
     flex-wrap: wrap;
-    padding-block: 20px;
+    padding: 20px 16px;
   }
 
   .pageHeading {
@@ -219,6 +235,12 @@
   .headerActions {
     width: 100%;
     justify-content: flex-start;
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  .content {
+    padding: 20px 16px 56px;
   }
 }
 

@@ -465,3 +465,69 @@
     flex-wrap: wrap;
   }
 }
+
+@media (max-width: 640px) {
+  .page {
+    padding: 0 16px 64px;
+  }
+
+  .headerTop,
+  .headerTitleRow,
+  .headerActions,
+  .completionRow,
+  .claimCardTop,
+  .editActions,
+  .suggestionActions,
+  .dateField,
+  .linkFormRow,
+  .linkItem {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .headerTitleRow,
+  .headerActions {
+    width: 100%;
+  }
+
+  .projectName {
+    overflow-wrap: anywhere;
+  }
+
+  .completionTrack {
+    width: min(160px, 100%);
+  }
+
+  .sidebar {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .sidebarLabel {
+    display: none;
+  }
+
+  .sidebarItem {
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding-inline: 10px;
+    background: var(--surface-subtle);
+  }
+
+  .sectionBlock {
+    padding: 16px;
+  }
+
+  .linkFormRow select,
+  .linkFormRow input,
+  .dateField input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .linkHref {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+}

@@ -268,10 +268,23 @@
 
 @media (max-width: 640px) {
   .header {
-    padding: 18px 24px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 18px 16px;
   }
 
   .body {
-    padding: 28px 24px 64px;
+    padding: 28px 16px 64px;
+  }
+
+  .dropZoneHint,
+  .dropZoneFile {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .draftPanel {
+    padding: 18px;
   }
 }

@@ -75,6 +75,18 @@ export default function AboutPage() {
             ))}
           </div>
         </section>
+
+        <section aria-labelledby="honesty-heading" className={styles.honesty}>
+          <h2 id="honesty-heading" className={styles.honestyHeading}>Where this is headed</h2>
+          <p>
+            undr isn&rsquo;t perfect — it was built in a hackathon, and today&rsquo;s
+            research runs are capped by tight search budgets and API limits. But the
+            foundations are honest: deterministic scoring, evidence you can check, and
+            an agent that never invents a person. We believe that with a larger search
+            budget per run and more development time, this can become an excellent
+            sourcing tool.
+          </p>
+        </section>
       </div>
     </AppShell>
   );

@@ -1042,7 +1042,31 @@
   }
 }
 
+@media (min-width: 960px) and (max-width: 1199px), (min-width: 1920px) {
+  .page,
+  .workspace,
+  .mainColumn,
+  .sideColumn,
+  .sideCard,
+  .sourceChips {
+    min-width: 0;
+  }
+}
+
 @media (max-width: 880px) {
+  .page,
+  .workspace,
+  .mainColumn,
+  .sideColumn,
+  .panel,
+  .problemProductPanel,
+  .axisGrid,
+  .statusGrid,
+  .founderList,
+  .evidenceRows {
+    min-width: 0;
+  }
+
   .heroTop {
     flex-direction: column;
   }
@@ -1080,6 +1104,14 @@
 }
 
 @media (max-width: 620px) {
+  .panel,
+  .problemProductPanel,
+  .sideCard,
+  .introCard,
+  .trustLegend {
+    padding: 1rem;
+  }
+
   .monogram {
     width: 2.75rem;
     height: 2.75rem;
@@ -1096,6 +1128,32 @@
   .claimHeader,
   .memoMasthead {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .problemProductTop,
+  .contradictionTop,
+  .trustTotal {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .founderRow {
+    align-items: flex-start;
+  }
+
+  .founderRow > :global([class*="dataBadge"]) {
+    max-width: calc(100% - 2rem);
+    margin-left: 2.95rem;
+  }
+
+  .claimHeader,
+  .evidenceRecord {
+    padding-inline: 1rem;
   }
 
   .memoMeta {

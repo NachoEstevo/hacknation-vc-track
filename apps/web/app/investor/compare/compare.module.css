@@ -318,7 +318,7 @@ thead .rowLabel {
   color: var(--accent);
 }
 
-@media (max-width: 700px) {
+@media (max-width: 1199px) {
   .fallbackBanner {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -332,5 +332,94 @@ thead .rowLabel {
   .footerNote,
   .keyDifferences {
     font-size: 0.7rem;
+  }
+
+  .tableScroll {
+    overflow: visible;
+  }
+
+  .table {
+    display: block;
+    min-width: 0 !important;
+  }
+
+  .table thead,
+  .table tbody,
+  .table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .table thead tr {
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.8rem;
+    background: var(--surface-subtle);
+  }
+
+  .table thead .rowLabel {
+    display: none;
+  }
+
+  .headerCell {
+    display: block;
+    width: 100%;
+    padding: 0.85rem !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-md);
+  }
+
+  .identity {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .table tbody tr {
+    border-top: 1px solid var(--border);
+  }
+
+  .table th,
+  .table td {
+    display: block;
+    width: 100%;
+    border-right: 0;
+  }
+
+  .rowLabel {
+    position: static;
+    width: 100%;
+    padding: 0.65rem 0.9rem !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+
+  .table td {
+    display: grid;
+    gap: 0.45rem;
+    padding: 0.8rem 0.9rem;
+  }
+
+  .table td::before {
+    color: var(--text-tertiary);
+    content: attr(data-project);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.055em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .table tbody tr:last-child > * {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table tbody tr:last-child > :last-child {
+    border-bottom: 0;
+  }
+
+  .sectionRow > * {
+    border-top: 0;
+  }
+
+  .tableFoot {
+    padding-inline: 0.9rem;
   }
 }

@@ -303,3 +303,51 @@
     position: static;
   }
 }
+
+@media (max-width: 640px) {
+  .page {
+    padding: 0 16px 64px;
+  }
+
+  .banner,
+  .headerCard,
+  .headerCardTitleRow,
+  .blockHeading,
+  .warningBox {
+    align-items: flex-start;
+  }
+
+  .headerCard,
+  .headerCardTitleRow,
+  .blockHeading {
+    flex-direction: column;
+  }
+
+  .headerCard,
+  .block,
+  .sidebar {
+    padding: 16px;
+  }
+
+  .headerCardTitleRow h1 {
+    overflow-wrap: anywhere;
+  }
+
+  .blockControls {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .addEvidencePopover {
+    position: static;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-top: 0;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .addEvidencePopover input {
+    width: 100%;
+    min-width: 0;
+  }
+}

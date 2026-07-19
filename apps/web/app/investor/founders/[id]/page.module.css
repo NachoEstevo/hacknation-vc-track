@@ -517,6 +517,18 @@
 }
 
 @media (max-width: 900px) {
+  .page,
+  .hero,
+  .heroCopy,
+  .columns,
+  .main,
+  .rail,
+  .panel,
+  .scoreCard,
+  .sideCard {
+    min-width: 0;
+  }
+
   .columns {
     grid-template-columns: 1fr;
   }
@@ -527,5 +539,37 @@
 
   .heroActions {
     flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 620px) {
+  .hero,
+  .panel,
+  .scoreCard,
+  .sideCard {
+    padding: 1rem;
+  }
+
+  .heroActions {
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .heroActions > * {
+    width: 100%;
+  }
+
+  .experienceRow,
+  .projectCard,
+  .scoreTop {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .projectTop {
+    align-items: flex-start;
+    flex-wrap: wrap;
   }
 }
